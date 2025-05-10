@@ -1,0 +1,42 @@
+{
+  "name": "@mevbg/design-tokens-generator",
+  "title": "DesignTokensGenerator",
+  "version": "1.0.0",
+  "description": "Mev’s personal design tokens generator.",
+  "keywords": [
+    "style-dictionary",
+    "design tokens",
+    "token builder",
+    "style dictionary wrapper",
+    "design system",
+    "mevbg",
+    "personal",
+    "opinionated",
+    "css variables",
+    "javascript tokens",
+    "token pipeline",
+    "token automation",
+    "ui consistency",
+    "style config",
+    "build tool"
+  ],
+  "homepage": "https://github.com/mevbg/design-tokens-generator#readme",
+  "bugs": {
+    "url": "https://github.com/mevbg/design-tokens-generator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mevbg/design-tokens-generator.git"
+  },
+  "license": "ISC",
+  "author": {
+    "name": "Martin Metodiev • Mev",
+    "email": "martin@mev.bg",
+    "url": "https://mev.bg"
+  },
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "style-dictionary": "^4.4.0"
+  }
+}
