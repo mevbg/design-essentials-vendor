@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import createConfig from './config/default.config.js';
 
-export function buildTokens({ tokensSourcePath, tokensBuildPath, prefix, vpMin, vpMax, baseFontSize }) {
+export function generateDesignTokens({ tokensSourcePath, tokensBuildPath, prefix, vpMin, vpMax, baseFontSize }) {
   const sourcePath = path.resolve(tokensSourcePath);
   const buildPath = path.resolve(tokensBuildPath) + '/';
 
