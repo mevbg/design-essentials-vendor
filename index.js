@@ -14,5 +14,6 @@ export function generateDesignTokens({ tokensSourcePath, tokensBuildPath, prefix
   const config = createConfig({ sourcePath, buildPath, prefix, vpMin, vpMax, baseFontSize });
 
   const SD = new StyleDictionary(config);
-  SD.buildAllPlatforms();
+
+  return SD.buildAllPlatforms();
 }
