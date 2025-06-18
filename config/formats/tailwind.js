@@ -11,11 +11,13 @@ export const tailwind = ({ prefix }) => ({
 
     // Create a structure that matches the source tokens
     const tokenStructure = {
-      color: {},
-      typo: {},
-      space: {},
       border: {},
-      breakpoint: {}
+      breakpoint: {},
+      color: {},
+      dimensions: {},
+      icon: {},
+      space: {},
+      typo: {}
     };
 
     // Helper function to set nested value
