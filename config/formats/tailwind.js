@@ -43,7 +43,7 @@ export const tailwind = ({ prefix }) => ({
       // Get the category from the token path
       const category = token.path[0];
       if (tokenStructure[category]) {
-        // For color tokens, we want to use the light scheme values
+        // For color tokens, we want to use the light scheme values and primitives
         if (category === 'color' && token.path[1] === 'light') {
           // Remove 'light' from the path and use the rest
           const remainingPath = token.path.slice(2).join('.');
@@ -51,6 +51,12 @@ export const tailwind = ({ prefix }) => ({
             ...token,
             path: ['color', ...token.path.slice(2)]
           });
+        }
+        // Also handle primitive color tokens
+        else if (category === 'color' && token.path[1] === 'primitives') {
+          // Keep 'primitives' in the path
+          const remainingPath = token.path.slice(1).join('.');
+          setNestedValue(tokenStructure[category], remainingPath, token);
         }
         // For non-color tokens, process normally
         else if (category !== 'color') {

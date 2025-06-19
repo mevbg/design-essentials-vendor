@@ -139,15 +139,25 @@ export const cssVars = ({ prefix, vpMin, vpMax, baseFontSize }) => ({
     // Generate color scheme CSS
     const generateColorScheme = () => {
       // Get all color tokens
-      const colorTokens = dictionary.allTokens.filter(
-        (token) =>
-          token.name.startsWith('color-') &&
-          (token.name.includes('light-') || token.name.includes('dark-'))
+      const allColorTokens = dictionary.allTokens.filter((token) =>
+        token.name.startsWith('color-')
       );
 
-      // Separate light and dark tokens
-      const lightTokens = colorTokens.filter((token) => token.name.startsWith('color-light-'));
-      const darkTokens = colorTokens.filter((token) => token.name.startsWith('color-dark-'));
+      // Separate tokens into light, dark, and primitive/other categories
+      // More specific filtering: only tokens that start with 'color-light-' or 'color-dark-' are scheme tokens
+      const lightTokens = allColorTokens.filter((token) => token.name.startsWith('color-light-'));
+      const darkTokens = allColorTokens.filter((token) => token.name.startsWith('color-dark-'));
+      const primitiveTokens = allColorTokens.filter(
+        (token) => !token.name.startsWith('color-light-') && !token.name.startsWith('color-dark-')
+      );
+
+      // Process primitive tokens (output directly in root)
+      const primitiveVars = primitiveTokens
+        .map((token) => {
+          const baseName = token.name.replace('color-', '');
+          return `  --${prefix}-color-${baseName}: ${token.original.value};`;
+        })
+        .join('\n');
 
       // Process light tokens
       const lightVars = lightTokens
@@ -165,27 +175,24 @@ export const cssVars = ({ prefix, vpMin, vpMax, baseFontSize }) => ({
         })
         .join('\n  ');
 
-      return `/* Color tokens */
-:root,
-html.light {
-  ${lightVars}
-}
+      // Build the final CSS structure
+      let colorSchemeCSS = '';
 
-html.dark {
-  ${darkVars}
-}
+      // Add primitive tokens at the beginning if they exist
+      if (primitiveVars) {
+        colorSchemeCSS += `/* Color tokens */\n:root {\n${primitiveVars}\n}\n\n`;
+      }
 
-@media (prefers-color-scheme: light) {
-  :root {
-  ${lightVars}
-  }
-}
+      // Add light/dark conditional logic only if light or dark tokens exist
+      if (lightVars || darkVars) {
+        const conditionalHeader = primitiveVars
+          ? '/* Color scheme tokens */'
+          : '/* Color tokens */';
 
-@media (prefers-color-scheme: dark) {
-  :root {
-  ${darkVars}
-  }
-}`;
+        colorSchemeCSS += `${conditionalHeader}\n:root,\nhtml.light {\n  ${lightVars}\n}\n\nhtml.dark {\n  ${darkVars}\n}\n\n@media (prefers-color-scheme: light) {\n  :root {\n  ${lightVars}\n  }\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n  ${darkVars}\n  }\n}`;
+      }
+
+      return colorSchemeCSS;
     };
 
     // Get all tokens as CSS variables with grouping
