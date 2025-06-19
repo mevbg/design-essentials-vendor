@@ -53,7 +53,7 @@ export const tailwind = ({ prefix }) => ({
           });
         }
         // Also handle primitive color tokens
-        else if (category === 'color' && token.path[1] === 'primitives') {
+        else if (category === 'color' && token.path[1] === 'primitive') {
           // Keep 'primitives' in the path
           const remainingPath = token.path.slice(1).join('.');
           setNestedValue(tokenStructure[category], remainingPath, token);
