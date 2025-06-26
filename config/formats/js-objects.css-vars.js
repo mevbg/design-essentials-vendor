@@ -1,5 +1,5 @@
 export const tailwind = ({ prefix }) => ({
-  name: 'javascript/tailwind',
+  name: 'javascript/css-vars',
   format: function ({ dictionary }) {
     // Helper function to convert camelCase to kebab-case
     const toKebabCase = (str) => {

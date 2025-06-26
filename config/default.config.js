@@ -43,8 +43,8 @@ export default ({ sourcePath, buildPath, prefix, vpMin, vpMax, baseFontSize }) =
             format: 'javascript/js-objects'
           },
           {
-            destination: 'tailwind.tokens.js',
-            format: 'javascript/tailwind'
+            destination: 'css-vars.tokens.js',
+            format: 'javascript/css-vars'
           },
           {
             destination: 'js-constants.tokens.js',
