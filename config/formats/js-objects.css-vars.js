@@ -95,7 +95,7 @@ export const tailwind = ({ prefix }) => ({
       if (typeof value === 'object' && value.min && value.max && value.scaled) {
         flattenedSpace[`${key}-min`] = value.min;
         flattenedSpace[`${key}-max`] = value.max;
-        flattenedSpace[`${key}-scaled`] = value.scaled;
+        flattenedSpace[key] = value.scaled;
       } else {
         flattenedSpace[key] = value;
       }
@@ -109,7 +109,7 @@ export const tailwind = ({ prefix }) => ({
       if (typeof value === 'object' && value.min && value.max && value.scaled) {
         flattenedFontSize[`${key}-min`] = value.min;
         flattenedFontSize[`${key}-max`] = value.max;
-        flattenedFontSize[`${key}-scaled`] = value.scaled;
+        flattenedFontSize[key] = value.scaled;
       } else {
         flattenedFontSize[key] = value;
       }
