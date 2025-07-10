@@ -12,6 +12,7 @@ export const tailwind = ({ prefix }) => ({
     // Create a structure that matches the source tokens
     const tokenStructure = {
       border: {},
+      boxShadow: {},
       breakpoint: {},
       color: {},
       dimensions: {},
