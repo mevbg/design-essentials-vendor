@@ -108,17 +108,23 @@ export const cssVars = ({ prefix, vpMin, vpMax, baseFontSize }) => ({
         return '';
       }
 
-      return `  @media all and (max-width: ${vpMin - 1}px) {
+      return `@media all and (max-width: ${vpMin - 1}px) {
+  :root {
     ${formatQueries(minQueries)}
   }
+}
 
-  @media all and (min-width: ${vpMin}px) and (max-width: ${vpMax}px) {
+@media all and (min-width: ${vpMin}px) and (max-width: ${vpMax}px) {
+  :root {
     ${formatQueries(fluidQueries)}
   }
+}
 
-  @media all and (min-width: ${vpMax + 1}px) {
+@media all and (min-width: ${vpMax + 1}px) {
+  :root {
     ${formatQueries(maxQueries)}
-  }`;
+  }
+}`;
     };
 
     // Generate CSS variables for each group
@@ -214,6 +220,17 @@ export const cssVars = ({ prefix, vpMin, vpMax, baseFontSize }) => ({
     const colorScheme = generateColorScheme();
 
     // Combine standard variables, media queries, and color scheme
-    return `:root {\n${standardVariables}\n\n${mediaQueries}\n}\n\n${colorScheme}`;
+    const hasMediaQueries = mediaQueries.trim().length > 0;
+    
+    let result = `:root {\n${standardVariables}\n}`;
+    
+    if (hasMediaQueries) {
+      // Add media queries as separate blocks with :root selector inside
+      result += `\n\n${mediaQueries}`;
+    }
+    
+    result += `\n\n${colorScheme}`;
+    
+    return result;
   }
 });

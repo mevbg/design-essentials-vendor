@@ -13,11 +13,11 @@ export default ({ sourcePath, buildPath, prefix, vpMin, vpMax, baseFontSize }) =
 
     platforms: {
       css: {
-        transformGroup: 'scss',
+        transformGroup: 'css',
         buildPath: buildPath,
         files: [
           {
-            destination: 'css-vars.tokens.scss',
+            destination: 'css-vars.tokens.css',
             format: 'css/css-vars'
           }
         ]
