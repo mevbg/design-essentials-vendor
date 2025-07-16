@@ -17,6 +17,7 @@ export const tailwind = ({ prefix }) => ({
       color: {},
       dimensions: {},
       icon: {},
+      opacity: {},
       space: {},
       typo: {}
     };
