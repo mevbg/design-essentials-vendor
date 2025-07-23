@@ -35,8 +35,49 @@
     "url": "https://mev.bg"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx dev/index.ts",
+    "dev:watch": "nodemon --exec \"tsx dev/index.ts\" --ext ts,js --watch src --watch dev/client",
+    "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "clean": "del-cli dist dev/dist"
+  },
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  },
   "dependencies": {
-    "style-dictionary": "^4.4.0"
+    "style-dictionary": "^5.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "chokidar": "^4.0.3",
+    "colorjs.io": "^0.6.0-alpha.1",
+    "del-cli": "^6.0.0",
+    "esbuild-register": "^3.6.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10",
+    "prettier-plugin-organize-imports": "^4.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
   }
 }
