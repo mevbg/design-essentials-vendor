@@ -1,8 +1,11 @@
-import { TokenTypeHandlerParams } from '../../../../types';
+import { FormatHandler, TokenTypeHandlerParams } from '../../../../types';
 import { wrapInFileChapter } from '../../../../utils/formats.utils';
 import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils';
 
-const basicHandler = (name: string, { options, tokens, config }: TokenTypeHandlerParams): string =>
+const basicHandler: FormatHandler = (
+  name: string,
+  { options, tokens, config }: TokenTypeHandlerParams
+): string =>
   wrapInFileChapter(
     name,
     wrapInJsConst(name, defineJsObjectItemsWithVariables(tokens, options?.prefix)),

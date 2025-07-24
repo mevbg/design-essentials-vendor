@@ -4,10 +4,59 @@ import {
   CoreTokenHandlers,
   CustomFormatTypes,
   FormatBuilder,
+  FormatHandler,
   TokenTypeHandlerParams
 } from '../types';
 import { tokenIsFluid } from './fluid-tokens.utils';
 import { capitalize, toSpaceCase } from './strings.utils';
+
+// Static imports for all handlers
+import cssBasicHandler from '../formats/css/handlers/basic.handler';
+import cssColorHandler from '../formats/css/handlers/color.handler';
+import cssFluidHandler from '../formats/css/handlers/fluid.handler';
+import cssRootHandler from '../formats/css/handlers/root.handler';
+
+import jsStaticBasicHandler from '../formats/js/handlers/static/basic.handler';
+import jsStaticColorHandler from '../formats/js/handlers/static/color.handler';
+import jsStaticFluidHandler from '../formats/js/handlers/static/fluid.handler';
+
+import jsVariableBasicHandler from '../formats/js/handlers/variable/basic.handler';
+import jsVariableColorHandler from '../formats/js/handlers/variable/color.handler';
+import jsVariableFluidHandler from '../formats/js/handlers/variable/fluid.handler';
+
+import scssBasicHandler from '../formats/scss/handlers/basic.handler';
+import scssColorHandler from '../formats/scss/handlers/color.handler';
+import scssFluidHandler from '../formats/scss/handlers/fluid.handler';
+
+// Handler mapping object
+const handlers: Record<
+  string,
+  Record<string, FormatHandler> | Record<string, Record<string, FormatHandler>>
+> = {
+  css: {
+    basic: cssBasicHandler,
+    color: cssColorHandler,
+    fluid: cssFluidHandler,
+    root: cssRootHandler
+  },
+  js: {
+    static: {
+      basic: jsStaticBasicHandler,
+      color: jsStaticColorHandler,
+      fluid: jsStaticFluidHandler
+    },
+    variable: {
+      basic: jsVariableBasicHandler,
+      color: jsVariableColorHandler,
+      fluid: jsVariableFluidHandler
+    }
+  },
+  scss: {
+    basic: scssBasicHandler,
+    color: scssColorHandler,
+    fluid: scssFluidHandler
+  }
+};
 
 // Returns a file header with a provided name
 export const fileHeader = (name: string): string =>
@@ -25,7 +74,7 @@ export const getCoreTokenHandlers = (
   format: CustomFormatTypes,
   type: 'static' | 'variable' | null = null
 ): CoreTokenHandlers => {
-  const getHandler = async (...args: [string, TokenTypeHandlerParams]) => {
+  const getHandler = (...args: [string, TokenTypeHandlerParams]) => {
     let handlerType = 'basic';
 
     // If the tokens are color, use the color handler
@@ -38,9 +87,9 @@ export const getCoreTokenHandlers = (
       handlerType = 'fluid';
     }
 
-    const { default: handler } = await import(
-      `../formats/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler`
-    );
+    const handler = type
+      ? (handlers[format] as Record<string, Record<string, FormatHandler>>)[type][handlerType]
+      : (handlers[format] as Record<string, FormatHandler>)[handlerType];
 
     return handler(...args);
   };
@@ -48,7 +97,7 @@ export const getCoreTokenHandlers = (
   return Object.fromEntries(
     CORE_TOKENS.map((token) => [
       token,
-      (params: TokenTypeHandlerParams) => getHandler(capitalize(toSpaceCase(token)), params)
+      async (params: TokenTypeHandlerParams) => getHandler(capitalize(toSpaceCase(token)), params)
     ])
   );
 };

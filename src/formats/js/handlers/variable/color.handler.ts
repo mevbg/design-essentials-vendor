@@ -1,9 +1,9 @@
-import { TokenTypeHandlerParams } from '../../../../types';
+import { FormatHandler, TokenTypeHandlerParams } from '../../../../types';
 import { wrapInFileChapter } from '../../../../utils/formats.utils';
 import { capitalize } from '../../../../utils/strings.utils';
 import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils';
 
-const colorHandler = (
+const colorHandler: FormatHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {

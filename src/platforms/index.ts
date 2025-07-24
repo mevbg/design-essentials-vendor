@@ -1,17 +1,23 @@
 import { PlatformConfig } from 'style-dictionary/types';
 import { PlatformConfigBuilder, PlatformConfigBuilderParams, PlatformName } from '../types';
+import { css } from './css.platform';
+import { js } from './js.platform';
+import { json } from './json.platform';
+import { scss } from './scss.platform';
 
-export const getPlatformConfigs = async (
+const platformBuilders: Record<PlatformName, PlatformConfigBuilder> = {
+  css,
+  js,
+  json,
+  scss
+};
+
+export const getPlatformConfigs = (
   platforms: PlatformName[],
   params: PlatformConfigBuilderParams
-): Promise<Partial<Record<PlatformName, PlatformConfig>>> => {
-  const imports: Promise<Record<PlatformName, PlatformConfigBuilder>>[] = platforms.map(
-    (platformName) => import(`./${platformName}.platform`)
-  );
-  const arrOfBuilders = await Promise.all(imports);
-
+): Partial<Record<PlatformName, PlatformConfig>> => {
   const platformConfigs = Object.fromEntries(
-    arrOfBuilders.map((builder, index) => [platforms[index], builder[platforms[index]](params)])
+    platforms.map((platformName) => [platformName, platformBuilders[platformName](params)])
   );
 
   return platformConfigs;

@@ -1,9 +1,9 @@
-import { TokenTypeHandlerParams } from '../../../types';
+import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
 import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
 import { getColorScheme } from '../../../utils/tokens.utils';
 import { defineCssCustomProperties, wrapInCssRoot, wrapInCssSelector } from '../utils';
 
-const colorHandler = (
+const colorHandler: FormatHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {

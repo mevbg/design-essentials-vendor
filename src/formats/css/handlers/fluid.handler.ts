@@ -1,4 +1,4 @@
-import { TokenTypeHandlerParams } from '../../../types';
+import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
 import {
   mapFluidTokenValuesToMax,
   mapFluidTokenValuesToMin,
@@ -8,7 +8,7 @@ import {
 import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
 import { defineCssCustomProperties, wrapInCssRoot } from '../utils';
 
-const fluidHandler = (
+const fluidHandler: FormatHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {
