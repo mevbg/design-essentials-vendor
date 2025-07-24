@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { PREFIX as prefix } from './constants.js';
+import { PREFIX as prefix } from './constants';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,7 +10,7 @@ export const generateDevClientTokens: () => Promise<void> = async () => {
 
   try {
     await generateDesignTokens({
-      sourcePath: path.resolve(__dirname, './design/tokens/**/index.js'),
+      sourcePath: path.resolve(__dirname, './design/tokens/**/index.ts'),
       buildPath: path.resolve(__dirname, '../dist'),
       prefix,
       options: {

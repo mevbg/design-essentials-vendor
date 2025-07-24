@@ -1,4 +1,4 @@
-import { px } from '../utils/units.utils.js';
+import { px } from '../utils/units.utils';
 
 export const BASE_SIZE_UNIT = 8;
 

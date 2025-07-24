@@ -1,5 +1,5 @@
-import { $300, $600, $1800 } from '../../constants/breakpoint.constants.js';
-import { px } from '../../utils/units.utils.js';
+import { $300, $600, $1800 } from '../../constants/breakpoint.constants';
+import { px } from '../../utils/units.utils';
 
 export default {
   breakpoint: {

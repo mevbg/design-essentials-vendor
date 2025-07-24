@@ -1,4 +1,4 @@
-import { PREFIX } from '../../../constants.js';
+import { PREFIX } from '../../../constants';
 
 export default {
   $type: 'borderColor',

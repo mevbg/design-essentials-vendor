@@ -1,4 +1,4 @@
-import { $075, $050, $025 } from '../../constants/opacities.constants.js';
+import { $075, $050, $025 } from '../../constants/opacities.constants';
 
 export default {
   opacity: {

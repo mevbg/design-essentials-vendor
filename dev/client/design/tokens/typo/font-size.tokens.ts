@@ -1,5 +1,5 @@
-import { BASE_FONT_SIZE } from '../../constants/typography.constants.js';
-import { $150, $175, $200, $225, $250, $300, $400, $500 } from '../../constants/sizes.constants.js';
+import { BASE_FONT_SIZE } from '../../constants/typography.constants';
+import { $150, $175, $200, $225, $250, $300, $400, $500 } from '../../constants/sizes.constants';
 
 export default {
   $type: 'fontSize',

@@ -1,4 +1,4 @@
-import { $050, $075, $100, $125, $150, $175, $200, $225, $250, $300, $400, $500, $600, $800 } from '../../constants/sizes.constants.js';
+import { $050, $075, $100, $125, $150, $175, $200, $225, $250, $300, $400, $500, $600, $800 } from '../../constants/sizes.constants';
 
 export default {
   size: {

@@ -53,7 +53,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "clean": "del-cli dist dev/dist"
+    "clean:all": "del-cli dist dev/dist",
+    "clean:build": "del-cli dist",
+    "clean:dev": "del-cli dev/dist"
   },
   "engines": {
     "node": "22.x",

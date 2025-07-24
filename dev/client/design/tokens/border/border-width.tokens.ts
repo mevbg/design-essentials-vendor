@@ -1,5 +1,5 @@
-import { $600 } from '../../constants/breakpoint.constants.js';
-import { PREFIX } from '../../../constants.js';
+import { $600 } from '../../constants/breakpoint.constants';
+import { PREFIX } from '../../../constants';
 
 export default {
   $type: 'borderWidth',

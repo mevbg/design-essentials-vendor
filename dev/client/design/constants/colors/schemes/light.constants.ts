@@ -1,4 +1,4 @@
-import { Monochrome, Red, Green } from '../colors.constants.js';
+import { Monochrome, Red, Green } from '../colors.constants';
 
 export const light = {
   content: {

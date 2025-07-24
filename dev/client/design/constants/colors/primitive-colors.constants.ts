@@ -1,5 +1,5 @@
-import * as Colors from './colors.constants.js';
-import { upperSnakeToLowerKebab } from '../../utils/strings.utils.js';
+import * as Colors from './colors.constants';
+import { upperSnakeToLowerKebab } from '../../utils/strings.utils';
 
 const modifyToPrimitive = (obj) => Object.fromEntries(
   Object.entries(obj).map(([key, value]) => [upperSnakeToLowerKebab(key), value])

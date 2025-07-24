@@ -1,4 +1,4 @@
-import { BASE_FONT_SIZE } from '../constants/typography.constants.js';
+import { BASE_FONT_SIZE } from '../constants/typography.constants';
 
 export const px = (value) => `${value}px`;
 
