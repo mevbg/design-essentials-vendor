@@ -1,6 +1,6 @@
 import { TokenTypeHandlerParams } from '../../../../types';
-import { defineSection } from '../../../../utils';
-import { defineObjectItemsWithVariables, wrapInConst } from '../../utils';
+import { wrapInFileChapter } from '../../../../utils/formats.utils';
+import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils';
 
 const fluidHandler = (
   name: string,
@@ -10,10 +10,10 @@ const fluidHandler = (
   const output: string[] = [];
 
   // Print out all the tokens
-  output.push(wrapInConst(name, defineObjectItemsWithVariables(tokens, options?.prefix)));
+  output.push(wrapInJsConst(name, defineJsObjectItemsWithVariables(tokens, options?.prefix)));
 
   // Return the output
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default fluidHandler;

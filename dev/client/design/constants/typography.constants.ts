@@ -1,1 +1,1 @@
-export const BASE_FONT_SIZE = 10;
+export const BASE_FONT_SIZE: number = 10;

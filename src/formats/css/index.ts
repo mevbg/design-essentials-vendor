@@ -1,26 +1,37 @@
-import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
-import { TokenTypeHandlerParams } from '../../types';
-import { fileHeader, toSpaceCase } from '../../utils';
-import * as coreTokenHandlers from './core-tokens';
+import { FormatFnArguments } from 'style-dictionary/types';
+import { FormatBuilder, TokenTypeHandlerParams } from '../../types';
+import {
+  allFormatterTemplate,
+  coreFormatterTemplate,
+  fileHeader,
+  getCoreTokenHandlers
+} from '../../utils/formats.utils';
 import basicHandler from './handlers/basic.handler';
 import rootHandler from './handlers/root.handler';
 
-export const cssRootFontSizeFormatter = () => ({
+const coreTokenHandlers = getCoreTokenHandlers('css');
+const rootFontSizeTitle = 'Root Font Size';
+
+const outputRootFontSize = (output: string[], { options, platform }: FormatFnArguments) => {
+  output.push(
+    rootHandler(rootFontSizeTitle, {
+      options,
+      config: { prefix: platform?.prefix }
+    } as TokenTypeHandlerParams)
+  );
+};
+
+export const cssRootFontSizeFormatter: FormatBuilder = () => ({
   name: 'mev/css/root-font-size',
-  format: function ({ options, platform }: FormatFnArguments) {
+  format: function (formatArgs: FormatFnArguments) {
     // Define the output array
     const output: string[] = [];
 
     // Add header to the output array
-    output.push(fileHeader('Root Font Size'));
+    output.push(fileHeader(rootFontSizeTitle));
 
     // Handle the root font size
-    output.push(
-      rootHandler('Root Font Size', {
-        options,
-        config: { noFlagComment: true, prefix: platform?.prefix }
-      } as TokenTypeHandlerParams)
-    );
+    outputRootFontSize(output, formatArgs);
 
     // Join the output array into a string and return it
     return output.join('\n');
@@ -28,75 +39,16 @@ export const cssRootFontSizeFormatter = () => ({
 });
 
 // Formatter for all tokens
-export const cssAllFormatter = () => ({
+export const cssAllFormatter: FormatBuilder = allFormatterTemplate({
   name: 'mev/css/all',
-  format: function ({ dictionary, options, platform }: FormatFnArguments) {
-    // Define the output array
-    const output: string[] = [];
-
-    // Get all tokens from the dictionary
-    const { allTokens } = dictionary;
-
-    // Add header to the output array
-    output.push(fileHeader('CSS Custom Properties'));
-
-    // Handle the root font size
-    output.push(
-      rootHandler('Root Font Size', {
-        options,
-        config: { prefix: platform?.prefix }
-      } as TokenTypeHandlerParams)
-    );
-
-    // Parse tokens that have a dedicated handler
-    const getDedicatedTokens = (type: string): TransformedToken[] =>
-      allTokens.filter((token) => token.$type === type);
-    Object.entries(coreTokenHandlers).forEach(([type, handlerFn]) => {
-      const tokens = getDedicatedTokens(type);
-
-      if (tokens.length) {
-        output.push(handlerFn({ options, tokens }));
-      }
-    });
-
-    // Parse tokens that don't have a dedicated handler
-    const otherTokens: TransformedToken[] = allTokens.filter(
-      (token) => !Object.keys(coreTokenHandlers).includes(token.$type || '')
-    );
-    if (otherTokens.length) {
-      output.push(basicHandler('Other', { options, tokens: otherTokens }));
-    }
-
-    // Join the output array into a string and return it
-    return output.join('\n');
-  }
+  fileHeaderTitle: 'CSS Custom Properties',
+  prefix: outputRootFontSize,
+  coreTokenHandlers,
+  basicHandler
 });
 
-// Formatter for tokens with a dedicated handler
-export const cssDedicatedFormatter = () => ({
-  name: 'mev/css/dedicated',
-  format: function (args: FormatFnArguments) {
-    // Define the output array
-    const output: string[] = [];
-
-    // Get all tokens from the dictionary
-    const { allTokens: tokens } = args.dictionary;
-
-    // Get the type of the tokens
-    // If there are no tokens, exit the function
-    const type = tokens.length && tokens[0].$type;
-    if (!type) return;
-
-    // Add header to the output array
-    output.push(fileHeader(`${toSpaceCase(type)} Custom Properties`));
-
-    // Parse the tokens
-    const handler = coreTokenHandlers[type as keyof typeof coreTokenHandlers];
-    if (handler) {
-      output.push(handler({ options: args.options, tokens, config: { noFlagComment: true } }));
-    }
-
-    // Join the output array into a string and return it
-    return output.join('\n');
-  }
+// Formatter for tokens with a core handler
+export const cssCoreFormatter: FormatBuilder = coreFormatterTemplate({
+  name: 'mev/css/core',
+  coreTokenHandlers
 });

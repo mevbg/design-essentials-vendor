@@ -1,13 +1,12 @@
 import { TokenTypeHandlerParams } from '../../../types';
 import {
-  defineSection,
-  mapFluidTokensToCalcTokens,
-  mapFluidTokensToMaxTokens,
-  mapFluidTokensToMinTokens,
-  separateFluidTokens,
-  tab
-} from '../../../utils';
-import { defineCssCustomProperties, wrapInRoot } from '../utils';
+  mapFluidTokenValuesToMax,
+  mapFluidTokenValuesToMin,
+  mapFluidTokenValuesToResponsive,
+  separateFluidAndFixedTokens
+} from '../../../utils/fluid-tokens.utils';
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
+import { defineCssCustomProperties, wrapInCssRoot } from '../utils';
 
 const fluidHandler = (
   name: string,
@@ -15,28 +14,32 @@ const fluidHandler = (
 ): string => {
   // Define the output array
   const output: string[] = [];
-  const { fluidTokens, regularTokens } = separateFluidTokens(tokens);
 
-  if (regularTokens.length) {
-    output.push(wrapInRoot(defineCssCustomProperties(regularTokens)) + '\n');
+  // Separate fluid and regular tokens
+  const { fluidTokens, fixedTokens } = separateFluidAndFixedTokens(tokens);
+
+  // Print out regular tokens (if any)
+  if (fixedTokens.length) {
+    output.push(wrapInCssRoot(defineCssCustomProperties(fixedTokens)) + '\n');
   }
 
+  // Get the fluid scale scheme, the base font size and the viewport sizes
   const { fluidScaleScheme, baseFontSize } = options || {};
   const { minViewportW, maxViewportW } = fluidScaleScheme;
 
   // min
   output.push(`@media all and (max-width: ${minViewportW - 1}px) {`);
   output.push(
-    wrapInRoot(defineCssCustomProperties(mapFluidTokensToMinTokens(fluidTokens), tab(2)), tab())
+    wrapInCssRoot(defineCssCustomProperties(mapFluidTokenValuesToMin(fluidTokens), tab(2)), tab())
   );
   output.push('}\n');
 
   // calc
   output.push(`@media all and (min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px) {`);
   output.push(
-    wrapInRoot(
+    wrapInCssRoot(
       defineCssCustomProperties(
-        mapFluidTokensToCalcTokens(fluidTokens, baseFontSize, fluidScaleScheme),
+        mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme),
         tab(2)
       ),
       tab()
@@ -47,11 +50,12 @@ const fluidHandler = (
   // max
   output.push(`@media all and (min-width: ${maxViewportW + 1}px) {`);
   output.push(
-    wrapInRoot(defineCssCustomProperties(mapFluidTokensToMaxTokens(fluidTokens), tab(2)), tab())
+    wrapInCssRoot(defineCssCustomProperties(mapFluidTokenValuesToMax(fluidTokens), tab(2)), tab())
   );
   output.push('}');
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  // Return the output
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default fluidHandler;

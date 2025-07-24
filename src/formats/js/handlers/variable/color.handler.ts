@@ -1,6 +1,7 @@
 import { TokenTypeHandlerParams } from '../../../../types';
-import { capitalize, defineSection } from '../../../../utils';
-import { defineObjectItemsWithVariables, wrapInConst } from '../../utils';
+import { wrapInFileChapter } from '../../../../utils/formats.utils';
+import { capitalize } from '../../../../utils/strings.utils';
+import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils';
 
 const colorHandler = (
   name: string,
@@ -28,14 +29,14 @@ const colorHandler = (
 
   if (nonSchemeTokens.length) {
     output.push(
-      wrapInConst(
+      wrapInJsConst(
         name,
-        defineObjectItemsWithVariables([...nonSchemeTokens, ...schemeTokens], options?.prefix)
+        defineJsObjectItemsWithVariables([...nonSchemeTokens, ...schemeTokens], options?.prefix)
       )
     );
   }
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default colorHandler;

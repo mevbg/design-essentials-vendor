@@ -1,13 +1,18 @@
 import { TransformedToken } from 'style-dictionary/types';
-import { capitalize, spaceCaseToCamelCase, toCamelCase, toKebabCase } from '../../utils';
+import {
+  capitalize,
+  spaceCaseToCamelCase,
+  toCamelCase,
+  toKebabCase
+} from '../../utils/strings.utils';
 
-export const wrapInConst = (name: string, code: string): string =>
+export const wrapInJsConst = (name: string, code: string): string =>
   `export const ${spaceCaseToCamelCase(name)} = {\n${code}\n};`;
 
-export const wrapInObject = (name: string, code: string, indent: string = ''): string =>
+export const wrapInJsObject = (name: string, code: string, indent: string = ''): string =>
   `${indent}${name}: {\n${code}\n${indent}}`;
 
-export const defineObjectItemsWithValues = (
+export const defineJsObjectItemsWithValues = (
   tokens: TransformedToken[],
   indent: string = '  '
 ): string =>
@@ -17,7 +22,7 @@ export const defineObjectItemsWithValues = (
     })
     .join('\n');
 
-export const defineObjectItemsWithVariables = (
+export const defineJsObjectItemsWithVariables = (
   tokens: TransformedToken[],
   prefix: string,
   indent: string = '  '

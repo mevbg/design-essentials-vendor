@@ -1,10 +1,10 @@
 import { TransformedToken } from 'style-dictionary/types';
-import { toKebabCase } from '../../utils';
+import { toKebabCase } from '../../utils/strings.utils';
 
-export const wrapInMap = (name: string, code: string, indent: string = ''): string =>
+export const wrapInSassMap = (name: string, code: string, indent: string = ''): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
-export const defineMapValues = (tokens: TransformedToken[], indent: string = '  '): string =>
+export const defineSassMapValues = (tokens: TransformedToken[], indent: string = '  '): string =>
   tokens
     .map(
       ({ name, $type, $value }, index) =>

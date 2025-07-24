@@ -1,12 +1,12 @@
 import { TokenTypeHandlerParams } from '../../../../types';
-import { defineSection } from '../../../../utils';
-import { defineObjectItemsWithValues, wrapInConst } from '../../utils';
+import { wrapInFileChapter } from '../../../../utils/formats.utils';
+import { defineJsObjectItemsWithValues, wrapInJsConst } from '../../utils';
 
 const basicHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string =>
-  defineSection(
+  wrapInFileChapter(
     name,
-    wrapInConst(name, defineObjectItemsWithValues(tokens)),
-    config?.noFlagComment
+    wrapInJsConst(name, defineJsObjectItemsWithValues(tokens)),
+    config?.noChapterTitle
   );
 
 export default basicHandler;

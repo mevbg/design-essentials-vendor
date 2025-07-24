@@ -1,7 +1,12 @@
-export const toHex = (color) => color.to('srgb').toString({ format: 'hex' });
+import Color from 'colorjs.io';
 
-export const parseColorGroupToStyleDictionaryFormat = (group) => {
-  const processValue = (value) => {
+// Converts a given color to hex format
+export const toHex = (color: Color): string => color.to('srgb').toString({ format: 'hex' });
+
+// Transforms a given color group to Style Dictionary format
+type ColorGroup = Record<string, Color>;
+export const transformToStyleDictionaryColors = (groups: ColorGroup[]): ColorGroup[] => groups.map((group) => {
+  const processValue = (value: Color) => {
     // Check if the value is a Color object (has 'to' method)
     if (value && typeof value.to === 'function') {
       return { $value: toHex(value) };
@@ -21,7 +26,4 @@ export const parseColorGroupToStyleDictionaryFormat = (group) => {
   return Object.fromEntries(
     Object.entries(group).map(([key, value]) => [key, processValue(value)])
   );
-};
-
-export const transformToStyleDictionaryColors = (groups) =>
-  groups.map((group) => parseColorGroupToStyleDictionaryFormat(group));
+});

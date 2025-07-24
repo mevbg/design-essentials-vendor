@@ -1,8 +1,8 @@
 import { TokenTypeHandlerParams } from '../../../types';
-import { defineSection } from '../../../utils';
-import { defineCssCustomProperties, wrapInRoot } from '../utils';
+import { wrapInFileChapter } from '../../../utils/formats.utils';
+import { defineCssCustomProperties, wrapInCssRoot } from '../utils';
 
 const basicHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string =>
-  defineSection(name, wrapInRoot(defineCssCustomProperties(tokens)), config?.noFlagComment);
+  wrapInFileChapter(name, wrapInCssRoot(defineCssCustomProperties(tokens)), config?.noChapterTitle);
 
 export default basicHandler;

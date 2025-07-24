@@ -1,8 +1,8 @@
 import { TokenTypeHandlerParams } from '../../../types';
-import { defineSection } from '../../../utils';
-import { defineMapValues, wrapInMap } from '../utils';
+import { wrapInFileChapter } from '../../../utils/formats.utils';
+import { defineSassMapValues, wrapInSassMap } from '../utils';
 
 const basicHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string =>
-  defineSection(name, wrapInMap(name, defineMapValues(tokens)), config?.noFlagComment);
+  wrapInFileChapter(name, wrapInSassMap(name, defineSassMapValues(tokens)), config?.noChapterTitle);
 
 export default basicHandler;

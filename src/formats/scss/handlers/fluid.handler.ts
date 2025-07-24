@@ -1,12 +1,12 @@
 import { TokenTypeHandlerParams } from '../../../types';
 import {
-  defineSection,
-  mapFluidTokensToCalcTokens,
-  mapFluidTokensToMaxTokens,
-  mapFluidTokensToMinTokens,
-  separateFluidTokens
-} from '../../../utils';
-import { defineMapValues, wrapInMap } from '../utils';
+  mapFluidTokenValuesToMax,
+  mapFluidTokenValuesToMin,
+  mapFluidTokenValuesToResponsive,
+  separateFluidAndFixedTokens
+} from '../../../utils/fluid-tokens.utils';
+import { wrapInFileChapter } from '../../../utils/formats.utils';
+import { defineSassMapValues, wrapInSassMap } from '../utils';
 
 const fluidHandler = (
   name: string,
@@ -16,11 +16,11 @@ const fluidHandler = (
   const output: string[] = [];
 
   // Separate fluid and regular tokens
-  const { fluidTokens, regularTokens } = separateFluidTokens(tokens);
+  const { fluidTokens, fixedTokens } = separateFluidAndFixedTokens(tokens);
 
   // Print out regular tokens (if any)
-  if (regularTokens.length) {
-    output.push(wrapInMap(name, defineMapValues(regularTokens)) + '\n');
+  if (fixedTokens.length) {
+    output.push(wrapInSassMap(name, defineSassMapValues(fixedTokens)) + '\n');
   }
 
   // Get the fluid scale scheme and base font size
@@ -28,21 +28,26 @@ const fluidHandler = (
 
   // min
   output.push(
-    wrapInMap(name + '-min', defineMapValues(mapFluidTokensToMinTokens(fluidTokens))) + '\n'
+    wrapInSassMap(name + '-min', defineSassMapValues(mapFluidTokenValuesToMin(fluidTokens))) + '\n'
   );
 
   // calc
   output.push(
-    wrapInMap(
+    wrapInSassMap(
       name + '-fluid',
-      defineMapValues(mapFluidTokensToCalcTokens(fluidTokens, baseFontSize, fluidScaleScheme))
+      defineSassMapValues(
+        mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme)
+      )
     ) + '\n'
   );
 
   // max
-  output.push(wrapInMap(name + '-max', defineMapValues(mapFluidTokensToMaxTokens(fluidTokens))));
+  output.push(
+    wrapInSassMap(name + '-max', defineSassMapValues(mapFluidTokenValuesToMax(fluidTokens)))
+  );
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  // Return the output
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default fluidHandler;

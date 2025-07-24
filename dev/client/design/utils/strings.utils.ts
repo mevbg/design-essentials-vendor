@@ -1,4 +1,5 @@
-export const upperSnakeToLowerKebab = (str) => {
+// Converts a given string from UPPER_SNAKE_CASE to lower-kebab-case
+export const upperSnakeToLowerKebab = (str: string): string => {
   const parts = str.toLowerCase().split('_');
   const result: string[] = [];
 

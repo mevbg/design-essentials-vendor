@@ -1,6 +1,16 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { PREFIX as prefix } from './constants';
+import {
+  BASE_FONT_SIZE,
+  COLOR_SCHEME_METHOD,
+  DEFAULT_COLOR_SCHEME,
+  FLUID_SCALE_MAX_VIEWPORT,
+  FLUID_SCALE_MIN_VIEWPORT,
+  PLATFORMS,
+  PREFIX,
+  ROOT_SCALE_MAX_VIEWPORT,
+  ROOT_SCALE_MIN_VIEWPORT
+} from './constants';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,20 +22,21 @@ export const generateDevClientTokens: () => Promise<void> = async () => {
     await generateDesignTokens({
       sourcePath: path.resolve(__dirname, './design/tokens/**/index.ts'),
       buildPath: path.resolve(__dirname, '../dist'),
-      prefix,
+      prefix: PREFIX,
+      platforms: PLATFORMS,
       options: {
-        baseFontSize: 10,
+        baseFontSize: BASE_FONT_SIZE,
         colorScheme: {
-          default: 'light',
-          method: 'combined'
+          default: DEFAULT_COLOR_SCHEME,
+          method: COLOR_SCHEME_METHOD
         },
         fluidScaleScheme: {
-          minViewportW: 600,
-          maxViewportW: 1200
+          minViewportW: FLUID_SCALE_MIN_VIEWPORT,
+          maxViewportW: FLUID_SCALE_MAX_VIEWPORT
         },
         rootScaleScheme: {
-          minViewportW: 300,
-          maxViewportW: 2100
+          minViewportW: ROOT_SCALE_MIN_VIEWPORT,
+          maxViewportW: ROOT_SCALE_MAX_VIEWPORT
         }
       }
     });

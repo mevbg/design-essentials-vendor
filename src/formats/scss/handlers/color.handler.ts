@@ -1,31 +1,21 @@
-import { TransformedToken } from 'style-dictionary';
 import { TokenTypeHandlerParams } from '../../../types';
-import { defineSection, tab } from '../../../utils';
-import { defineMapValues, wrapInMap } from '../utils';
-
-const getSchemeTokens = (tokens: TransformedToken[], scheme: string): TransformedToken[] =>
-  tokens
-    .filter(({ attributes }) => attributes?.item === scheme)
-    .map(({ name, ...rest }) => ({
-      name: name.replace(`-scheme-${scheme}`, ''),
-      ...rest
-    }));
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
+import { getColorScheme } from '../../../utils/tokens.utils';
+import { defineSassMapValues, wrapInSassMap } from '../utils';
 
 const colorHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string => {
   // Define the output array
   const output: string[] = [];
 
   // Scheme color tokens
-  const schemeTokens = tokens.filter(({ attributes }) => attributes?.type === 'scheme');
-  const colorScheme: Record<string, TransformedToken[]> = {
-    light: getSchemeTokens(schemeTokens, 'light'),
-    dark: getSchemeTokens(schemeTokens, 'dark')
-  };
+  const colorScheme = getColorScheme(tokens, 'kebab');
   output.push(
-    wrapInMap(
+    wrapInSassMap(
       'color-scheme',
       Object.entries(colorScheme)
-        .map(([scheme, tokens]) => wrapInMap(scheme, defineMapValues(tokens, tab(2)), tab()))
+        .map(([scheme, tokens]) =>
+          wrapInSassMap(scheme, defineSassMapValues(tokens, tab(2)), tab())
+        )
         .join('\n')
     ) + '\n'
   );
@@ -33,10 +23,11 @@ const colorHandler = (name: string, { tokens, config }: TokenTypeHandlerParams):
   // Non-scheme color tokens
   const nonSchemeTokens = tokens.filter(({ attributes }) => attributes?.type !== 'scheme');
   if (nonSchemeTokens.length) {
-    output.push(wrapInMap(name, defineMapValues(nonSchemeTokens)));
+    output.push(wrapInSassMap(name, defineSassMapValues(nonSchemeTokens)));
   }
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  // Return the output
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default colorHandler;

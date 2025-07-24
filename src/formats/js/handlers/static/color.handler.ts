@@ -1,43 +1,22 @@
-import { TransformedToken } from 'style-dictionary';
 import { TokenTypeHandlerParams } from '../../../../types';
-import { capitalize, defineSection, tab } from '../../../../utils';
-import { defineObjectItemsWithValues, wrapInConst, wrapInObject } from '../../utils';
-
-const getSchemeTokens = (tokens: TransformedToken[], scheme: string): TransformedToken[] =>
-  tokens
-    .filter(({ attributes }) => attributes?.item === scheme)
-    .map(({ name, ...rest }) => ({
-      name: name.replace(`-scheme-${scheme}`, ''),
-      ...rest
-    }));
+import { tab, wrapInFileChapter } from '../../../../utils/formats.utils';
+import { getColorScheme } from '../../../../utils/tokens.utils';
+import { defineJsObjectItemsWithValues, wrapInJsConst, wrapInJsObject } from '../../utils';
 
 const colorHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string => {
   // Define the output array
   const output: string[] = [];
 
   // Scheme color tokens
-  const schemeTokens = tokens.filter(({ attributes }) => attributes?.type === 'scheme');
-  const colorScheme: Record<string, TransformedToken[]> = {
-    light: getSchemeTokens(schemeTokens, 'light'),
-    dark: getSchemeTokens(schemeTokens, 'dark')
-  };
+  const colorScheme = getColorScheme(tokens, 'pascal');
   output.push(
-    wrapInConst(
-      'colorScheme',
+    wrapInJsConst(
+      'Color Scheme',
       Object.entries(colorScheme)
         .map(
           ([scheme, tokens], index) =>
-            wrapInObject(
-              scheme,
-              defineObjectItemsWithValues(
-                tokens.map(({ name, ...rest }) => ({
-                  name: name.replace('ColorScheme' + capitalize(scheme), ''),
-                  ...rest
-                })),
-                tab(2)
-              ),
-              tab()
-            ) + (index < Object.entries(colorScheme).length - 1 ? ',' : '')
+            wrapInJsObject(scheme, defineJsObjectItemsWithValues(tokens, tab(2)), tab()) +
+            (index < Object.entries(colorScheme).length - 1 ? ',' : '')
         )
         .join('\n')
     ) + '\n'
@@ -46,10 +25,11 @@ const colorHandler = (name: string, { tokens, config }: TokenTypeHandlerParams):
   // Non-scheme color tokens
   const nonSchemeTokens = tokens.filter(({ attributes }) => attributes?.type !== 'scheme');
   if (nonSchemeTokens.length) {
-    output.push(wrapInConst(name, defineObjectItemsWithValues(nonSchemeTokens)));
+    output.push(wrapInJsConst(name, defineJsObjectItemsWithValues(nonSchemeTokens)));
   }
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  // Return the output
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default colorHandler;

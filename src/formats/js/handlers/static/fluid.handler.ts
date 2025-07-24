@@ -1,12 +1,12 @@
 import { TokenTypeHandlerParams } from '../../../../types';
 import {
-  defineSection,
-  mapFluidTokensToCalcTokens,
-  mapFluidTokensToMaxTokens,
-  mapFluidTokensToMinTokens,
-  separateFluidTokens
-} from '../../../../utils';
-import { defineObjectItemsWithValues, wrapInConst } from '../../utils';
+  mapFluidTokenValuesToMax,
+  mapFluidTokenValuesToMin,
+  mapFluidTokenValuesToResponsive,
+  separateFluidAndFixedTokens
+} from '../../../../utils/fluid-tokens.utils';
+import { wrapInFileChapter } from '../../../../utils/formats.utils';
+import { defineJsObjectItemsWithValues, wrapInJsConst } from '../../utils';
 
 const fluidHandler = (
   name: string,
@@ -16,11 +16,11 @@ const fluidHandler = (
   const output: string[] = [];
 
   // Separate fluid and regular tokens
-  const { fluidTokens, regularTokens } = separateFluidTokens(tokens);
+  const { fluidTokens, fixedTokens } = separateFluidAndFixedTokens(tokens);
 
   // Print out regular tokens (if any)
-  if (regularTokens.length) {
-    output.push(wrapInConst(name, defineObjectItemsWithValues(regularTokens)) + '\n');
+  if (fixedTokens.length) {
+    output.push(wrapInJsConst(name, defineJsObjectItemsWithValues(fixedTokens)) + '\n');
   }
 
   // Get the fluid scale scheme and base font size
@@ -28,28 +28,32 @@ const fluidHandler = (
 
   // min
   output.push(
-    wrapInConst(
+    wrapInJsConst(
       name + ' Min',
-      defineObjectItemsWithValues(mapFluidTokensToMinTokens(fluidTokens))
+      defineJsObjectItemsWithValues(mapFluidTokenValuesToMin(fluidTokens))
     ) + '\n'
   );
 
   // calc
   output.push(
-    wrapInConst(
+    wrapInJsConst(
       name + ' Fluid',
-      defineObjectItemsWithValues(
-        mapFluidTokensToCalcTokens(fluidTokens, baseFontSize, fluidScaleScheme)
+      defineJsObjectItemsWithValues(
+        mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme)
       )
     ) + '\n'
   );
 
   // max
   output.push(
-    wrapInConst(name + ' Max', defineObjectItemsWithValues(mapFluidTokensToMaxTokens(fluidTokens)))
+    wrapInJsConst(
+      name + ' Max',
+      defineJsObjectItemsWithValues(mapFluidTokenValuesToMax(fluidTokens))
+    )
   );
 
-  return defineSection(name, output.join('\n'), config?.noFlagComment);
+  // Return the output
+  return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
 
 export default fluidHandler;
