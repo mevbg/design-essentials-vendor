@@ -65,13 +65,10 @@ export const defineSection = (name: string, code: string, noFlagComment?: boolea
   return noFlagComment ? `${code}\n` : `\n${`/* ${name} Tokens */`.toUpperCase()}\n\n${code}\n`;
 };
 
-export const tokenHasFluidValue = (token: TransformedToken): boolean => {
-  return (
-    token.$value.min !== undefined &&
-    token.$value.max !== undefined &&
-    token.$value.min !== token.$value.max
-  );
-};
+export const tokenHasFluidValue = (token: TransformedToken): boolean =>
+  token.$value.min !== undefined &&
+  token.$value.max !== undefined &&
+  token.$value.min !== token.$value.max;
 
 export const separateFluidTokens = (tokens: TransformedToken[]) => {
   const fluidTokens: TransformedToken[] = [];
