@@ -1,10 +1,10 @@
-import { TransformedToken } from 'style-dictionary/types';
+import { CodeBlockContentParams, CodeBlockWrapperParams } from '../../types/index.js';
 import { toKebabCase } from '../../utils/string.utils.js';
 
-export const wrapInSassMap = (name: string, code: string, indent: string = ''): string =>
+export const wrapInSassMap = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
-export const defineSassMapValues = (tokens: TransformedToken[], indent: string = '  '): string =>
+export const defineSassMapValues = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
   tokens
     .map(
       ({ name, $type, $value }, index) =>

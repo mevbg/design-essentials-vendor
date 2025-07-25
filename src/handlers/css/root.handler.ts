@@ -1,6 +1,6 @@
-import { TokenTypeHandlerParams } from '../../../types/index.js';
-import { tab, wrapInFileChapter } from '../../../utils/format.utils.js';
-import { wrapInCssRoot, wrapInCssSelector } from '../utils.js';
+import { wrapInCssRoot, wrapInCssSelector } from '../../formats/css/utils.js';
+import { TokenTypeHandlerParams } from '../../types/index.js';
+import { tab, wrapInFileChapter } from '../../utils/format.utils.js';
 
 export default (name: string, { options, config }: TokenTypeHandlerParams): string => {
   // Define the output array
@@ -16,30 +16,30 @@ export default (name: string, { options, config }: TokenTypeHandlerParams): stri
   // from 0 up to min breakpoint
   output.push(`@media all and (max-width: ${minViewportW - 1}px) {`);
   output.push(
-    wrapInCssRoot(
-      `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${minViewportW});`,
-      tab()
-    )
+    wrapInCssRoot({
+      code: `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${minViewportW});`,
+      indent: tab()
+    })
   );
   output.push('}\n');
 
   // from min breakpoint up to max breakpoint
   output.push(`@media all and (min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px) {`);
   output.push(
-    wrapInCssRoot(
-      `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`,
-      tab()
-    )
+    wrapInCssRoot({
+      code: `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`,
+      indent: tab()
+    })
   );
   output.push('}\n');
 
   // scalable from max breakpoint up to ∞
   output.push(`@media all and (min-width: ${maxViewportW + 1}px) {`);
   output.push(
-    wrapInCssRoot(
-      `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`,
-      tab()
-    ) + '\n'
+    wrapInCssRoot({
+      code: `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`,
+      indent: tab()
+    }) + '\n'
   );
   output.push(
     wrapInCssSelector(

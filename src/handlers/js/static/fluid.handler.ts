@@ -1,3 +1,4 @@
+import { defineJsObjectItemsWithValues, wrapInJsConst } from '../../../formats/js/utils.js';
 import { TokenTypeHandlerParams } from '../../../types/index.js';
 import {
   mapFluidTokenValuesToMax,
@@ -6,7 +7,6 @@ import {
   separateFluidAndFixedTokens
 } from '../../../utils/fluid-token.utils.js';
 import { wrapInFileChapter } from '../../../utils/format.utils.js';
-import { defineSassMapValues, wrapInSassMap } from '../utils.js';
 
 const fluidHandler = (
   name: string,
@@ -20,7 +20,12 @@ const fluidHandler = (
 
   // Print out regular tokens (if any)
   if (fixedTokens.length) {
-    output.push(wrapInSassMap(name, defineSassMapValues(fixedTokens)) + '\n');
+    output.push(
+      wrapInJsConst({
+        name,
+        code: defineJsObjectItemsWithValues({ tokens: fixedTokens })
+      }) + '\n'
+    );
   }
 
   // Get the fluid scale scheme and base font size
@@ -28,22 +33,28 @@ const fluidHandler = (
 
   // min
   output.push(
-    wrapInSassMap(name + '-min', defineSassMapValues(mapFluidTokenValuesToMin(fluidTokens))) + '\n'
+    wrapInJsConst({
+      name: name + ' Min',
+      code: defineJsObjectItemsWithValues({ tokens: mapFluidTokenValuesToMin(fluidTokens) })
+    }) + '\n'
   );
 
   // calc
   output.push(
-    wrapInSassMap(
-      name + '-fluid',
-      defineSassMapValues(
-        mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme)
-      )
-    ) + '\n'
+    wrapInJsConst({
+      name: name + ' Fluid',
+      code: defineJsObjectItemsWithValues({
+        tokens: mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme)
+      })
+    }) + '\n'
   );
 
   // max
   output.push(
-    wrapInSassMap(name + '-max', defineSassMapValues(mapFluidTokenValuesToMax(fluidTokens)))
+    wrapInJsConst({
+      name: name + ' Max',
+      code: defineJsObjectItemsWithValues({ tokens: mapFluidTokenValuesToMax(fluidTokens) })
+    })
   );
 
   // Return the output

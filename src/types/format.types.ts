@@ -25,3 +25,15 @@ export enum JsFormatterType {
   STATIC = 'static',
   VARIABLE = 'variable'
 }
+
+export type CodeBlockWrapperParams = {
+  code: string;
+  name?: string;
+  indent?: string;
+};
+
+export type CodeBlockContentParams = {
+  tokens: TransformedToken[];
+  options?: FormatFnArguments['options'];
+  indent?: string;
+};

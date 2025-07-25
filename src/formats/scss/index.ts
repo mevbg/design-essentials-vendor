@@ -4,7 +4,7 @@ import {
   coreFormatterTemplate,
   getCoreTokenHandlers
 } from '../../utils/format.utils.js';
-import basicHandler from './handlers/basic.handler.js';
+import scssConfig from './scss.config.js';
 
 const platform: PlatformName = 'scss';
 const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.SCSS);
@@ -15,7 +15,7 @@ export const scssAllFormatter: FormatBuilder = allFormatterTemplate({
   name: 'all',
   fileHeaderTitle: 'SCSS Tokens',
   coreTokenHandlers,
-  basicHandler
+  ...scssConfig
 });
 
 // Formatter for tokens with a core handler

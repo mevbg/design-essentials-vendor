@@ -1,6 +1,9 @@
 import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CORE_TOKENS } from '../constants.js';
+import basicHandler from '../handlers/basic.handler.js';
 import {
+  CodeBlockContentParams,
+  CodeBlockWrapperParams,
   CoreTokenHandlers,
   CustomFormatter,
   FormatBuilder,
@@ -28,23 +31,26 @@ export const getCoreTokenHandlers = (
   type: JsFormatterType | null = null
 ): CoreTokenHandlers => {
   const getHandler = async (...args: [string, TokenTypeHandlerParams]) => {
-    let handlerType = 'basic';
+    const handlerType =
+      args[1].tokens.length && args[1].tokens[0].$type === 'color'
+        ? 'color'
+        : args[1].tokens.some(tokenIsFluid)
+          ? 'fluid'
+          : 'basic';
 
-    // If the tokens are color, use the color handler
-    if (args[1].tokens.length && args[1].tokens[0].$type === 'color') {
-      handlerType = 'color';
+    if (handlerType !== 'basic') {
+      const { default: handler } = await import(
+        `../handlers/${format}/${type ? `${type}/` : ''}${handlerType}.handler.js`
+      );
+      return handler(...args);
     }
 
-    // If the tokens are fluid, use the fluid handler
-    if (args[1].tokens.some(tokenIsFluid)) {
-      handlerType = 'fluid';
-    }
-
-    const { default: handler } = await import(
-      `../formats/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler.js`
-    );
-
-    return handler(...args);
+    const { default: config } = await import(`../formats/${format}/${format}.config.js`);
+    return basicHandler({
+      name: args[0],
+      params: args[1],
+      ...(type ? config[type] : config)
+    });
   };
 
   return Object.fromEntries(
@@ -71,14 +77,16 @@ export const allFormatterTemplate =
     fileHeaderTitle,
     prefix = () => {},
     coreTokenHandlers,
-    basicHandler
+    wrapper,
+    definer
   }: {
     platform: PlatformName;
     name: string;
     fileHeaderTitle: string;
     prefix?: (output: string[], formatArgs: FormatFnArguments) => void;
     coreTokenHandlers: CoreTokenHandlers;
-    basicHandler: (name: string, params: TokenTypeHandlerParams) => string;
+    wrapper: (params: CodeBlockWrapperParams) => string;
+    definer: (params: CodeBlockContentParams) => string;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(platform, name),
@@ -118,7 +126,14 @@ export const allFormatterTemplate =
         (token) => !Object.keys(coreTokenHandlers).includes(token.$type || '')
       );
       if (otherTokens.length) {
-        output.push(basicHandler('Other', { options, tokens: otherTokens }));
+        output.push(
+          basicHandler({
+            name: 'Other',
+            params: { options, tokens: otherTokens },
+            wrapper,
+            definer
+          })
+        );
       }
 
       // Join the output array into a string and return it

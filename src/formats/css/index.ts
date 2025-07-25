@@ -1,4 +1,5 @@
 import { FormatFnArguments } from 'style-dictionary/types';
+import rootHandler from '../../handlers/css/root.handler.js';
 import { CustomFormatter, FormatBuilder, TokenTypeHandlerParams } from '../../types/index.js';
 import { PlatformName } from '../../types/platform.types.js';
 import {
@@ -8,8 +9,7 @@ import {
   getCoreTokenHandlers,
   getFormatterName
 } from '../../utils/format.utils.js';
-import basicHandler from './handlers/basic.handler.js';
-import rootHandler from './handlers/root.handler.js';
+import cssConfig from './css.config.js';
 
 const platform: PlatformName = 'css';
 const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.CSS);
@@ -48,7 +48,7 @@ export const cssAllFormatter: FormatBuilder = allFormatterTemplate({
   fileHeaderTitle: 'CSS Custom Properties',
   prefix: outputRootFontSize,
   coreTokenHandlers,
-  basicHandler
+  ...cssConfig
 });
 
 // Formatter for tokens with a core handler

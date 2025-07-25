@@ -5,8 +5,7 @@ import {
   PlatformName
 } from '../../types/index.js';
 import { allFormatterTemplate, getCoreTokenHandlers } from '../../utils/format.utils.js';
-import basicStaticHandler from './handlers/static/basic.handler.js';
-import basicVariableHandler from './handlers/variable/basic.handler.js';
+import jsConfig from './js.config.js';
 
 const platform: PlatformName = 'js';
 
@@ -15,7 +14,7 @@ export const staticFormatter: FormatBuilder = allFormatterTemplate({
   name: 'static',
   fileHeaderTitle: 'JS Tokens (static values)',
   coreTokenHandlers: getCoreTokenHandlers(CustomFormatter.JS, JsFormatterType.STATIC),
-  basicHandler: basicStaticHandler
+  ...jsConfig.static
 });
 
 export const variableFormatter: FormatBuilder = allFormatterTemplate({
@@ -23,5 +22,5 @@ export const variableFormatter: FormatBuilder = allFormatterTemplate({
   name: 'variable',
   fileHeaderTitle: 'JS Tokens (variable values)',
   coreTokenHandlers: getCoreTokenHandlers(CustomFormatter.JS, JsFormatterType.VARIABLE),
-  basicHandler: basicVariableHandler
+  ...jsConfig.variable
 });

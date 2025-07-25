@@ -1,12 +1,12 @@
-import { TokenTypeHandlerParams } from '../../../types/index.js';
+import { defineCssCustomProperties, wrapInCssRoot } from '../../formats/css/utils.js';
+import { TokenTypeHandlerParams } from '../../types/index.js';
 import {
   mapFluidTokenValuesToMax,
   mapFluidTokenValuesToMin,
   mapFluidTokenValuesToResponsive,
   separateFluidAndFixedTokens
-} from '../../../utils/fluid-token.utils.js';
-import { tab, wrapInFileChapter } from '../../../utils/format.utils.js';
-import { defineCssCustomProperties, wrapInCssRoot } from '../utils.js';
+} from '../../utils/fluid-token.utils.js';
+import { tab, wrapInFileChapter } from '../../utils/format.utils.js';
 
 const fluidHandler = (
   name: string,
@@ -20,7 +20,7 @@ const fluidHandler = (
 
   // Print out regular tokens (if any)
   if (fixedTokens.length) {
-    output.push(wrapInCssRoot(defineCssCustomProperties(fixedTokens)) + '\n');
+    output.push(wrapInCssRoot({ code: defineCssCustomProperties({ tokens: fixedTokens }) }) + '\n');
   }
 
   // Get the fluid scale scheme, the base font size and the viewport sizes
@@ -30,27 +30,39 @@ const fluidHandler = (
   // min
   output.push(`@media all and (max-width: ${minViewportW - 1}px) {`);
   output.push(
-    wrapInCssRoot(defineCssCustomProperties(mapFluidTokenValuesToMin(fluidTokens), tab(2)), tab())
+    wrapInCssRoot({
+      code: defineCssCustomProperties({
+        tokens: mapFluidTokenValuesToMin(fluidTokens),
+        indent: tab(2)
+      }),
+      indent: tab()
+    })
   );
   output.push('}\n');
 
   // calc
   output.push(`@media all and (min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px) {`);
   output.push(
-    wrapInCssRoot(
-      defineCssCustomProperties(
-        mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme),
-        tab(2)
-      ),
-      tab()
-    )
+    wrapInCssRoot({
+      code: defineCssCustomProperties({
+        tokens: mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme),
+        indent: tab(2)
+      }),
+      indent: tab()
+    })
   );
   output.push('}\n');
 
   // max
   output.push(`@media all and (min-width: ${maxViewportW + 1}px) {`);
   output.push(
-    wrapInCssRoot(defineCssCustomProperties(mapFluidTokenValuesToMax(fluidTokens), tab(2)), tab())
+    wrapInCssRoot({
+      code: defineCssCustomProperties({
+        tokens: mapFluidTokenValuesToMax(fluidTokens),
+        indent: tab(2)
+      }),
+      indent: tab()
+    })
   );
   output.push('}');
 
