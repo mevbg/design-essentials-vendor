@@ -1,4 +1,5 @@
 import path from 'path';
+import { JsFormatterType } from '../types/format.types.js';
 import { PlatformConfigBuilderParams } from '../types/index.js';
 
 export const js = ({ buildPath, prefix, options }: PlatformConfigBuilderParams) => ({
@@ -9,13 +10,9 @@ export const js = ({ buildPath, prefix, options }: PlatformConfigBuilderParams) 
   transformGroup: 'js',
   buildPath: `${path.resolve(buildPath)}/js`,
   files: [
-    {
-      destination: 'static.design-tokens.js',
-      format: 'mev/js/static'
-    },
-    {
-      destination: 'variable.design-tokens.js',
-      format: 'mev/js/variable'
-    }
+    ...Object.values(JsFormatterType).map((format) => ({
+      destination: `${format}.design-tokens.js`,
+      format: `mev/js/${format}`
+    }))
   ]
 });
