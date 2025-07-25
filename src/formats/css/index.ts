@@ -1,14 +1,17 @@
 import { FormatFnArguments } from 'style-dictionary/types';
 import { CustomFormatter, FormatBuilder, TokenTypeHandlerParams } from '../../types/index.js';
+import { PlatformName } from '../../types/platform.types.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
   fileHeader,
-  getCoreTokenHandlers
-} from '../../utils/formats.utils.js';
+  getCoreTokenHandlers,
+  getFormatterName
+} from '../../utils/format.utils.js';
 import basicHandler from './handlers/basic.handler.js';
 import rootHandler from './handlers/root.handler.js';
 
+const platform: PlatformName = 'css';
 const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.CSS);
 const rootFontSizeTitle = 'Root Font Size';
 
@@ -22,7 +25,7 @@ const outputRootFontSize = (output: string[], { options, platform }: FormatFnArg
 };
 
 export const cssRootFontSizeFormatter: FormatBuilder = () => ({
-  name: 'mev/css/root-font-size',
+  name: getFormatterName(platform, 'root-font-size'),
   format: function (formatArgs: FormatFnArguments) {
     // Define the output array
     const output: string[] = [];
@@ -40,7 +43,8 @@ export const cssRootFontSizeFormatter: FormatBuilder = () => ({
 
 // Formatter for all tokens
 export const cssAllFormatter: FormatBuilder = allFormatterTemplate({
-  name: 'mev/css/all',
+  platform,
+  name: 'all',
   fileHeaderTitle: 'CSS Custom Properties',
   prefix: outputRootFontSize,
   coreTokenHandlers,
@@ -49,6 +53,7 @@ export const cssAllFormatter: FormatBuilder = allFormatterTemplate({
 
 // Formatter for tokens with a core handler
 export const cssCoreFormatter: FormatBuilder = coreFormatterTemplate({
-  name: 'mev/css/core',
+  platform,
+  name: 'core',
   coreTokenHandlers
 });

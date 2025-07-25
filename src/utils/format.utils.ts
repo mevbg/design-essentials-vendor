@@ -7,8 +7,9 @@ import {
   JsFormatterType,
   TokenTypeHandlerParams
 } from '../types/index.js';
-import { tokenIsFluid } from './fluid-tokens.utils.js';
-import { capitalize, toSpaceCase } from './strings.utils.js';
+import { PlatformName } from '../types/platform.types.js';
+import { tokenIsFluid } from './fluid-token.utils.js';
+import { capitalize, toSpaceCase } from './string.utils.js';
 
 // Returns a file header with a provided name
 export const fileHeader = (name: string): string =>
@@ -54,16 +55,25 @@ export const getCoreTokenHandlers = (
   );
 };
 
+// Returns a destination file name
+export const getDestinationFileName = (platform: PlatformName, name: string) =>
+  `${name}.design-tokens.${platform}`;
+
+// Returns a formatter name
+export const getFormatterName = (platform: PlatformName, name: string) => `mev/${platform}/${name}`;
+
 // Returns a function for a formatter
 // that handles all tokens in a single file
 export const allFormatterTemplate =
   ({
+    platform,
     name,
     fileHeaderTitle,
     prefix = () => {},
     coreTokenHandlers,
     basicHandler
   }: {
+    platform: PlatformName;
     name: string;
     fileHeaderTitle: string;
     prefix?: (output: string[], formatArgs: FormatFnArguments) => void;
@@ -71,7 +81,7 @@ export const allFormatterTemplate =
     basicHandler: (name: string, params: TokenTypeHandlerParams) => string;
   }): FormatBuilder =>
   () => ({
-    name,
+    name: getFormatterName(platform, name),
     format: async function (formatArgs: FormatFnArguments) {
       // Get the dictionary and the options from the format arguments
       const { dictionary, options } = formatArgs;
@@ -120,14 +130,16 @@ export const allFormatterTemplate =
 // that handles a given type of core tokens individually
 export const coreFormatterTemplate =
   ({
+    platform,
     name,
     coreTokenHandlers
   }: {
+    platform: PlatformName;
     name: string;
     coreTokenHandlers: CoreTokenHandlers;
   }): FormatBuilder =>
   () => ({
-    name,
+    name: getFormatterName(platform, name),
     format: async function (formatArgs: FormatFnArguments) {
       // Get the dictionary and the options from the format arguments
       const { dictionary, options } = formatArgs;

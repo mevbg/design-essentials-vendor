@@ -1,17 +1,18 @@
-import path from 'path';
-import { PlatformConfigBuilderParams } from '../types/index.js';
+import { PlatformConfigProvider } from '../types/index.js';
+import { getDestinationFileName } from '../utils/format.utils.js';
 
-export const json = ({ buildPath, options }: PlatformConfigBuilderParams) => ({
-  transformGroup: 'js',
-  buildPath: `${path.resolve(buildPath)}/json`,
-  options: {
-    ...options,
-    showFileHeader: false
-  },
-  files: [
-    {
-      destination: 'design-tokens.json',
-      format: 'json/nested'
-    }
-  ]
+export const json: PlatformConfigProvider = ({ options }) => ({
+  config: {
+    transformGroup: 'js',
+    options: {
+      ...options,
+      showFileHeader: false
+    },
+    files: [
+      {
+        destination: getDestinationFileName('json', 'all'),
+        format: 'json/nested'
+      }
+    ]
+  }
 });

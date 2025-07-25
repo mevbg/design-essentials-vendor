@@ -4,8 +4,8 @@ import {
   mapFluidTokenValuesToMin,
   mapFluidTokenValuesToResponsive,
   separateFluidAndFixedTokens
-} from '../../../utils/fluid-tokens.utils.js';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+} from '../../../utils/fluid-token.utils.js';
+import { tab, wrapInFileChapter } from '../../../utils/format.utils.js';
 import { defineCssCustomProperties, wrapInCssRoot } from '../utils.js';
 
 const fluidHandler = (

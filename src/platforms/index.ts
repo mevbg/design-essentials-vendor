@@ -1,21 +1,50 @@
-import { PlatformConfig } from 'style-dictionary/types';
+import path from 'path';
+import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
+import { CORE_TOKENS } from '../constants.js';
 import {
-  PlatformConfigBuilder,
-  PlatformConfigBuilderParams,
+  PlatformConfigProvider,
+  PlatformConfigsBuilderParams,
   PlatformName
 } from '../types/index.js';
+import { getDestinationFileName, getFormatterName } from '../utils/format.utils.js';
+import { toKebabCase } from '../utils/string.utils.js';
 
 export const getPlatformConfigs = async (
   platforms: PlatformName[],
-  params: PlatformConfigBuilderParams
+  params: PlatformConfigsBuilderParams
 ): Promise<Partial<Record<PlatformName, PlatformConfig>>> => {
-  const imports: Promise<Record<PlatformName, PlatformConfigBuilder>>[] = platforms.map(
+  const imports: Promise<Record<PlatformName, PlatformConfigProvider>>[] = platforms.map(
     (platformName) => import(`./${platformName}.platform.js`)
   );
   const arrOfBuilders = await Promise.all(imports);
 
   const platformConfigs = Object.fromEntries(
-    arrOfBuilders.map((builder, index) => [platforms[index], builder[platforms[index]](params)])
+    arrOfBuilders.map((builder, index) => {
+      const platform = platforms[index];
+      const { config, files = [], coreFiles } = builder[platform](params);
+
+      return [
+        platform,
+        {
+          transformGroup: platform,
+          buildPath: `${path.resolve(params.buildPath)}/${platform}`,
+          files: [
+            ...files.map((file) => ({
+              destination: getDestinationFileName(platform, file),
+              format: getFormatterName(platform, file)
+            })),
+            ...(coreFiles
+              ? CORE_TOKENS.map((key) => ({
+                  destination: getDestinationFileName(platform, toKebabCase(key)),
+                  format: getFormatterName(platform, 'core'),
+                  filter: (token: TransformedToken) => token.$type === key
+                }))
+              : [])
+          ],
+          ...config
+        }
+      ];
+    })
   );
 
   return platformConfigs;

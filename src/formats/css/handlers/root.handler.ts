@@ -1,5 +1,5 @@
 import { TokenTypeHandlerParams } from '../../../types/index.js';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+import { tab, wrapInFileChapter } from '../../../utils/format.utils.js';
 import { wrapInCssRoot, wrapInCssSelector } from '../utils.js';
 
 export default (name: string, { options, config }: TokenTypeHandlerParams): string => {

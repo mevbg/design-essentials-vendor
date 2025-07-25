@@ -1,6 +1,6 @@
 import { TokenTypeHandlerParams } from '../../../types/index.js';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
-import { getColorScheme } from '../../../utils/tokens.utils.js';
+import { tab, wrapInFileChapter } from '../../../utils/format.utils.js';
+import { getColorScheme } from '../../../utils/token.utils.js';
 import { defineCssCustomProperties, wrapInCssRoot, wrapInCssSelector } from '../utils.js';
 
 const colorHandler = (

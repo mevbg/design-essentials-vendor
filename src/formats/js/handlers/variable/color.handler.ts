@@ -1,6 +1,6 @@
 import { TokenTypeHandlerParams } from '../../../../types/index.js';
-import { wrapInFileChapter } from '../../../../utils/formats.utils.js';
-import { capitalize } from '../../../../utils/strings.utils.js';
+import { wrapInFileChapter } from '../../../../utils/format.utils.js';
+import { capitalize } from '../../../../utils/string.utils.js';
 import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils.js';
 
 const colorHandler = (

@@ -4,7 +4,7 @@ import {
   spaceCaseToCamelCase,
   toCamelCase,
   toKebabCase
-} from '../../utils/strings.utils.js';
+} from '../../utils/string.utils.js';
 
 export const wrapInJsConst = (name: string, code: string): string =>
   `export const ${spaceCaseToCamelCase(name)} = {\n${code}\n};`;

@@ -1,13 +1,23 @@
-import { PlatformConfig } from 'style-dictionary/types';
 import { DEFAULT_PLATFORMS } from '../constants.js';
 import { GeneratorOptions } from './generator.types.js';
 
 export type PlatformName = (typeof DEFAULT_PLATFORMS)[number];
 
-export type PlatformConfigBuilderParams = {
+export type PlatformConfigsBuilderParams = {
   buildPath: string;
   options: GeneratorOptions;
   prefix?: string;
 };
 
-export type PlatformConfigBuilder = (params: PlatformConfigBuilderParams) => PlatformConfig;
+export type PlatformConfigProviderResponse = {
+  config: {
+    options: GeneratorOptions;
+    prefix?: string;
+  };
+  coreFiles?: boolean;
+  files?: string[];
+};
+
+export type PlatformConfigProvider = (
+  params: PlatformConfigsBuilderParams
+) => PlatformConfigProviderResponse;

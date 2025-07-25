@@ -71,15 +71,14 @@ src/
 │   ├── js.platform.ts          # JavaScript output configuration
 │   └── json.platform.ts        # JSON output configuration
 ├── types/                      # TypeScript type definitions
+│   ├── format.types.ts         # Format-related types
 │   ├── generator.types.ts      # Generator-related types
-│   ├── platform.types.ts       # Platform-related types
-│   ├── token.types.ts          # Token-related types
-│   └── format.types.ts         # Format-related types
+│   └── platform.types.ts       # Platform-related types
 └── utils/                      # Utility functions
-    ├── formats.utils.ts        # Format utilities
-    ├── strings.utils.ts        # String utilities
-    ├── tokens.utils.ts         # Token utilities
-    └── fluid-tokens.utils.ts   # Fluid-token utilities
+    ├── format.utils.ts         # Format utilities
+    ├── string.utils.ts         # String utilities
+    ├── token.utils.ts          # Token utilities
+    └── fluid-token.utils.ts    # Fluid-token utilities
 ```
 
 ### Development Example (`dev/`)
@@ -300,15 +299,7 @@ DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default output platforms
 
 ## Utility Functions
 
-### String Utilities (`src/utils/strings.utils.ts`)
-
-- `toKebabCase(str: string)` - Converts to kebab-case
-- `capitalize(str: string)` - Capitalizes first letter
-- `toCamelCase(str: string)` - Converts to camelCase
-- `toSpaceCase(str: string)` - Converts to space-separated words
-- `spaceCaseToCamelCase(str: string)` - Converts space case to camelCase
-
-### Fluid Token Utilities (`src/utils/fluid-tokens.utils.ts`)
+### Fluid Token Utilities (`src/utils/fluid-token.utils.ts`)
 
 - `tokenIsFluid(token: TransformedToken)` - Checks if token is fluid/responsive
 - `mapFluidTokenValuesToMin(tokens: TransformedToken[])` - Maps to minimum values
@@ -316,7 +307,7 @@ DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default output platforms
 - `mapFluidTokenValuesToResponsive(tokens, baseFontSize, fluidScaleScheme)` - Generates responsive CSS
 - `separateFluidAndFixedTokens(tokens: TransformedToken[])` - Separates fluid from fixed tokens
 
-### Format Utilities (`src/utils/formats.utils.ts`)
+### Format Utilities (`src/utils/format.utils.ts`)
 
 - `fileHeader(name: string)` - Generates file headers
 - `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean)` - Creates file sections
@@ -325,7 +316,15 @@ DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default output platforms
 - `allFormatterTemplate(config)` - Template for "all tokens" formatters
 - `coreFormatterTemplate(config)` - Template for individual token type formatters
 
-### Token Utilities (`src/utils/tokens.utils.ts`)
+### String Utilities (`src/utils/string.utils.ts`)
+
+- `toKebabCase(str: string)` - Converts to kebab-case
+- `capitalize(str: string)` - Capitalizes first letter
+- `toCamelCase(str: string)` - Converts to camelCase
+- `toSpaceCase(str: string)` - Converts to space-separated words
+- `spaceCaseToCamelCase(str: string)` - Converts space case to camelCase
+
+### Token Utilities (`src/utils/token.utils.ts`)
 
 Provides token processing and validation utilities.
 

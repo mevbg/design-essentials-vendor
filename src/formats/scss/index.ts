@@ -1,16 +1,18 @@
-import { CustomFormatter, FormatBuilder } from '../../types/index.js';
+import { CustomFormatter, FormatBuilder, PlatformName } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
   getCoreTokenHandlers
-} from '../../utils/formats.utils.js';
+} from '../../utils/format.utils.js';
 import basicHandler from './handlers/basic.handler.js';
 
+const platform: PlatformName = 'scss';
 const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.SCSS);
 
 // Formatter for all tokens
 export const scssAllFormatter: FormatBuilder = allFormatterTemplate({
-  name: 'mev/scss/all',
+  platform,
+  name: 'all',
   fileHeaderTitle: 'SCSS Tokens',
   coreTokenHandlers,
   basicHandler
@@ -18,6 +20,7 @@ export const scssAllFormatter: FormatBuilder = allFormatterTemplate({
 
 // Formatter for tokens with a core handler
 export const scssCoreFormatter: FormatBuilder = coreFormatterTemplate({
-  name: 'mev/scss/core',
+  platform,
+  name: 'core',
   coreTokenHandlers
 });
