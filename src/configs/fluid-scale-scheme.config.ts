@@ -1,4 +1,7 @@
-import { DEFAULT_FLUID_SCALE_MAX_VIEWPORT, DEFAULT_FLUID_SCALE_MIN_VIEWPORT } from '../constants';
+import {
+  DEFAULT_FLUID_SCALE_MAX_VIEWPORT,
+  DEFAULT_FLUID_SCALE_MIN_VIEWPORT
+} from '../constants.js';
 
 export type FluidScaleSchemeConfig = {
   minViewportW: number;

@@ -1,5 +1,5 @@
 import { TransformedToken } from 'style-dictionary/types';
-import { toKebabCase } from '../../utils/strings.utils';
+import { toKebabCase } from '../../utils/strings.utils.js';
 
 export const wrapInSassMap = (name: string, code: string, indent: string = ''): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;

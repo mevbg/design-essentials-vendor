@@ -1,5 +1,5 @@
 import path from 'path';
-import { PlatformConfigBuilderParams } from '../types';
+import { PlatformConfigBuilderParams } from '../types/index.js';
 
 export const js = ({ buildPath, prefix, options }: PlatformConfigBuilderParams) => ({
   options: {

@@ -1,4 +1,4 @@
-import { DEFAULT_COLOR_SCHEME, DEFAULT_COLOR_SCHEME_METHOD } from '../constants';
+import { DEFAULT_COLOR_SCHEME, DEFAULT_COLOR_SCHEME_METHOD } from '../constants.js';
 
 export const colorSchemes = ['light', 'dark'] as const;
 export const colorSchemeMethods = ['media', 'class', 'combined'] as const;

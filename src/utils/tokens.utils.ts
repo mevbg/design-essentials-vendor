@@ -1,5 +1,5 @@
-import { TransformedToken } from 'style-dictionary';
-import { capitalize } from './strings.utils';
+import { TransformedToken } from 'style-dictionary/types';
+import { capitalize } from './strings.utils.js';
 
 const nameReplacers = {
   pascal: (name: string, scheme: string) => name.replace('ColorScheme' + capitalize(scheme), ''),

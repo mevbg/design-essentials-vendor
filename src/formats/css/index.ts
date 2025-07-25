@@ -1,13 +1,13 @@
 import { FormatFnArguments } from 'style-dictionary/types';
-import { FormatBuilder, TokenTypeHandlerParams } from '../../types';
+import { FormatBuilder, TokenTypeHandlerParams } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
   fileHeader,
   getCoreTokenHandlers
-} from '../../utils/formats.utils';
-import basicHandler from './handlers/basic.handler';
-import rootHandler from './handlers/root.handler';
+} from '../../utils/formats.utils.js';
+import basicHandler from './handlers/basic.handler.js';
+import rootHandler from './handlers/root.handler.js';
 
 const coreTokenHandlers = getCoreTokenHandlers('css');
 const rootFontSizeTitle = 'Root Font Size';

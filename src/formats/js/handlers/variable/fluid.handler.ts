@@ -1,8 +1,8 @@
-import { FormatHandler, TokenTypeHandlerParams } from '../../../../types';
-import { wrapInFileChapter } from '../../../../utils/formats.utils';
-import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils';
+import { TokenTypeHandlerParams } from '../../../../types/index.js';
+import { wrapInFileChapter } from '../../../../utils/formats.utils.js';
+import { defineJsObjectItemsWithVariables, wrapInJsConst } from '../../utils.js';
 
-const fluidHandler: FormatHandler = (
+const fluidHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {

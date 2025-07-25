@@ -1,4 +1,4 @@
-import { DEFAULT_ROOT_SCALE_MAX_VIEWPORT, DEFAULT_ROOT_SCALE_MIN_VIEWPORT } from '../constants';
+import { DEFAULT_ROOT_SCALE_MAX_VIEWPORT, DEFAULT_ROOT_SCALE_MIN_VIEWPORT } from '../constants.js';
 
 export type RootScaleSchemeConfig = {
   minViewportW: number;

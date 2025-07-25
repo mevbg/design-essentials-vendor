@@ -1,7 +1,7 @@
-import { FormatBuilder } from '../../types';
-import { allFormatterTemplate, getCoreTokenHandlers } from '../../utils/formats.utils';
-import basicStaticHandler from './handlers/static/basic.handler';
-import basicVariableHandler from './handlers/variable/basic.handler';
+import { FormatBuilder } from '../../types/index.js';
+import { allFormatterTemplate, getCoreTokenHandlers } from '../../utils/formats.utils.js';
+import basicStaticHandler from './handlers/static/basic.handler.js';
+import basicVariableHandler from './handlers/variable/basic.handler.js';
 
 export const staticFormatter: FormatBuilder = allFormatterTemplate({
   name: 'mev/js/static',

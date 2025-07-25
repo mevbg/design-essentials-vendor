@@ -1,5 +1,5 @@
 import { TransformedToken } from 'style-dictionary/types';
-import { type FluidScaleSchemeConfig } from '../configs/fluid-scale-scheme.config';
+import { type FluidScaleSchemeConfig } from '../configs/fluid-scale-scheme.config.js';
 
 // Generates and returns the responsive value
 // of a given fluid token (one with min and max values)

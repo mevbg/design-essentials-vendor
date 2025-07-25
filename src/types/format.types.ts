@@ -1,5 +1,5 @@
 import { Format } from 'style-dictionary/types';
-import { TokenTypeHandlerParams } from './token.types';
+import { TokenTypeHandlerParams } from './token.types.js';
 
 export type CustomFormatTypes = 'css' | 'scss' | 'js';
 

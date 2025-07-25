@@ -1,11 +1,8 @@
-import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
-import { wrapInCssRoot, wrapInCssSelector } from '../utils';
+import { TokenTypeHandlerParams } from '../../../types/index.js';
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+import { wrapInCssRoot, wrapInCssSelector } from '../utils.js';
 
-const rootHandler: FormatHandler = (
-  name: string,
-  { options, config }: TokenTypeHandlerParams
-): string => {
+export default (name: string, { options, config }: TokenTypeHandlerParams): string => {
   // Define the output array
   const output: string[] = [];
 
@@ -56,5 +53,3 @@ const rootHandler: FormatHandler = (
   // Return the output
   return wrapInFileChapter(name, output.join('\n'), config?.noChapterTitle);
 };
-
-export default rootHandler;

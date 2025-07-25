@@ -1,9 +1,9 @@
-import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
-import { getColorScheme } from '../../../utils/tokens.utils';
-import { defineCssCustomProperties, wrapInCssRoot, wrapInCssSelector } from '../utils';
+import { TokenTypeHandlerParams } from '../../../types/index.js';
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+import { getColorScheme } from '../../../utils/tokens.utils.js';
+import { defineCssCustomProperties, wrapInCssRoot, wrapInCssSelector } from '../utils.js';
 
-const colorHandler: FormatHandler = (
+const colorHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {

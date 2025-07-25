@@ -1,12 +1,9 @@
-import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
-import { getColorScheme } from '../../../utils/tokens.utils';
-import { defineSassMapValues, wrapInSassMap } from '../utils';
+import { TokenTypeHandlerParams } from '../../../types/index.js';
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+import { getColorScheme } from '../../../utils/tokens.utils.js';
+import { defineSassMapValues, wrapInSassMap } from '../utils.js';
 
-const colorHandler: FormatHandler = (
-  name: string,
-  { tokens, config }: TokenTypeHandlerParams
-): string => {
+const colorHandler = (name: string, { tokens, config }: TokenTypeHandlerParams): string => {
   // Define the output array
   const output: string[] = [];
 

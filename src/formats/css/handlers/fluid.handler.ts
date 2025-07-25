@@ -1,14 +1,14 @@
-import { FormatHandler, TokenTypeHandlerParams } from '../../../types';
+import { TokenTypeHandlerParams } from '../../../types/index.js';
 import {
   mapFluidTokenValuesToMax,
   mapFluidTokenValuesToMin,
   mapFluidTokenValuesToResponsive,
   separateFluidAndFixedTokens
-} from '../../../utils/fluid-tokens.utils';
-import { tab, wrapInFileChapter } from '../../../utils/formats.utils';
-import { defineCssCustomProperties, wrapInCssRoot } from '../utils';
+} from '../../../utils/fluid-tokens.utils.js';
+import { tab, wrapInFileChapter } from '../../../utils/formats.utils.js';
+import { defineCssCustomProperties, wrapInCssRoot } from '../utils.js';
 
-const fluidHandler: FormatHandler = (
+const fluidHandler = (
   name: string,
   { options, tokens, config }: TokenTypeHandlerParams
 ): string => {

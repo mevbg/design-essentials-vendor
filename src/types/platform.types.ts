@@ -1,6 +1,6 @@
 import { PlatformConfig } from 'style-dictionary/types';
-import { DEFAULT_PLATFORMS } from '../constants';
-import { GeneratorOptions } from './generator.types';
+import { DEFAULT_PLATFORMS } from '../constants.js';
+import { GeneratorOptions } from './generator.types.js';
 
 export type PlatformName = (typeof DEFAULT_PLATFORMS)[number];
 

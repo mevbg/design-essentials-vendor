@@ -1,7 +1,7 @@
-import { ColorSchemeConfig } from '../configs/color-scheme.config';
-import { type FluidScaleSchemeConfig } from '../configs/fluid-scale-scheme.config';
-import { type RootScaleSchemeConfig } from '../configs/root-scale-scheme.config';
-import { PlatformName } from './platform.types';
+import { ColorSchemeConfig } from '../configs/color-scheme.config.js';
+import { type FluidScaleSchemeConfig } from '../configs/fluid-scale-scheme.config.js';
+import { type RootScaleSchemeConfig } from '../configs/root-scale-scheme.config.js';
+import { PlatformName } from './platform.types.js';
 
 export type GeneratorOptions = {
   baseFontSize: number;

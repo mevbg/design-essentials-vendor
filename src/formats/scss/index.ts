@@ -1,10 +1,10 @@
-import { FormatBuilder } from '../../types';
+import { FormatBuilder } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
   getCoreTokenHandlers
-} from '../../utils/formats.utils';
-import basicHandler from './handlers/basic.handler';
+} from '../../utils/formats.utils.js';
+import basicHandler from './handlers/basic.handler.js';
 
 const coreTokenHandlers = getCoreTokenHandlers('scss');
 

@@ -1,8 +1,8 @@
 import path from 'path';
 import { TransformedToken } from 'style-dictionary/types';
-import { CORE_TOKENS } from '../constants';
-import { PlatformConfigBuilderParams } from '../types';
-import { toKebabCase } from '../utils/strings.utils';
+import { CORE_TOKENS } from '../constants.js';
+import { PlatformConfigBuilderParams } from '../types/index.js';
+import { toKebabCase } from '../utils/strings.utils.js';
 
 export const scss = ({ buildPath, options }: PlatformConfigBuilderParams) => ({
   transformGroup: 'scss',
