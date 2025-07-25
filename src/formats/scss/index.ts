@@ -1,4 +1,4 @@
-import { FormatBuilder } from '../../types/index.js';
+import { CustomFormatter, FormatBuilder } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
@@ -6,7 +6,7 @@ import {
 } from '../../utils/formats.utils.js';
 import basicHandler from './handlers/basic.handler.js';
 
-const coreTokenHandlers = getCoreTokenHandlers('scss');
+const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.SCSS);
 
 // Formatter for all tokens
 export const scssAllFormatter: FormatBuilder = allFormatterTemplate({

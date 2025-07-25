@@ -1,5 +1,5 @@
 import { FormatFnArguments } from 'style-dictionary/types';
-import { FormatBuilder, TokenTypeHandlerParams } from '../../types/index.js';
+import { CustomFormatter, FormatBuilder, TokenTypeHandlerParams } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
@@ -9,7 +9,7 @@ import {
 import basicHandler from './handlers/basic.handler.js';
 import rootHandler from './handlers/root.handler.js';
 
-const coreTokenHandlers = getCoreTokenHandlers('css');
+const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.CSS);
 const rootFontSizeTitle = 'Root Font Size';
 
 const outputRootFontSize = (output: string[], { options, platform }: FormatFnArguments) => {

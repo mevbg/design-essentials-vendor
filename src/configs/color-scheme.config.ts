@@ -1,17 +1,22 @@
 import { DEFAULT_COLOR_SCHEME, DEFAULT_COLOR_SCHEME_METHOD } from '../constants.js';
 
-export const colorSchemes = ['light', 'dark'] as const;
-export const colorSchemeMethods = ['media', 'class', 'combined'] as const;
+export enum ColorSchemeType {
+  LIGHT = 'light',
+  DARK = 'dark'
+}
 
-export type ColorScheme = (typeof colorSchemes)[number];
-export type ColorSchemeMethod = (typeof colorSchemeMethods)[number] | null;
+export enum ColorSchemeMethod {
+  MEDIA = 'media',
+  CLASS = 'class',
+  COMBINED = 'combined'
+}
 
 export type ColorSchemeConfig = {
-  default?: ColorScheme;
+  default?: ColorSchemeType;
   method?: ColorSchemeMethod;
 };
 
 export const defaultColorSchemeConfig: ColorSchemeConfig = {
-  default: DEFAULT_COLOR_SCHEME as ColorScheme,
+  default: DEFAULT_COLOR_SCHEME as ColorSchemeType,
   method: DEFAULT_COLOR_SCHEME_METHOD as ColorSchemeMethod
 };

@@ -1,9 +1,11 @@
+import { ColorSchemeMethod, ColorSchemeType } from '../../src/configs/color-scheme.config.js';
+
 export { BASE_FONT_SIZE } from './design/constants/typography.constants';
 
 export const PREFIX: string = 'dev';
 
-export const DEFAULT_COLOR_SCHEME: string = 'light';
-export const COLOR_SCHEME_METHOD: string = 'combined';
+export const DEFAULT_COLOR_SCHEME: ColorSchemeType = ColorSchemeType.LIGHT;
+export const COLOR_SCHEME_METHOD: ColorSchemeMethod = ColorSchemeMethod.COMBINED;
 
 export const FLUID_SCALE_MIN_VIEWPORT: number = 600;
 export const FLUID_SCALE_MAX_VIEWPORT: number = 1200;

@@ -1,8 +1,27 @@
-import { Format } from 'style-dictionary/types';
-import { TokenTypeHandlerParams } from './token.types.js';
-
-export type CustomFormatTypes = 'css' | 'scss' | 'js';
+import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 
 export type FormatBuilder = () => Format;
 
+export type TokenTypeHandlerParams = {
+  options?: FormatFnArguments['options'];
+  tokens: TransformedToken[];
+  config?: {
+    noChapterTitle?: boolean;
+    prefix?: string;
+  };
+};
+
+export type CoreTokenHandlers = Record<string, (params: TokenTypeHandlerParams) => Promise<string>>;
+
 export type FormatHandler = (name: string, params: TokenTypeHandlerParams) => string;
+
+export enum CustomFormatter {
+  CSS = 'css',
+  SCSS = 'scss',
+  JS = 'js'
+}
+
+export enum JsFormatterType {
+  STATIC = 'static',
+  VARIABLE = 'variable'
+}

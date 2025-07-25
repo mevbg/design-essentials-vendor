@@ -321,7 +321,7 @@ DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default output platforms
 - `fileHeader(name: string)` - Generates file headers
 - `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean)` - Creates file sections
 - `tab(count?: number)` - Generates indentation
-- `getCoreTokenHandlers(format: CustomFormatTypes, type?: 'static' | 'variable')` - Gets format handlers
+- `getCoreTokenHandlers(format: CustomFormatter, type?: JsFormatterType)` - Gets format handlers
 - `allFormatterTemplate(config)` - Template for "all tokens" formatters
 - `coreFormatterTemplate(config)` - Template for individual token type formatters
 

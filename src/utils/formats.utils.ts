@@ -2,8 +2,9 @@ import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CORE_TOKENS } from '../constants.js';
 import {
   CoreTokenHandlers,
-  CustomFormatTypes,
+  CustomFormatter,
   FormatBuilder,
+  JsFormatterType,
   TokenTypeHandlerParams
 } from '../types/index.js';
 import { tokenIsFluid } from './fluid-tokens.utils.js';
@@ -22,8 +23,8 @@ export const tab = (c: number = 1): string => '  '.repeat(c);
 
 // Returns a set of core token handlers for a given format
 export const getCoreTokenHandlers = (
-  format: CustomFormatTypes,
-  type: 'static' | 'variable' | null = null
+  format: CustomFormatter,
+  type: JsFormatterType | null = null
 ): CoreTokenHandlers => {
   const getHandler = async (...args: [string, TokenTypeHandlerParams]) => {
     let handlerType = 'basic';
