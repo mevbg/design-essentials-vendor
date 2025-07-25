@@ -1,6 +1,8 @@
-import { ColorSchemeConfig } from '../configs/color-scheme.config.js';
-import { type FluidScaleSchemeConfig } from '../configs/fluid-scale-scheme.config.js';
-import { type RootScaleSchemeConfig } from '../configs/root-scale-scheme.config.js';
+import {
+  ColorSchemeConfig,
+  FluidScaleSchemeConfig,
+  RootScaleSchemeConfig
+} from '../types/scheme.types.js';
 import { PlatformName } from './platform.types.js';
 
 export type GeneratorOptions = {

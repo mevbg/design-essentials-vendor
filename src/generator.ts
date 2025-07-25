@@ -1,11 +1,13 @@
 import path from 'path';
 import StyleDictionary from 'style-dictionary';
-import { defaultColorSchemeConfig as colorScheme } from './configs/color-scheme.config.js';
-import { defaultFluidScaleSchemeConfig as fluidScaleScheme } from './configs/fluid-scale-scheme.config.js';
-import { defaultRootScaleSchemeConfig as rootScaleScheme } from './configs/root-scale-scheme.config.js';
+import {
+  defaultColorSchemeConfig as colorScheme,
+  defaultFluidScaleSchemeConfig as fluidScaleScheme,
+  defaultRootScaleSchemeConfig as rootScaleScheme
+} from './configs.js';
 import { DEFAULT_BASE_FONT_SIZE, DEFAULT_PLATFORMS, DEFAULT_PREFIX } from './constants.js';
-import * as formats from './formats/index.js';
-import { getPlatformConfigs } from './platforms/index.js';
+import * as formats from './formats.js';
+import { getPlatformConfigs } from './platforms.js';
 import type { FormatBuilder, GeneratorConfig } from './types/index.js';
 
 export async function generateDesignTokens({

@@ -1,4 +1,4 @@
-import { ColorSchemeMethod, ColorSchemeType } from '../../src/configs/color-scheme.config.js';
+import { ColorSchemeMethod, ColorSchemeType } from '../../src/types/scheme.types.js';
 
 export { BASE_FONT_SIZE } from './design/constants/typography.constants';
 

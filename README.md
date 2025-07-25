@@ -8,11 +8,12 @@ Intended for use in his own projects, this tool simplifies token management with
 
 The generator supports advanced features like:
 
-- **Fluid/responsive tokens** with min/max viewport scaling
-- **Color scheme management** (light/dark mode support)
-- **Multiple output formats** with customizable handlers
-- **TypeScript-first development** with comprehensive type safety
-- **Modular token organization** with support for complex token hierarchies
+- **Fluid/responsive tokens** with min/max viewport scaling using `calc()` functions
+- **Color scheme management** (light/dark mode support) with multiple implementation methods
+- **Multiple output formats** with specialized handlers for different token types
+- **TypeScript-first development** with comprehensive type safety and ES modules
+- **Modular platform architecture** with dynamic loading and extensible handlers
+- **Flexible token organization** supporting complex hierarchies and references
 
 ## Installation
 
@@ -26,7 +27,7 @@ npm install @mevbg/design-tokens-generator -D
 import { generateDesignTokens } from '@mevbg/design-tokens-generator';
 
 await generateDesignTokens({
-  sourcePath: './tokens/**/index.js',
+  sourcePath: './tokens/**/index.ts',
   buildPath: './dist',
   prefix: 'tk',
   platforms: ['css', 'scss', 'js', 'json'],
@@ -34,7 +35,7 @@ await generateDesignTokens({
     baseFontSize: 10,
     colorScheme: {
       default: 'light',
-      method: 'class'
+      method: 'combined'
     },
     fluidScaleScheme: {
       minViewportW: 600,
@@ -48,7 +49,9 @@ await generateDesignTokens({
 });
 ```
 
-## File Structure
+## Architecture Overview
+
+The generator is built on a modular platform architecture where each platform (CSS, SCSS, JS, JSON) is self-contained with its own configuration, formats, and handlers. The system dynamically loads platform-specific modules and automatically detects the appropriate handler for each token type.
 
 ### Core Library (`src/`)
 
@@ -57,66 +60,74 @@ src/
 ├── index.ts                    # Main library export
 ├── generator.ts                # Core token generation engine
 ├── constants.ts                # Global configuration constants
-├── configs/                    # Configuration schemas and defaults
-│   ├── color-scheme.config.ts  # Light/dark mode configuration
-│   ├── fluid-scale-scheme.config.ts # Responsive scaling settings
-│   └── root-scale-scheme.config.ts  # Root font size scaling
-├── formats/                    # Output format handlers
-│   ├── css/                    # CSS custom properties
-│   ├── scss/                   # SCSS maps
-│   └── js/                     # JavaScript exports
-├── platforms/                  # Platform-specific configurations
-│   ├── css.platform.ts         # CSS output configuration
-│   ├── scss.platform.ts        # SCSS output configuration
-│   ├── js.platform.ts          # JavaScript output configuration
-│   └── json.platform.ts        # JSON output configuration
+├── configs.ts                  # Default configuration objects
+├── formats.ts                  # Format re-exports from platforms
+├── handlers.ts                 # Basic handler implementation
+├── platforms.ts                # Platform configuration loader
+├── platforms/                  # Platform-specific modules
+│   ├── css/
+│   │   ├── index.ts            # Platform configuration
+│   │   ├── css.config.ts       # CSS-specific config
+│   │   ├── css.formats.ts      # CSS formatters
+│   │   ├── css.utils.ts        # CSS utility functions
+│   │   └── handlers/           # Token type handlers
+│   │       ├── color.handler.ts
+│   │       ├── fluid.handler.ts
+│   │       └── root.handler.ts
+│   ├── scss/                   # SCSS platform modules
+│   ├── js/                     # JavaScript platform modules
+│   └── json/                   # JSON platform modules
 ├── types/                      # TypeScript type definitions
-│   ├── format.types.ts         # Format-related types
-│   ├── generator.types.ts      # Generator-related types
-│   └── platform.types.ts       # Platform-related types
+│   ├── format.types.ts         # Format and handler types
+│   ├── generator.types.ts      # Generator configuration types
+│   ├── platform.types.ts       # Platform-related types
+│   └── scheme.types.ts         # Color and scaling scheme types
 └── utils/                      # Utility functions
-    ├── format.utils.ts         # Format utilities
-    ├── string.utils.ts         # String utilities
-    ├── token.utils.ts          # Token utilities
-    └── fluid-token.utils.ts    # Fluid-token utilities
+    ├── formats.utils.ts        # Format generation utilities
+    ├── strings.utils.ts        # String transformation utilities
+    └── tokens/                 # Token processing utilities
+        ├── color-tokens.utils.ts
+        └── fluid-tokens.utils.ts
 ```
 
 ### Development Example (`dev/`)
 
-The `dev/` directory contains a complete example implementation showing how to structure and use the design tokens generator:
+The `dev/` directory provides a complete real-world example showing best practices for structuring design tokens:
 
 ```
 dev/
-├── index.ts                    # Development build script with file watching
-├── client/                     # Example token definitions
-│   ├── index.ts                # Client generator configuration
-│   ├── constants.ts            # Client-specific constants
-│   ├── design/
-│   │   ├── constants/          # Raw design values
-│   │   │   ├── colors/         # Color definitions using colorjs.io
-│   │   │   ├── typography.constants.ts
-│   │   │   ├── breakpoint.constants.ts
-│   │   │   ├── sizes.constants.ts
-│   │   │   └── opacities.constants.ts
-│   │   ├── tokens/             # Structured token definitions
-│   │   │   ├── color/          # Color tokens with scheme support
-│   │   │   ├── typography/     # Font tokens (family, size, weight, etc.)
-│   │   │   ├── border/         # Border-related tokens
-│   │   │   ├── shadow/         # Box shadow definitions
-│   │   │   ├── size/           # Sizing tokens
-│   │   │   └── breakpoint/     # Responsive breakpoints
-│   │   └── utils/              # Token processing utilities
-│   │       ├── colors.utils.ts # Color transformation helpers
-│   │       ├── strings.utils.ts
-│   │       └── units.utils.ts
-│   └── dist/                   # Generated output files
+├── index.ts                    # Development build script
+├── client/
+│   ├── index.ts                # Client configuration
+│   ├── constants.ts            # Project-specific constants
+│   └── design/
+│       ├── constants/          # Raw design values
+│       │   ├── colors/         # Color definitions with colorjs.io
+│       │   │   ├── primitive-colors.constants.ts
+│       │   │   └── contextual-colors.constants.ts
+│       │   ├── typography.constants.ts
+│       │   ├── breakpoint.constants.ts
+│       │   ├── sizes.constants.ts
+│       │   └── opacities.constants.ts
+│       ├── tokens/             # Structured token definitions
+│       │   ├── color/          # Color tokens with scheme support
+│       │   ├── typography/     # Typography tokens
+│       │   ├── border/         # Border tokens
+│       │   ├── shadow/         # Shadow tokens
+│       │   ├── size/           # Size tokens
+│       │   ├── opacity/        # Opacity tokens
+│       │   ├── icon/           # Icon tokens
+│       │   ├── dimensions/     # Dimension tokens
+│       │   └── breakpoint/     # Breakpoint tokens
+│       └── utils/              # Token processing utilities
+└── dist/                       # Generated output files
 ```
 
 ## Core Concepts
 
-### Design Tokens
+### Design Tokens Structure
 
-Design tokens are structured data that represent design decisions. They're organized by type and support complex value structures:
+Tokens follow the W3C Design Token Community Group format specification with `$type` and `$value` properties:
 
 ```typescript
 // Simple token
@@ -134,7 +145,13 @@ Design tokens are structured data that represent design decisions. They're organ
   }
 }
 
-// Hierarchical tokens
+// Token with references
+{
+  $type: 'color',
+  $value: '{color.primitive.red}'
+}
+
+// Hierarchical structure
 {
   color: {
     $type: 'color',
@@ -144,7 +161,12 @@ Design tokens are structured data that represent design decisions. They're organ
     },
     scheme: {
       light: {
-        background: { $value: '{color.primitive.white}' }
+        background: { $value: '{color.primitive.white}' },
+        content: { $value: '{color.primitive.black}' }
+      },
+      dark: {
+        background: { $value: '{color.primitive.black}' },
+        content: { $value: '{color.primitive.white}' }
       }
     }
   }
@@ -156,7 +178,7 @@ Design tokens are structured data that represent design decisions. They're organ
 The generator supports these core token types (defined in `CORE_TOKENS`):
 
 - **Typography**: `fontFamily`, `fontSize`, `fontWeight`, `letterSpacing`, `lineHeight`
-- **Color**: `color` (with scheme support)
+- **Color**: `color` (with light/dark scheme support)
 - **Sizing**: `size`
 - **Border**: `borderColor`, `borderRadius`, `borderStyle`, `borderWidth`
 - **Shadow**: `boxShadow`
@@ -164,61 +186,145 @@ The generator supports these core token types (defined in `CORE_TOKENS`):
 - **Visual**: `icon`, `opacity`
 - **Animation**: `transition`
 
-### Platforms
+### Token Handlers
 
-Each platform generates tokens in a specific format:
-
-#### CSS Platform (`css.platform.ts`)
-
-- **Output**: CSS custom properties
-- **Files generated**:
-  - `all.design-tokens.css` - All tokens in one file
-  - `root-font-size.design-tokens.css` - Root font size only
-  - `{token-type}.design-tokens.css` - Individual token type files
-- **Features**: CSS custom properties with `:root` scope
-
-#### SCSS Platform (`scss.platform.ts`)
-
-- **Output**: SCSS maps
-- **Files generated**:
-  - `all.design-tokens.scss` - All tokens as SCSS maps
-  - `{token-type}.design-tokens.scss` - Individual token type files
-- **Features**: SCSS map syntax (`$variable-name`)
-
-#### JavaScript Platform (`js.platform.ts`)
-
-- **Output**: JavaScript modules
-- **Files generated**:
-  - `static.design-tokens.js` - Static value exports
-  - `variable.design-tokens.js` - CSS custom property references
-- **Features**: ES6 module exports
-
-#### JSON Platform (`json.platform.ts`)
-
-- **Output**: Raw JSON data
-- **Features**: Structured token data for tooling integration
-
-### Format Handlers
-
-Each platform uses specialized handlers for different token types:
+The system automatically selects the appropriate handler based on token characteristics:
 
 #### Basic Handler
 
-Handles standard tokens with simple string values.
+Processes standard tokens with simple string values using platform-specific formatters.
 
 #### Color Handler
 
-- Supports color scheme switching (light/dark)
-- Handles color transformations
-- Manages contextual color tokens
+- Supports multiple color scheme implementations (media queries, CSS classes, or combined)
+- Generates separate rules for light/dark variants
+- Handles scheme-specific and primitive color tokens
 
 #### Fluid Handler
 
-- Processes responsive tokens with min/max values
-- Generates CSS `calc()` functions
-- Calculates viewport-based scaling
+- Processes responsive tokens with `min`/`max` values
+- Generates CSS `calc()` functions for smooth viewport scaling
+- Creates media query breakpoints for min/max fallbacks
+
+#### Root Handler (CSS only)
+
+- Generates root font size variables for responsive typography
+- Integrates with the root scale scheme configuration
+
+## Platform Architecture
+
+### CSS Platform
+
+**Configuration**: Generates CSS custom properties with comprehensive color scheme and fluid token support.
+
+**Generated Files**:
+
+- `all.design-tokens.css` - All tokens in one file
+- `root-font-size.design-tokens.css` - Root font size variables only
+- `{token-type}.design-tokens.css` - Individual files per token type
+
+**Features**:
+
+- CSS custom properties with `:root` scope
+- Color scheme switching via media queries and/or CSS classes
+- Responsive fluid tokens with media query fallbacks
+- Automatic `calc()` function generation for fluid scaling
+
+**Example Output**:
+
+```css
+/* Color scheme with combined method */
+:root {
+  --tk-color-content: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tk-color-content: #ffffff;
+  }
+}
+
+html.dark {
+  --tk-color-content: #ffffff;
+}
+
+/* Fluid typography with breakpoints */
+@media all and (max-width: 599px) {
+  :root {
+    --tk-font-size-title: 20px;
+  }
+}
+
+@media all and (min-width: 600px) and (max-width: 1200px) {
+  :root {
+    --tk-font-size-title: calc(1.33333rem + 0.66667vw);
+  }
+}
+
+@media all and (min-width: 1201px) {
+  :root {
+    --tk-font-size-title: 24px;
+  }
+}
+```
+
+### SCSS Platform
+
+**Configuration**: Generates SCSS maps for integration with Sass-based projects.
+
+**Generated Files**:
+
+- `all.design-tokens.scss` - All tokens as SCSS maps
+- `{token-type}.design-tokens.scss` - Individual token type maps
+
+**Features**:
+
+- SCSS map syntax for easy integration
+- Supports both static and fluid values
+- Compatible with existing Sass workflows
+
+### JavaScript Platform
+
+**Configuration**: Generates JavaScript ES modules with both static values and CSS variable references.
+
+**Generated Files**:
+
+- `static.design-tokens.js` - Static token values for JavaScript usage
+- `variable.design-tokens.js` - CSS custom property names for runtime usage
+
+**Features**:
+
+- ES6 module exports
+- TypeScript-compatible output
+- Dual static/variable value exports
+
+### JSON Platform
+
+**Configuration**: Generates raw JSON data for tooling integration.
+
+**Generated Files**:
+
+- `all.design-tokens.json` - Complete token structure in JSON format
+
+**Features**:
+
+- Raw token data for external tools
+- Preserves original token structure
+- Useful for documentation generation
 
 ## Configuration
+
+### Generator Configuration
+
+```typescript
+type GeneratorConfig = {
+  sourcePath: string; // Glob pattern for source files
+  buildPath: string; // Output directory
+  prefix?: string; // Token name prefix (default: 'tk')
+  platforms?: PlatformName[]; // Platforms to generate
+  options: GeneratorOptions; // Generation options
+};
+```
 
 ### Generator Options
 
@@ -226,8 +332,8 @@ Handles standard tokens with simple string values.
 type GeneratorOptions = {
   baseFontSize: number; // Base font size for rem calculations
   colorScheme: ColorSchemeConfig; // Color scheme configuration
-  fluidScaleScheme: FluidScaleSchemeConfig; // Responsive scaling
-  rootScaleScheme: RootScaleSchemeConfig; // Root font scaling
+  fluidScaleScheme: FluidScaleSchemeConfig; // Responsive scaling viewport range
+  rootScaleScheme: RootScaleSchemeConfig; // Root font scaling viewport range
 };
 ```
 
@@ -235,121 +341,191 @@ type GeneratorOptions = {
 
 ```typescript
 type ColorSchemeConfig = {
-  default?: 'light' | 'dark'; // Default color scheme
-  method?: 'media' | 'class' | 'combined' | null; // Implementation method
+  default?: ColorSchemeType; // 'light' | 'dark'
+  method?: ColorSchemeMethod; // Implementation method
 };
+
+enum ColorSchemeMethod {
+  MEDIA = 'media', // CSS media queries only
+  CLASS = 'class', // CSS classes only (html.light, html.dark)
+  COMBINED = 'combined' // Both media queries and classes
+}
 ```
 
-- **`media`**: Uses CSS media queries (`@media (prefers-color-scheme: dark)`)
-- **`class`**: Uses CSS classes (`html.light`, `html.dark`)
-- **`combined`**: Uses both methods
-- **`null`**: No scheme switching (default scheme taken in count only)
+**Implementation Methods**:
+
+- **`MEDIA`**: Uses `@media (prefers-color-scheme: dark)` for automatic scheme detection
+- **`CLASS`**: Uses CSS classes (`html.light`, `html.dark`) for manual switching
+- **`COMBINED`**: Provides both methods for maximum flexibility
 
 ### Fluid Scale Configuration
 
 ```typescript
 type FluidScaleSchemeConfig = {
-  minViewportW: number; // Minimum viewport width (px)
-  maxViewportW: number; // Maximum viewport width (px)
+  minViewportW: number; // Minimum viewport width (px) for fluid scaling
+  maxViewportW: number; // Maximum viewport width (px) for fluid scaling
 };
 ```
 
-Controls responsive scaling for fluid tokens. Tokens with `min`/`max` values are converted to CSS `clamp()` functions.
+Controls responsive scaling for fluid tokens. Tokens with `min`/`max` values generate `calc()` functions that scale smoothly between these viewport widths.
 
 ### Root Scale Configuration
 
 ```typescript
 type RootScaleSchemeConfig = {
-  minViewportW: number; // Minimum viewport width for root scaling
-  maxViewportW: number; // Maximum viewport width for root scaling
+  minViewportW: number; // Minimum viewport width for root font scaling
+  maxViewportW: number; // Maximum viewport width for root font scaling
 };
 ```
+
+Defines viewport range for root font size scaling, used by the CSS platform's root handler.
 
 ## API Reference
 
 ### `generateDesignTokens(config: GeneratorConfig)`
 
-Main function to generate design tokens.
+Main function to generate design tokens across specified platforms.
 
 **Parameters:**
 
-- `sourcePath: string` - Glob pattern for token source files
-- `buildPath: string` - Output directory for generated files
-- `prefix?: string` - Token name prefix (default: `'tk'`)
-- `platforms?: PlatformName[]` - Platforms to generate (default: `['css', 'scss', 'js', 'json']`)
-- `options: GeneratorOptions` - Generator configuration options
+- `config.sourcePath: string` - Glob pattern for token source files (e.g., `'./tokens/**/index.ts'`)
+- `config.buildPath: string` - Output directory path for generated files
+- `config.prefix?: string` - Token name prefix (default: `'tk'`)
+- `config.platforms?: PlatformName[]` - Array of platforms to generate (default: `['css', 'scss', 'js', 'json']`)
+- `config.options: GeneratorOptions` - Generation configuration options
 
-**Returns:** `Promise<StyleDictionary>` - Style Dictionary instance
+**Returns:** `Promise<StyleDictionary>` - Style Dictionary instance after build completion
 
-## Constants
+**Example:**
 
-### Default Values (`src/constants.ts`)
+```typescript
+const styleDictionary = await generateDesignTokens({
+  sourcePath: './design/tokens/**/index.ts',
+  buildPath: './dist/tokens',
+  prefix: 'app',
+  platforms: ['css', 'js'],
+  options: {
+    baseFontSize: 16,
+    colorScheme: { default: 'light', method: 'combined' },
+    fluidScaleScheme: { minViewportW: 768, maxViewportW: 1440 },
+    rootScaleScheme: { minViewportW: 320, maxViewportW: 1920 }
+  }
+});
+```
+
+## Default Constants
+
+All default values are defined in `src/constants.ts`:
 
 ```typescript
 DEFAULT_BASE_FONT_SIZE = 10; // Base font size in pixels
 DEFAULT_PREFIX = 'tk'; // Token prefix ("tk" = tokens)
 DEFAULT_COLOR_SCHEME = 'light'; // Default color scheme
-DEFAULT_COLOR_SCHEME_METHOD = 'class'; // Default scheme switching method
+DEFAULT_COLOR_SCHEME_METHOD = 'class'; // Default scheme method
 DEFAULT_FLUID_SCALE_MIN_VIEWPORT = 600; // Fluid scaling minimum viewport
 DEFAULT_FLUID_SCALE_MAX_VIEWPORT = 1200; // Fluid scaling maximum viewport
 DEFAULT_ROOT_SCALE_MIN_VIEWPORT = 300; // Root scaling minimum viewport
 DEFAULT_ROOT_SCALE_MAX_VIEWPORT = 2100; // Root scaling maximum viewport
-DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default output platforms
+DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default platforms
+
+CORE_TOKENS = [
+  'fontFamily',
+  'fontSize',
+  'fontWeight',
+  'letterSpacing',
+  'lineHeight',
+  'color',
+  'size',
+  'borderColor',
+  'borderRadius',
+  'borderStyle',
+  'borderWidth',
+  'boxShadow',
+  'breakpoint',
+  'dimensions',
+  'icon',
+  'opacity',
+  'transition'
+];
 ```
 
 ## Utility Functions
 
-### Fluid Token Utilities (`src/utils/fluid-token.utils.ts`)
+### Fluid Token Utilities (`src/utils/tokens/fluid-tokens.utils.ts`)
 
-- `tokenIsFluid(token: TransformedToken)` - Checks if token is fluid/responsive
-- `mapFluidTokenValuesToMin(tokens: TransformedToken[])` - Maps to minimum values
-- `mapFluidTokenValuesToMax(tokens: TransformedToken[])` - Maps to maximum values
-- `mapFluidTokenValuesToResponsive(tokens, baseFontSize, fluidScaleScheme)` - Generates responsive CSS
-- `separateFluidAndFixedTokens(tokens: TransformedToken[])` - Separates fluid from fixed tokens
+- `tokenIsFluid(token: TransformedToken): boolean` - Checks if token has min/max values
+- `mapFluidTokenValuesToMin(tokens: TransformedToken[]): TransformedToken[]` - Maps fluid tokens to minimum values
+- `mapFluidTokenValuesToMax(tokens: TransformedToken[]): TransformedToken[]` - Maps fluid tokens to maximum values
+- `mapFluidTokenValuesToResponsive(tokens, baseFontSize, fluidScaleScheme): TransformedToken[]` - Generates responsive `calc()` values
+- `separateFluidAndFixedTokens(tokens: TransformedToken[]): { fluidTokens, fixedTokens }` - Separates fluid from fixed tokens
 
-### Format Utilities (`src/utils/format.utils.ts`)
+### Color Token Utilities (`src/utils/tokens/color-tokens.utils.ts`)
 
-- `fileHeader(name: string)` - Generates file headers
-- `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean)` - Creates file sections
-- `tab(count?: number)` - Generates indentation
-- `getCoreTokenHandlers(format: CustomFormatter, type?: JsFormatterType)` - Gets format handlers
-- `allFormatterTemplate(config)` - Template for "all tokens" formatters
-- `coreFormatterTemplate(config)` - Template for individual token type formatters
+- `getColorScheme(tokens: TransformedToken[], syntax: 'pascal' | 'kebab'): Record<string, TransformedToken[]>` - Extracts and groups color scheme tokens
 
-### String Utilities (`src/utils/string.utils.ts`)
+### Format Utilities (`src/utils/formats.utils.ts`)
 
-- `toKebabCase(str: string)` - Converts to kebab-case
-- `capitalize(str: string)` - Capitalizes first letter
-- `toCamelCase(str: string)` - Converts to camelCase
-- `toSpaceCase(str: string)` - Converts to space-separated words
-- `spaceCaseToCamelCase(str: string)` - Converts space case to camelCase
+- `fileHeader(name: string): string` - Generates standardized file headers
+- `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean): string` - Creates comment-separated sections
+- `tab(count?: number): string` - Generates consistent indentation
+- `getCoreTokenHandlers(format: CustomFormatter, type?: JsFormatterType): CoreTokenHandlers` - Returns appropriate handlers for token types
+- `getDestinationFileName(platform: PlatformName, name: string): string` - Generates output file names
+- `getFormatterName(platform: PlatformName, name: string): string` - Generates formatter names
 
-### Token Utilities (`src/utils/token.utils.ts`)
+### String Utilities (`src/utils/strings.utils.ts`)
 
-Provides token processing and validation utilities.
+- `toKebabCase(str: string): string` - Converts to kebab-case
+- `capitalize(str: string): string` - Capitalizes first letter
+- `toCamelCase(str: string): string` - Converts various formats to camelCase
+- `toSpaceCase(str: string): string` - Converts to space-separated words
+- `spaceCaseToCamelCase(str: string): string` - Converts space case to camelCase
 
-## Development Example
+## Development Workflow
 
-The `dev/` directory demonstrates a complete implementation:
+### Build Scripts
 
-### Color System Example
+```json
+{
+  "scripts": {
+    "dev": "tsx dev/index.ts", // Generate tokens once
+    "dev:watch": "nodemon --exec \"tsx dev/index.ts\" --ext ts,js --watch src --watch dev/client", // Watch mode
+    "build": "tsc", // Build library
+    "lint": "eslint .", // Lint codebase
+    "lint:fix": "eslint . --fix", // Fix linting issues
+    "format": "prettier --write .", // Format code
+    "clean:all": "del-cli dist dev/dist", // Clean all output
+    "clean:build": "del-cli dist", // Clean library build
+    "clean:dev": "del-cli dev/dist" // Clean dev output
+  }
+}
+```
+
+### Development Example Structure
+
+The development example demonstrates best practices:
 
 ```typescript
-// dev/client/design/constants/colors/colors.constants.ts
-import Color from 'colorjs.io';
+// dev/client/constants.ts - Project configuration
+export const PREFIX = 'dev';
+export const DEFAULT_COLOR_SCHEME = ColorSchemeType.LIGHT;
+export const COLOR_SCHEME_METHOD = ColorSchemeMethod.COMBINED;
+export const PLATFORMS = ['css', 'scss', 'js', 'json'];
 
-export const Monochrome = {
-  BLACK: new Color('okhsl', [0, 0, 0]), // #000000
-  GRAY_20: new Color('okhsl', [0, 0, 0.2]), // #333333
-  WHITE: new Color('okhsl', [0, 0, 1]) // #FFFFFF
+// dev/client/design/tokens/typography/font-size.tokens.ts - Fluid tokens
+export default {
+  $type: 'fontSize',
+  display: { $value: { min: '34px', max: '40px' } }, // Fluid token
+  title: { $value: { min: '20px', max: '24px' } },
+  body: { $value: '16px' } // Fixed token
 };
 
-// dev/client/design/tokens/color/index.ts
+// dev/client/design/tokens/color/index.ts - Color schemes
 export default {
   color: {
     $type: 'color',
     primitive: {
-      ...Monochrome
+      black: { $value: '#000000' },
+      white: { $value: '#ffffff' }
     },
     scheme: {
       light: {
@@ -365,83 +541,102 @@ export default {
 };
 ```
 
-### Typography System Example
-
-```typescript
-// dev/client/design/tokens/typography/font-size.tokens.ts
-export default {
-  fontSize: {
-    $type: 'fontSize',
-    xs: { $value: { min: '12px', max: '14px' } }, // Fluid token
-    sm: { $value: '14px' }, // Fixed token
-    base: { $value: { min: '16px', max: '18px' } },
-    lg: { $value: { min: '18px', max: '20px' } }
-  }
-};
-```
-
-## Build Scripts
-
-The project includes several npm scripts:
-
-- `npm run dev` - Generate tokens once
-- `npm run dev:watch` - Watch for changes and regenerate
-- `npm run build` - Build the library
-- `npm run lint` - Lint the codebase
-- `npm run format` - Format code with Prettier
-
 ## TypeScript Support
 
-The entire codebase is written in TypeScript with comprehensive type definitions. All public APIs are fully typed, providing excellent IDE support and compile-time validation.
+The entire codebase uses TypeScript with strict configuration and ES modules. All APIs are fully typed with comprehensive type definitions.
 
-### Key Types
+### Key Type Definitions
 
-- `GeneratorConfig` - Main configuration interface
-- `GeneratorOptions` - Generator options
-- `PlatformName` - Supported platform names
-- `ColorSchemeConfig` - Color scheme configuration
-- `FluidScaleSchemeConfig` - Responsive scaling configuration
-- `TransformedToken` - Style Dictionary token structure
+```typescript
+// Main configuration types
+type GeneratorConfig = { sourcePath; buildPath; prefix?; platforms?; options };
+type GeneratorOptions = { baseFontSize; colorScheme; fluidScaleScheme; rootScaleScheme };
+
+// Platform types
+type PlatformName = 'css' | 'scss' | 'js' | 'json';
+type PlatformConfigProvider = (
+  params: PlatformConfigsBuilderParams
+) => PlatformConfigProviderResponse;
+
+// Format types
+enum CustomFormatter {
+  CSS = 'css',
+  SCSS = 'scss',
+  JS = 'js'
+}
+enum JsFormatterType {
+  STATIC = 'static',
+  VARIABLE = 'variable'
+}
+
+// Scheme types
+enum ColorSchemeType {
+  LIGHT = 'light',
+  DARK = 'dark'
+}
+enum ColorSchemeMethod {
+  MEDIA = 'media',
+  CLASS = 'class',
+  COMBINED = 'combined'
+}
+```
 
 ## Advanced Features
 
-### Custom Format Registration
+### Dynamic Platform Loading
 
-The generator automatically registers custom formats for each platform. Formats are dynamically loaded and support:
+The system uses dynamic imports to load platform-specific modules, enabling:
 
-- Hierarchical token organization
-- Responsive/fluid token handling
-- Color scheme switching
-- Customizable output templates
+- Lazy loading of platform configurations
+- Extensible architecture for adding new platforms
+- Memory-efficient builds with only required platforms loaded
 
-### File Organization
+### Intelligent Handler Selection
 
-Generated files are organized by platform and token type:
+Handlers are automatically selected based on token characteristics:
+
+```typescript
+const handlerType =
+  token.$type === 'color' ? 'color' : tokens.some(tokenIsFluid) ? 'fluid' : 'basic';
+```
+
+### Flexible Output Organization
+
+Generated files follow a consistent structure:
 
 ```
 dist/
 ├── css/
-│   ├── all.design-tokens.css
-│   ├── root-font-size.design-tokens.css
-│   ├── color.design-tokens.css
-│   └── font-size.design-tokens.css
+│   ├── all.design-tokens.css              # All tokens
+│   ├── root-font-size.design-tokens.css   # Root font size only
+│   ├── color.design-tokens.css            # Color tokens only
+│   ├── font-size.design-tokens.css        # Font size tokens only
+│   └── ...                                # Other token types
 ├── scss/
 │   ├── all.design-tokens.scss
-│   └── color.design-tokens.scss
+│   └── {token-type}.design-tokens.scss
 ├── js/
-│   ├── static.design-tokens.js
-│   └── variable.design-tokens.js
+│   ├── static.design-tokens.js            # Static values
+│   └── variable.design-tokens.js          # CSS variable references
 └── json/
-    └── tokens.json
+    └── all.design-tokens.json             # Raw JSON data
 ```
 
-### Responsive Token Generation
+### Responsive Fluid Calculations
 
-Fluid tokens with min/max values are automatically converted to responsive CSS:
+Fluid tokens automatically generate responsive CSS using mathematical calculations:
 
-```css
-/* Input token: { min: '20px', max: '24px' } */
---tk-font-size-title: calc(1.6rem + 0.66667vw);
+```typescript
+// Input: { min: '16px', max: '24px' }
+// Viewport: 600px - 1200px
+// Base font size: 10px
+
+// Generated calc() function:
+// calc(0.73333rem + 1.33333vw)
+
+const slope = ((max - min) / (maxViewport - minViewport)) * 100;
+const yIntercept = min - (slope * minViewport) / 100;
+const yInterceptRem = yIntercept / baseFontSize;
 ```
 
-This calculation uses the configured viewport ranges and base font size to create smooth scaling between breakpoints.
+This creates smooth scaling between viewport breakpoints with pixel-perfect precision at the defined min/max points.
