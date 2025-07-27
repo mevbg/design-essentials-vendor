@@ -3,8 +3,8 @@ import { CodeBlockContentParams, CodeBlockWrapperParams } from '../../types/inde
 export const wrapInCssRoot = ({ code, indent = '' }: CodeBlockWrapperParams): string =>
   `${indent}:root {\n${code}\n${indent}}`;
 
-export const wrapInCssSelector = (selector: string, code: string, indent: string = ''): string =>
-  `${indent}${selector} {\n${code}\n${indent}}`;
+export const wrapInCssSelector = ({ name, code, indent = '' }: CodeBlockWrapperParams): string =>
+  `${indent}${name} {\n${code}\n${indent}}`;
 
 export const defineCssCustomProperties = ({
   tokens,

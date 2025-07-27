@@ -21,13 +21,6 @@ export type TokenTypeHandlerParams = {
   };
 };
 
-export type BasicHandlerParams = {
-  name: string;
-  params: TokenTypeHandlerParams;
-  wrapper: (params: CodeBlockWrapperParams) => string;
-  definer: (params: CodeBlockContentParams) => string;
-};
-
 export type CoreTokenHandlers = Record<string, (params: TokenTypeHandlerParams) => Promise<string>>;
 
 export type FormatHandler = (name: string, params: TokenTypeHandlerParams) => string;
@@ -44,3 +37,13 @@ export enum JsFormatterType {
   STATIC = 'static',
   VARIABLE = 'variable'
 }
+
+export type CommonHandlerParams = {
+  format?: CustomFormatter;
+  name: string;
+  type?: JsFormatterType;
+  params: TokenTypeHandlerParams;
+  fluidSeparation?: boolean;
+  wrapper: (params: CodeBlockWrapperParams) => string;
+  definer: (params: CodeBlockContentParams) => string;
+};

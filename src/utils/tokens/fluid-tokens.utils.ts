@@ -48,14 +48,14 @@ export const mapFluidTokenValuesToResponsive = (
 
 // Separates tokens into fluid and fixed tokens
 // and returns an object with the two arrays
-export const separateFluidAndFixedTokens = (
+export const separateFluidAndBasicTokens = (
   tokens: TransformedToken[]
 ): {
   fluidTokens: TransformedToken[];
-  fixedTokens: TransformedToken[];
+  basicTokens: TransformedToken[];
 } => {
   const fluidTokens: TransformedToken[] = [];
-  const fixedTokens: TransformedToken[] = [];
+  const basicTokens: TransformedToken[] = [];
 
   tokens.forEach((token: TransformedToken) => {
     const value = token.$value;
@@ -63,13 +63,13 @@ export const separateFluidAndFixedTokens = (
     if (typeof value === 'object' && value !== null && 'min' in value && 'max' in value) {
       fluidTokens.push(token);
     } else {
-      fixedTokens.push(token);
+      basicTokens.push(token);
     }
   });
 
   return {
     fluidTokens,
-    fixedTokens
+    basicTokens
   };
 };
 

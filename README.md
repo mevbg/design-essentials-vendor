@@ -457,7 +457,7 @@ CORE_TOKENS = [
 - `mapFluidTokenValuesToMin(tokens: TransformedToken[]): TransformedToken[]` - Maps fluid tokens to minimum values
 - `mapFluidTokenValuesToMax(tokens: TransformedToken[]): TransformedToken[]` - Maps fluid tokens to maximum values
 - `mapFluidTokenValuesToResponsive(tokens, baseFontSize, fluidScaleScheme): TransformedToken[]` - Generates responsive `calc()` values
-- `separateFluidAndFixedTokens(tokens: TransformedToken[]): { fluidTokens, fixedTokens }` - Separates fluid from fixed tokens
+- `separateFluidAndBasicTokens(tokens: TransformedToken[]): { fluidTokens, basicTokens }` - Separates fluid from basic tokens
 
 ### Color Token Utilities (`src/utils/tokens/color-tokens.utils.ts`)
 

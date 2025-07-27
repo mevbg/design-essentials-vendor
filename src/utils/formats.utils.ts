@@ -1,6 +1,6 @@
 import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CORE_TOKENS } from '../constants.js';
-import { basicHandler } from '../handlers.js';
+import * as handlers from '../handlers.js';
 import {
   CodeBlockContentParams,
   CodeBlockWrapperParams,
@@ -38,15 +38,17 @@ export const getCoreTokenHandlers = (
           ? 'fluid'
           : 'basic';
 
-    if (handlerType !== 'basic') {
-      const { default: handler } = await import(
-        `../platforms/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler.js`
-      );
-      return handler(...args);
-    }
+    // if (handlerType === 'SPECIFIC') {
+    //   const { default: handler } = await import(
+    //     `../platforms/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler.js`
+    //   );
+    //   return handler(...args);
+    // }
 
     const { default: config } = await import(`../platforms/${format}/${format}.config.js`);
-    return basicHandler({
+
+    return handlers[`${handlerType}Handler` as keyof typeof handlers]({
+      format,
       name: args[0],
       params: args[1],
       ...(type ? config[type] : config)
@@ -87,6 +89,7 @@ export const allFormatterTemplate =
     coreTokenHandlers: CoreTokenHandlers;
     wrapper: (params: CodeBlockWrapperParams) => string;
     definer: (params: CodeBlockContentParams) => string;
+    fluidSeparation?: boolean;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(platform, name),
@@ -127,7 +130,7 @@ export const allFormatterTemplate =
       );
       if (otherTokens.length) {
         output.push(
-          basicHandler({
+          handlers.basicHandler({
             name: 'Other',
             params: { options, tokens: otherTokens },
             wrapper,
@@ -152,6 +155,7 @@ export const coreFormatterTemplate =
     platform: PlatformName;
     name: string;
     coreTokenHandlers: CoreTokenHandlers;
+    fluidSeparation?: boolean;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(platform, name),

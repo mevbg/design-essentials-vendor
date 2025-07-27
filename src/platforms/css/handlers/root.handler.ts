@@ -42,11 +42,11 @@ export default (name: string, { options, config }: TokenTypeHandlerParams): stri
     }) + '\n'
   );
   output.push(
-    wrapInCssSelector(
-      'html.presentation-mode',
-      `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${maxViewportW});`,
-      tab()
-    )
+    wrapInCssSelector({
+      name: 'html.presentation-mode',
+      code: `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${maxViewportW});`,
+      indent: tab()
+    })
   );
   output.push('}');
 
