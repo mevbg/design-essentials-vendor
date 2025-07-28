@@ -23,11 +23,13 @@ export async function generateDesignTokens({
   }
 }: GeneratorConfig): Promise<StyleDictionary> {
   // Register custom formats
-  Object.values(formats).forEach((formatBuilder: FormatBuilder) => {
-    if (typeof formatBuilder === 'function') {
-      StyleDictionary.registerFormat(formatBuilder());
-    }
-  });
+  Object.values(formats)
+    .flatMap((formatterGroup) => Object.values(formatterGroup))
+    .forEach((formatBuilder: FormatBuilder) => {
+      if (typeof formatBuilder === 'function') {
+        StyleDictionary.registerFormat(formatBuilder());
+      }
+    });
 
   return new StyleDictionary({
     source: [path.resolve(sourcePath)],

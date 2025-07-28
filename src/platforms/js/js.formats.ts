@@ -1,26 +1,25 @@
-import {
-  CustomFormatter,
-  FormatBuilder,
-  JsFormatterType,
-  PlatformName
-} from '../../types/index.js';
-import { allFormatterTemplate, getCoreTokenHandlers } from '../../utils/formats.utils.js';
-import jsConfig from './js.config.js';
+import { CustomFormatterCategory, FormatBuilder, JsFormatterType } from '../../types/index.js';
+import { allFormatterTemplate } from '../../utils/formats.utils.js';
+import { defineJsObjectItems, wrapInJsObject } from './js.utils.js';
 
-const platform: PlatformName = 'js';
-
-export const staticFormatter: FormatBuilder = allFormatterTemplate({
-  platform,
-  name: 'static',
-  fileHeaderTitle: 'JS Tokens (static values)',
-  coreTokenHandlers: getCoreTokenHandlers(CustomFormatter.JS, JsFormatterType.STATIC),
-  ...jsConfig.static
-});
-
-export const variableFormatter: FormatBuilder = allFormatterTemplate({
-  platform,
-  name: 'variable',
-  fileHeaderTitle: 'JS Tokens (variable values)',
-  coreTokenHandlers: getCoreTokenHandlers(CustomFormatter.JS, JsFormatterType.VARIABLE),
-  ...jsConfig.variable
-});
+export const jsFormatters: FormatBuilder[] = [
+  {
+    name: JsFormatterType.STATIC,
+    type: JsFormatterType.STATIC,
+    fileHeaderTitle: 'JS Tokens (static values)'
+  },
+  {
+    name: JsFormatterType.VARIABLE,
+    type: JsFormatterType.VARIABLE,
+    fileHeaderTitle: 'JS Tokens (variable values)'
+  }
+].map(({ name, type, fileHeaderTitle }) =>
+  allFormatterTemplate({
+    name,
+    type,
+    fileHeaderTitle,
+    category: CustomFormatterCategory.JS,
+    wrapper: wrapInJsObject,
+    definer: defineJsObjectItems
+  })
+);

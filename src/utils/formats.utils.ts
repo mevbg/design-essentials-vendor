@@ -1,18 +1,64 @@
 import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CORE_TOKENS } from '../constants.js';
-import * as handlers from '../handlers.js';
+import * as handlers from '../handlers/index.js';
 import {
   CodeBlockContentParams,
   CodeBlockWrapperParams,
-  CoreTokenHandlers,
-  CustomFormatter,
-  FormatBuilder,
-  JsFormatterType,
-  TokenTypeHandlerParams
+  CoreToken,
+  CoreTokensHandlerResolvers,
+  CustomFormatterCategory,
+  CustomFormatterType,
+  FormatBuilder
 } from '../types/index.js';
 import { PlatformName } from '../types/platform.types.js';
 import { capitalize, toSpaceCase } from './strings.utils.js';
 import { tokenIsFluid } from './tokens/fluid-tokens.utils.js';
+
+// Returns an object of core tokens keys with handlers builders for each type
+export const getCoreTokensHandlerResolvers = ({
+  category,
+  type,
+  wrapper,
+  definer
+}: {
+  category: CustomFormatterCategory;
+  type?: CustomFormatterType;
+  wrapper: (params: CodeBlockWrapperParams) => string;
+  definer: (params: CodeBlockContentParams) => string;
+}): CoreTokensHandlerResolvers =>
+  Object.fromEntries(
+    CORE_TOKENS.map((token: CoreToken) => [
+      token,
+      // HandlerResolver
+      async (formatArgs, tokens, config) => {
+        const name = capitalize(toSpaceCase(token));
+        const handlerType =
+          tokens.length && tokens[0].$type === 'color'
+            ? 'color'
+            : tokens.some(tokenIsFluid)
+              ? 'fluid'
+              : 'basic';
+
+        // if (handlerType === 'SPECIFIC') {
+        //   const { default: handler } = await import(
+        //     `../platforms/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler.js`
+        //   );
+        //   return handler(...args);
+        // }
+
+        return handlers[`${handlerType}Handler` as keyof typeof handlers]({
+          name,
+          category,
+          type,
+          wrapper,
+          definer,
+          formatArgs,
+          tokens,
+          config
+        });
+      }
+    ])
+  ) as CoreTokensHandlerResolvers;
 
 // Returns a file header with a provided name
 export const fileHeader = (name: string): string =>
@@ -25,44 +71,6 @@ export const wrapInFileChapter = (name: string, code: string, noChapterTitle?: b
 // Returns a pair of spaces multiplied by the provided number
 export const tab = (c: number = 1): string => '  '.repeat(c);
 
-// Returns a set of core token handlers for a given format
-export const getCoreTokenHandlers = (
-  format: CustomFormatter,
-  type: JsFormatterType | null = null
-): CoreTokenHandlers => {
-  const getHandler = async (...args: [string, TokenTypeHandlerParams]) => {
-    const handlerType =
-      args[1].tokens.length && args[1].tokens[0].$type === 'color'
-        ? 'color'
-        : args[1].tokens.some(tokenIsFluid)
-          ? 'fluid'
-          : 'basic';
-
-    // if (handlerType === 'SPECIFIC') {
-    //   const { default: handler } = await import(
-    //     `../platforms/${format}/handlers/${type ? `${type}/` : ''}${handlerType}.handler.js`
-    //   );
-    //   return handler(...args);
-    // }
-
-    const { default: config } = await import(`../platforms/${format}/${format}.config.js`);
-
-    return handlers[`${handlerType}Handler` as keyof typeof handlers]({
-      format,
-      name: args[0],
-      params: args[1],
-      ...(type ? config[type] : config)
-    });
-  };
-
-  return Object.fromEntries(
-    CORE_TOKENS.map((token) => [
-      token,
-      (params: TokenTypeHandlerParams) => getHandler(capitalize(toSpaceCase(token)), params)
-    ])
-  );
-};
-
 // Returns a destination file name
 export const getDestinationFileName = (platform: PlatformName, name: string) =>
   `${name}.design-tokens.${platform}`;
@@ -74,49 +82,53 @@ export const getFormatterName = (platform: PlatformName, name: string) => `mev/$
 // that handles all tokens in a single file
 export const allFormatterTemplate =
   ({
-    platform,
     name,
+    category,
+    type,
     fileHeaderTitle,
-    prefix = () => {},
-    coreTokenHandlers,
+    prefixOutput = () => {},
     wrapper,
     definer
   }: {
-    platform: PlatformName;
     name: string;
+    category: CustomFormatterCategory;
+    type?: CustomFormatterType;
     fileHeaderTitle: string;
-    prefix?: (output: string[], formatArgs: FormatFnArguments) => void;
-    coreTokenHandlers: CoreTokenHandlers;
+    prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
     wrapper: (params: CodeBlockWrapperParams) => string;
     definer: (params: CodeBlockContentParams) => string;
-    fluidSeparation?: boolean;
   }): FormatBuilder =>
   () => ({
-    name: getFormatterName(platform, name),
+    name: getFormatterName(category, name),
     format: async function (formatArgs: FormatFnArguments) {
-      // Get the dictionary and the options from the format arguments
-      const { dictionary, options } = formatArgs;
+      // Get the core token handlers
+      const coreTokensHandlerResolvers: CoreTokensHandlerResolvers = getCoreTokensHandlerResolvers({
+        category,
+        type,
+        wrapper,
+        definer
+      });
 
       // Define the output array
       const output: string[] = [];
 
       // Get all tokens from the dictionary
-      const { allTokens } = dictionary;
+      const { allTokens } = formatArgs.dictionary;
 
       // Add header to the output array
       output.push(fileHeader(fileHeaderTitle));
 
-      // Handle the prefix (if such)
-      prefix(output, formatArgs);
+      // Handle the prefix output (if such)
+      prefixOutput(output, formatArgs);
 
       // Parse tokens that have a core handler
       const getCoreTokens = (type: string): TransformedToken[] =>
         allTokens.filter((token) => token.$type === type);
       const promises: Promise<string>[] = [];
-      Object.entries(coreTokenHandlers).forEach(([type, handlerFn]) => {
+      Object.entries(coreTokensHandlerResolvers).forEach(([type, handlerResolver]) => {
         const tokens = getCoreTokens(type);
         if (tokens.length) {
-          promises.push(handlerFn({ options, tokens }));
+          promises.push(handlerResolver(formatArgs, tokens));
         }
       });
       const responses = await Promise.all(promises);
@@ -126,15 +138,18 @@ export const allFormatterTemplate =
 
       // Parse tokens that don't have a core handler
       const otherTokens: TransformedToken[] = allTokens.filter(
-        (token) => !Object.keys(coreTokenHandlers).includes(token.$type || '')
+        (token) => !Object.keys(coreTokensHandlerResolvers).includes(token.$type || '')
       );
       if (otherTokens.length) {
         output.push(
           handlers.basicHandler({
             name: 'Other',
-            params: { options, tokens: otherTokens },
+            category,
+            type,
             wrapper,
-            definer
+            definer,
+            formatArgs,
+            tokens: otherTokens
           })
         );
       }
@@ -148,20 +163,31 @@ export const allFormatterTemplate =
 // that handles a given type of core tokens individually
 export const coreFormatterTemplate =
   ({
-    platform,
     name,
-    coreTokenHandlers
+    category,
+    type,
+    wrapper,
+    definer
   }: {
-    platform: PlatformName;
     name: string;
-    coreTokenHandlers: CoreTokenHandlers;
-    fluidSeparation?: boolean;
+    category: CustomFormatterCategory;
+    type?: CustomFormatterType;
+    wrapper: (params: CodeBlockWrapperParams) => string;
+    definer: (params: CodeBlockContentParams) => string;
   }): FormatBuilder =>
   () => ({
-    name: getFormatterName(platform, name),
+    name: getFormatterName(category, name),
     format: async function (formatArgs: FormatFnArguments) {
       // Get the dictionary and the options from the format arguments
-      const { dictionary, options } = formatArgs;
+      const { dictionary } = formatArgs;
+
+      // Get the core token handlers
+      const coreTokensHandlerResolvers: CoreTokensHandlerResolvers = getCoreTokensHandlerResolvers({
+        category,
+        type,
+        wrapper,
+        definer
+      });
 
       // Define the output array
       const output: string[] = [];
@@ -171,16 +197,17 @@ export const coreFormatterTemplate =
 
       // Get the type of the tokens
       // If there are no tokens, exit the function
-      const type = tokens.length && tokens[0].$type;
-      if (!type) return;
+      const tokenType = tokens.length && tokens[0].$type;
+      if (!tokenType) return;
 
       // Add header to the output array
-      output.push(fileHeader(`${toSpaceCase(type)} Tokens`));
+      output.push(fileHeader(`${toSpaceCase(tokenType)} Tokens`));
 
       // Parse the tokens
-      const handler = coreTokenHandlers[type as keyof typeof coreTokenHandlers];
-      if (handler) {
-        output.push(await handler({ options, tokens, config: { noChapterTitle: true } }));
+      const handlerResolver =
+        coreTokensHandlerResolvers[tokenType as keyof typeof coreTokensHandlerResolvers];
+      if (handlerResolver) {
+        output.push(await handlerResolver(formatArgs, tokens, { noChapterTitle: true }));
       }
 
       // Join the output array into a string and return it

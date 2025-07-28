@@ -1,26 +1,25 @@
-import { CustomFormatter, FormatBuilder, PlatformName } from '../../types/index.js';
-import {
-  allFormatterTemplate,
-  coreFormatterTemplate,
-  getCoreTokenHandlers
-} from '../../utils/formats.utils.js';
-import scssConfig from './scss.config.js';
+import { CustomFormatterCategory, FormatBuilder } from '../../types/index.js';
+import { allFormatterTemplate, coreFormatterTemplate } from '../../utils/formats.utils.js';
+import { defineSassMapValues, wrapInSassMap } from './scss.utils.js';
 
-const platform: PlatformName = 'scss';
-const coreTokenHandlers = getCoreTokenHandlers(CustomFormatter.SCSS);
-
-// Formatter for all tokens
-export const scssAllFormatter: FormatBuilder = allFormatterTemplate({
-  platform,
-  name: 'all',
-  fileHeaderTitle: 'SCSS Tokens',
-  coreTokenHandlers,
-  ...scssConfig
-});
-
-// Formatter for tokens with a core handler
-export const scssCoreFormatter: FormatBuilder = coreFormatterTemplate({
-  platform,
-  name: 'core',
-  coreTokenHandlers
-});
+export const scssFormatters: FormatBuilder[] = [
+  // Formatter for all tokens
+  {
+    name: 'all',
+    fileHeaderTitle: 'SCSS Tokens',
+    getFormatBuilder: allFormatterTemplate
+  },
+  // Formatter for core tokens
+  {
+    name: 'core',
+    getFormatBuilder: coreFormatterTemplate
+  }
+].map(({ name, fileHeaderTitle = '', getFormatBuilder }) =>
+  getFormatBuilder({
+    name,
+    fileHeaderTitle,
+    category: CustomFormatterCategory.SCSS,
+    wrapper: wrapInSassMap,
+    definer: defineSassMapValues
+  })
+);

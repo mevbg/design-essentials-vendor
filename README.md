@@ -1,6 +1,6 @@
 # Mev’s Design Tokens Generator
 
-A personal design token builder created by Mev, built on top of [Style Dictionary](https://styledictionary.com). It centralizes configuration and automates the generation of design tokens for multiple platforms such as CSS, Sass and JavaScript.
+A personal design tokens generator created by Mev, built on top of [Style Dictionary](https://styledictionary.com). It centralizes configuration and automates the creation of design tokens for multiple platforms such as CSS, Sass and JavaScript.
 
 Intended for use in his own projects, this tool simplifies token management with a predefined setup.
 
@@ -51,7 +51,7 @@ await generateDesignTokens({
 
 ## Architecture Overview
 
-The generator uses a consolidated handler architecture where all token processing logic is centralized in a single `handlers.ts` file. Each platform provides its own configuration, formats, and utility functions, while sharing the common handler implementations. The system dynamically loads platform-specific modules and automatically selects the appropriate handler based on token characteristics.
+The generator uses a modular handler architecture where token processing logic is organized in separate handler files within the `src/handlers/` directory. Each platform provides its own configuration, formats, and utility functions, while sharing the common handler implementations. The system dynamically loads platform-specific modules and automatically selects the appropriate handler based on token characteristics.
 
 ### Core Library (`src/`)
 
@@ -62,24 +62,25 @@ src/
 ├── constants.ts                # Global configuration constants
 ├── configs.ts                  # Default configuration objects
 ├── formats.ts                  # Format re-exports from platforms
-├── handlers.ts                 # Consolidated handler implementations
 ├── platforms.ts                # Platform configuration loader
+├── handlers/                   # Token processing handlers
+│   ├── index.ts                # Handler exports
+│   ├── basic.handler.ts        # Basic token handler
+│   ├── color.handler.ts        # Color token handler
+│   └── fluid.handler.ts        # Fluid token handler
 ├── platforms/                  # Platform-specific modules
 │   ├── css/
 │   │   ├── index.ts            # Platform configuration
-│   │   ├── css.config.ts       # CSS-specific config
 │   │   ├── css.formats.ts      # CSS formatters
 │   │   ├── css.utils.ts        # CSS utility functions
 │   │   └── handlers/           # Platform-specific handlers
 │   │       └── root.handler.ts # CSS root font size handler
 │   ├── scss/                   # SCSS platform modules
 │   │   ├── index.ts
-│   │   ├── scss.config.ts
 │   │   ├── scss.formats.ts
 │   │   └── scss.utils.ts
 │   ├── js/                     # JavaScript platform modules
 │   │   ├── index.ts
-│   │   ├── js.config.ts
 │   │   ├── js.formats.ts
 │   │   └── js.utils.ts
 │   └── json/                   # JSON platform modules
@@ -195,25 +196,27 @@ The generator supports these core token types (defined in `CORE_TOKENS`):
 
 ### Handler Architecture
 
-The system uses a consolidated handler approach with three main handler types, all implemented in `src/handlers.ts`:
+The system uses a modular handler approach with three main handler types, organized in separate files within `src/handlers/`:
 
-#### Basic Handler (`basicHandler`)
+#### Basic Handler (`src/handlers/basic.handler.ts`)
 
-Processes standard tokens with simple string values using platform-specific formatters. Each platform provides its own `wrapper` and `definer` functions through configuration.
+Processes standard tokens with simple string values using platform-specific formatters. Each platform provides its own `wrapper` and `definer` functions through utility modules.
 
-#### Color Handler (`colorHandler`)
+#### Fluid Handler (`src/handlers/fluid.handler.ts`)
+
+- Processes responsive tokens with `min`/`max` values
+- Generates CSS `calc()` functions for smooth viewport scaling
+- Creates media query breakpoints for min/max fixed values
+- Automatic fluid separation based on platform category (CSS/SCSS) or JS type (static)
+- Handles both separated (min/fluid/max) and unified output modes
+
+#### Color Handler (`src/handlers/color.handler.ts`)
 
 - Supports multiple color scheme implementations (media queries, CSS classes, or combined)
 - Generates separate rules for light/dark variants
 - Handles scheme-specific and primitive color tokens
 - Platform-specific output formatting (CSS media queries, SCSS maps, JS objects)
-
-#### Fluid Handler (`fluidHandler`)
-
-- Processes responsive tokens with `min`/`max` values
-- Generates CSS `calc()` functions for smooth viewport scaling
-- Creates media query breakpoints for min/max fallbacks
-- Supports fluid separation (separate min/fluid/max variants) or unified output
+- Uses `category` parameter to determine output format
 
 #### Root Handler (CSS Platform Only)
 
@@ -425,27 +428,48 @@ const styleDictionary = await generateDesignTokens({
 });
 ```
 
-### Handler Functions (`src/handlers.ts`)
+### Handler Functions (`src/handlers/`)
 
-#### `basicHandler(params: CommonHandlerParams): string`
+#### `basicHandler(params: GeneralHandlerParams): string`
 
 Processes standard tokens with simple string values.
 
 **Parameters:**
 
 - `params.name: string` - Handler name for chapter title
+- `params.category: CustomFormatterCategory` - Target format category
+- `params.type: CustomFormatterType` - JS format type (static/variable)
 - `params.params: TokenTypeHandlerParams` - Token data and options
 - `params.wrapper: Function` - Platform-specific wrapper function
 - `params.definer: Function` - Platform-specific definer function
 
-#### `colorHandler(params: CommonHandlerParams): string`
+#### `fluidHandler(params: GeneralHandlerParams): string`
+
+Processes responsive tokens with min/max values and automatic fluid separation.
+
+**Parameters:**
+
+- `params.category: CustomFormatterCategory` - Target format category
+- `params.type: CustomFormatterType` - JS format type (static/variable)
+- `params.params: TokenTypeHandlerParams` - Token data and options
+- `params.wrapper: Function` - Platform-specific wrapper function
+- `params.definer: Function` - Platform-specific definer function
+
+**Features:**
+
+- Automatic fluid token detection
+- Automatic separation based on platform category (CSS/SCSS) or JS type (static)
+- CSS media query generation for responsive breakpoints
+- Platform-specific output formatting
+
+#### `colorHandler(params: GeneralHandlerParams): string`
 
 Handles color tokens with scheme support and platform-specific formatting.
 
 **Parameters:**
 
-- `params.format: CustomFormatter` - Target format (css, scss, js)
-- `params.type: JsFormatterType` - JS format type (static/variable)
+- `params.category: CustomFormatterCategory` - Target format category (css, scss, js)
+- `params.type: CustomFormatterType` - JS format type (static/variable)
 - `params.params: TokenTypeHandlerParams` - Token data and options
 - `params.wrapper: Function` - Platform-specific wrapper function
 - `params.definer: Function` - Platform-specific definer function
@@ -455,67 +479,63 @@ Handles color tokens with scheme support and platform-specific formatting.
 - Automatic color scheme detection and grouping
 - Platform-specific output formatting
 - Support for media queries, CSS classes, or combined methods
+- Conditional processing based on format category and type
 
-#### `fluidHandler(params: CommonHandlerParams): string`
+## Platform Utilities
 
-Processes responsive tokens with min/max values and optional fluid separation.
+Each platform provides its own utility functions through `{platform}.utils.ts` files:
 
-**Parameters:**
-
-- `params.format: CustomFormatter` - Target format
-- `params.params: TokenTypeHandlerParams` - Token data and options
-- `params.fluidSeparation: boolean` - Whether to separate fluid variants
-- `params.wrapper: Function` - Platform-specific wrapper function
-- `params.definer: Function` - Platform-specific definer function
-
-**Features:**
-
-- Automatic fluid token detection
-- Optional separation into min/fluid/max variants
-- CSS media query generation for responsive breakpoints
-- Platform-specific output formatting
-
-## Platform Configurations
-
-Each platform provides its own configuration through `{platform}.config.ts` files:
-
-### CSS Configuration (`src/platforms/css/css.config.ts`)
+### CSS Utilities (`src/platforms/css/css.utils.ts`)
 
 ```typescript
-export default {
-  fluidSeparation: true, // Separate fluid tokens into min/fluid/max
-  wrapper: wrapInCssRoot, // Wrap in :root selector
-  definer: defineCssCustomProperties // Define as CSS custom properties
-};
+export const wrapInCssSelector = ({
+  name = ':root',
+  code,
+  indent = ''
+}: CodeBlockWrapperParams): string => `${indent}${name} {\n${code}\n${indent}}`;
+
+export const defineCssCustomProperties = ({
+  tokens,
+  indent = '  '
+}: CodeBlockContentParams): string =>
+  tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
 ```
 
-### SCSS Configuration (`src/platforms/scss/scss.config.ts`)
+### SCSS Utilities (`src/platforms/scss/scss.utils.ts`)
 
 ```typescript
-export default {
-  fluidSeparation: true, // Separate fluid tokens into min/fluid/max
-  wrapper: wrapInSassMap, // Wrap in SCSS map
-  definer: defineSassMapValues // Define as SCSS map values
-};
+export const wrapInSassMap = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+  `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
+
+export const defineSassMapValues = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+  tokens
+    .map(
+      ({ name, $type, $value }, index) =>
+        `${indent}'${name.replace(toKebabCase($type || '') + '-', '')}': ${$type === 'fontFamily' ? `'${$value}'` : $value}${index < tokens.length - 1 ? ',' : ''}`
+    )
+    .join('\n');
 ```
 
-### JavaScript Configuration (`src/platforms/js/js.config.ts`)
+### JavaScript Utilities (`src/platforms/js/js.utils.ts`)
 
 ```typescript
-export default {
-  static: {
-    type: 'static', // Generate static values
-    fluidSeparation: true, // Separate fluid tokens
-    wrapper: wrapInJsConst, // Wrap in JS const
-    definer: defineJsObjectItemsWithValues // Define as JS object values
-  },
-  variable: {
-    type: 'variable', // Generate CSS variable references
-    fluidSeparation: false, // No fluid separation
-    wrapper: wrapInJsConst, // Wrap in JS const
-    definer: defineJsObjectItemsWithVariables // Define as CSS variable names
-  }
-};
+export const wrapInJsObject = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+  (!indent ? `export const ${spaceCaseToCamelCase(name)} =` : `${indent}${name}:`) +
+  ` {\n${code}\n${indent}}`;
+
+export const defineJsObjectItems = ({
+  type,
+  tokens,
+  options,
+  indent = '  '
+}: CodeBlockContentParams): string =>
+  tokens
+    .map(({ name, path, $type = '', $value }, index) =>
+      type === JsFormatterType.STATIC
+        ? `${indent}'${toCamelCase(name.replace(capitalize($type), ''))}': '${$value}'${index < tokens.length - 1 ? ',' : ''}`
+        : `${indent}'${toKebabCase(toCamelCase(name.replace(capitalize($type), '')))}': 'var(--${options?.prefix}-${toKebabCase(path.join('-')).replace('$', '')})'${index < tokens.length - 1 ? ',' : ''}`
+    )
+    .join('\n');
 ```
 
 ## Default Constants
@@ -573,7 +593,7 @@ CORE_TOKENS = [
 - `fileHeader(name: string): string` - Generates standardized file headers
 - `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean): string` - Creates comment-separated sections
 - `tab(count?: number): string` - Generates consistent indentation
-- `getCoreTokenHandlers(format: CustomFormatter, type?: JsFormatterType): CoreTokenHandlers` - Returns appropriate handlers for token types
+- `getCoreTokensHandlerResolvers(config): CoreTokensHandlerResolvers` - Returns appropriate handlers for token types
 - `getDestinationFileName(platform: PlatformName, name: string): string` - Generates output file names
 - `getFormatterName(platform: PlatformName, name: string): string` - Generates formatter names
 - `allFormatterTemplate(config): FormatBuilder` - Template for "all tokens" formatters
@@ -664,18 +684,17 @@ type PlatformName = 'css' | 'scss' | 'js' | 'json';
 type PlatformConfigBuilder = (params: PlatformConfigBuilderParams) => PlatformConfig;
 
 // Handler types
-type CommonHandlerParams = {
-  format?: CustomFormatter;
+type GeneralHandlerParams = {
   name: string;
-  type?: JsFormatterType;
+  category: CustomFormatterCategory;
+  type?: CustomFormatterType;
   params: TokenTypeHandlerParams;
-  fluidSeparation?: boolean;
   wrapper: (params: CodeBlockWrapperParams) => string;
   definer: (params: CodeBlockContentParams) => string;
-};
+}; // this is the type of params for all common handlers regardless the custom formatter
 
 // Format types
-enum CustomFormatter {
+enum CustomFormatterCategory {
   CSS = 'css',
   SCSS = 'scss',
   JS = 'js'
@@ -684,6 +703,7 @@ enum JsFormatterType {
   STATIC = 'static',
   VARIABLE = 'variable'
 }
+type CustomFormatterType = JsFormatterType;
 
 // Scheme types
 enum ColorSchemeType {
@@ -699,13 +719,13 @@ enum ColorSchemeMethod {
 
 ## Advanced Features
 
-### Consolidated Handler Architecture
+### Modular Handler Architecture
 
-All token processing logic is centralized in `src/handlers.ts` with three main handlers:
+Token processing logic is organized in separate handler files within `src/handlers/` with three main handlers:
 
 - **`basicHandler`**: Processes standard tokens using platform-specific wrappers and definers
 - **`colorHandler`**: Handles color scheme tokens with platform-specific output formatting
-- **`fluidHandler`**: Processes responsive tokens with optional fluid separation
+- **`fluidHandler`**: Processes responsive tokens with automatic fluid separation based on platform
 
 ### Dynamic Platform Loading
 
@@ -721,19 +741,18 @@ Handlers are automatically selected based on token characteristics in `src/utils
 
 ```typescript
 const handlerType =
-  args[1].tokens.length && args[1].tokens[0].$type === 'color'
+  tokens.length && tokens[0].$type === 'color'
     ? 'color'
-    : args[1].tokens.some(tokenIsFluid)
+    : tokens.some(tokenIsFluid)
       ? 'fluid'
       : 'basic';
 ```
 
-Each platform provides configuration through `{platform}.config.ts` files that define:
+Each platform provides utility functions through `{platform}.utils.ts` files that define:
 
-- `wrapper`: Function to wrap token output (e.g., CSS `:root`, SCSS maps, JS objects)
+- `wrapper`: Function to wrap token output (e.g., CSS selectors, SCSS maps, JS objects)
 - `definer`: Function to define token values (e.g., CSS custom properties, SCSS variables, JS exports)
-- `fluidSeparation`: Whether to separate fluid tokens into min/fluid/max variants
-- `type`: For JS platform, whether to generate static values or CSS variable references
+- Platform-specific formatting logic and naming conventions
 
 ### Platform-Specific Handlers
 
