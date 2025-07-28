@@ -200,7 +200,7 @@ The system uses a modular handler approach with three main handler types, organi
 
 #### Basic Handler (`src/handlers/basic.handler.ts`)
 
-Processes standard tokens with simple string values using platform-specific formatters. Each platform provides its own `wrapper` and `definer` functions through utility modules.
+Processes standard tokens with simple string values using platform-specific formatters. Each platform provides its own `wrapper` and `definer` functions through utility modules. Special handling for "Other" tokens groups them by type for better organization.
 
 #### Fluid Handler (`src/handlers/fluid.handler.ts`)
 
@@ -439,9 +439,16 @@ Processes standard tokens with simple string values.
 - `params.name: string` - Handler name for chapter title
 - `params.category: CustomFormatterCategory` - Target format category
 - `params.type: CustomFormatterType` - JS format type (static/variable)
-- `params.params: TokenTypeHandlerParams` - Token data and options
+- `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
+- `params.tokens: TransformedToken[]` - Tokens to process
+- `params.config: HandlerConfig` - Optional handler configuration
 - `params.wrapper: Function` - Platform-specific wrapper function
 - `params.definer: Function` - Platform-specific definer function
+
+**Features:**
+- Special handling for "Other" tokens with type-based grouping
+- Platform-specific output formatting
+- Configurable chapter titles
 
 #### `fluidHandler(params: GeneralHandlerParams): string`
 
@@ -451,7 +458,9 @@ Processes responsive tokens with min/max values and automatic fluid separation.
 
 - `params.category: CustomFormatterCategory` - Target format category
 - `params.type: CustomFormatterType` - JS format type (static/variable)
-- `params.params: TokenTypeHandlerParams` - Token data and options
+- `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
+- `params.tokens: TransformedToken[]` - Tokens to process
+- `params.config: HandlerConfig` - Optional handler configuration
 - `params.wrapper: Function` - Platform-specific wrapper function
 - `params.definer: Function` - Platform-specific definer function
 
@@ -470,7 +479,9 @@ Handles color tokens with scheme support and platform-specific formatting.
 
 - `params.category: CustomFormatterCategory` - Target format category (css, scss, js)
 - `params.type: CustomFormatterType` - JS format type (static/variable)
-- `params.params: TokenTypeHandlerParams` - Token data and options
+- `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
+- `params.tokens: TransformedToken[]` - Tokens to process
+- `params.config: HandlerConfig` - Optional handler configuration
 - `params.wrapper: Function` - Platform-specific wrapper function
 - `params.definer: Function` - Platform-specific definer function
 
@@ -593,11 +604,12 @@ CORE_TOKENS = [
 - `fileHeader(name: string): string` - Generates standardized file headers
 - `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean): string` - Creates comment-separated sections
 - `tab(count?: number): string` - Generates consistent indentation
-- `getCoreTokensHandlerResolvers(config): CoreTokensHandlerResolvers` - Returns appropriate handlers for token types
+- `getCoreTokensHandlerResolvers(config): CoreTokensHandlerResolvers` - Returns handler resolvers for core token types
 - `getDestinationFileName(platform: PlatformName, name: string): string` - Generates output file names
 - `getFormatterName(platform: PlatformName, name: string): string` - Generates formatter names
 - `allFormatterTemplate(config): FormatBuilder` - Template for "all tokens" formatters
 - `coreFormatterTemplate(config): FormatBuilder` - Template for individual token type formatters
+- `othersFormatterTemplate(config): FormatBuilder` - Template for "other tokens" formatters
 
 ### String Utilities (`src/utils/strings.utils.ts`)
 
@@ -688,10 +700,20 @@ type GeneralHandlerParams = {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
-  params: TokenTypeHandlerParams;
+  formatArgs: FormatFnArguments;
+  tokens: TransformedToken[];
+  config?: HandlerConfig;
   wrapper: (params: CodeBlockWrapperParams) => string;
   definer: (params: CodeBlockContentParams) => string;
 }; // this is the type of params for all common handlers regardless the custom formatter
+
+type HandlerResolver = (
+  formatArgs: FormatFnArguments,
+  tokens: TransformedToken[],
+  config?: HandlerConfig
+) => Promise<string>;
+
+type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
 
 // Format types
 enum CustomFormatterCategory {
@@ -723,7 +745,7 @@ enum ColorSchemeMethod {
 
 Token processing logic is organized in separate handler files within `src/handlers/` with three main handlers:
 
-- **`basicHandler`**: Processes standard tokens using platform-specific wrappers and definers
+- **`basicHandler`**: Processes standard tokens using platform-specific wrappers and definers, with special handling for "Other" tokens
 - **`colorHandler`**: Handles color scheme tokens with platform-specific output formatting
 - **`fluidHandler`**: Processes responsive tokens with automatic fluid separation based on platform
 
@@ -753,6 +775,10 @@ Each platform provides utility functions through `{platform}.utils.ts` files tha
 - `wrapper`: Function to wrap token output (e.g., CSS selectors, SCSS maps, JS objects)
 - `definer`: Function to define token values (e.g., CSS custom properties, SCSS variables, JS exports)
 - Platform-specific formatting logic and naming conventions
+
+### Handler Resolvers
+
+The system uses `HandlerResolver` functions that take `FormatFnArguments`, tokens, and optional config to return processed token strings. These resolvers are organized in `CoreTokensHandlerResolvers` for each core token type.
 
 ### Platform-Specific Handlers
 
