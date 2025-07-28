@@ -4,7 +4,8 @@ import {
   allFormatterTemplate,
   coreFormatterTemplate,
   fileHeader,
-  getFormatterName
+  getFormatterName,
+  othersFormatterTemplate
 } from '../../utils/formats.utils.js';
 import { defineCssCustomProperties, wrapInCssSelector } from './css.utils.js';
 import rootHandler from './handlers/root.handler.js';
@@ -45,6 +46,11 @@ export const cssFormatters: FormatBuilder[] = [
     {
       name: 'core',
       getFormatBuilder: coreFormatterTemplate
+    },
+    // Formatter for non-core tokens
+    {
+      name: 'others',
+      getFormatBuilder: othersFormatterTemplate
     }
   ].map(({ name, prefixOutput, fileHeaderTitle = '', getFormatBuilder }) =>
     getFormatBuilder({

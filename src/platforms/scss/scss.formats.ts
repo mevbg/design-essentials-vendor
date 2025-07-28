@@ -1,5 +1,9 @@
 import { CustomFormatterCategory, FormatBuilder } from '../../types/index.js';
-import { allFormatterTemplate, coreFormatterTemplate } from '../../utils/formats.utils.js';
+import {
+  allFormatterTemplate,
+  coreFormatterTemplate,
+  othersFormatterTemplate
+} from '../../utils/formats.utils.js';
 import { defineSassMapValues, wrapInSassMap } from './scss.utils.js';
 
 export const scssFormatters: FormatBuilder[] = [
@@ -13,6 +17,11 @@ export const scssFormatters: FormatBuilder[] = [
   {
     name: 'core',
     getFormatBuilder: coreFormatterTemplate
+  },
+  // Formatter for non-core tokens
+  {
+    name: 'others',
+    getFormatBuilder: othersFormatterTemplate
   }
 ].map(({ name, fileHeaderTitle = '', getFormatBuilder }) =>
   getFormatBuilder({

@@ -6,6 +6,7 @@ import {
   PlatformConfigsBuilderParams,
   PlatformName
 } from './types/index.js';
+import { CoreToken } from './types/tokens.types.js';
 import { getDestinationFileName, getFormatterName } from './utils/formats.utils.js';
 import { toKebabCase } from './utils/strings.utils.js';
 
@@ -39,6 +40,16 @@ export const getPlatformConfigs = async (
                   format: getFormatterName(platform, 'core'),
                   filter: (token: TransformedToken) => token.$type === key
                 }))
+              : []),
+            ...(coreFiles
+              ? [
+                  {
+                    destination: getDestinationFileName(platform, 'others'),
+                    format: getFormatterName(platform, 'others'),
+                    filter: (token: TransformedToken) =>
+                      !CORE_TOKENS.includes(token.$type as CoreToken)
+                  }
+                ]
               : [])
           ],
           ...config

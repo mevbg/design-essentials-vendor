@@ -214,3 +214,53 @@ export const coreFormatterTemplate =
       return output.join('\n');
     }
   });
+
+// Returns a function for a formatter
+// that handles a given type of core tokens individually
+export const othersFormatterTemplate =
+  ({
+    name,
+    category,
+    type,
+    wrapper,
+    definer
+  }: {
+    name: string;
+    category: CustomFormatterCategory;
+    type?: CustomFormatterType;
+    wrapper: (params: CodeBlockWrapperParams) => string;
+    definer: (params: CodeBlockContentParams) => string;
+  }): FormatBuilder =>
+  () => ({
+    name: getFormatterName(category, name),
+    format: async function (formatArgs: FormatFnArguments) {
+      // Get the dictionary and the options from the format arguments
+      const { dictionary } = formatArgs;
+
+      // Define the output array
+      const output: string[] = [];
+
+      // Get all tokens from the dictionary
+      const { allTokens: tokens } = dictionary;
+
+      // Add header to the output array
+      output.push(fileHeader(`Other Tokens`));
+
+      // Parse tokens that don't have a core handler
+      output.push(
+        handlers.basicHandler({
+          name: 'Other',
+          category,
+          type,
+          wrapper,
+          definer,
+          formatArgs,
+          tokens,
+          config: { noChapterTitle: true }
+        })
+      );
+
+      // Join the output array into a string and return it
+      return output.join('\n');
+    }
+  });
