@@ -7,20 +7,21 @@ import {
   getFormatterName,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
-import { defineCssCustomProperties, wrapInCssSelector } from './css.utils.js';
-import rootHandler from './handlers/root.handler.js';
+import { rootHandler } from './handlers/root.handler.js';
 
 const rootFontSizeTitle = 'Root Font Size';
 
-const outputRootFontSize = (output: string[], formatArgs: FormatFnArguments) => {
-  output.push(rootHandler(rootFontSizeTitle, formatArgs, { prefix: formatArgs?.platform?.prefix }));
+const outputRootFontSize = async (output: string[], formatArgs: FormatFnArguments) => {
+  output.push(
+    await rootHandler(rootFontSizeTitle, formatArgs, { prefix: formatArgs?.platform?.prefix })
+  );
 };
 
 export const cssFormatters: FormatBuilder[] = [
   // Root font size formatter
   () => ({
     name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
-    format: function (formatArgs: FormatFnArguments) {
+    format: async function (formatArgs: FormatFnArguments) {
       // Define the output array
       const output: string[] = [];
 
@@ -28,7 +29,7 @@ export const cssFormatters: FormatBuilder[] = [
       output.push(fileHeader(rootFontSizeTitle));
 
       // Handle the root font size
-      outputRootFontSize(output, formatArgs);
+      await outputRootFontSize(output, formatArgs);
 
       // Join the output array into a string and return it
       return output.join('\n');
@@ -57,9 +58,7 @@ export const cssFormatters: FormatBuilder[] = [
       name,
       fileHeaderTitle,
       prefixOutput,
-      category: CustomFormatterCategory.CSS,
-      wrapper: wrapInCssSelector,
-      definer: defineCssCustomProperties
+      category: CustomFormatterCategory.CSS
     })
   )
 ];

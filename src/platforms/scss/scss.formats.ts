@@ -4,7 +4,6 @@ import {
   coreFormatterTemplate,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
-import { defineSassMapValues, wrapInSassMap } from './scss.utils.js';
 
 export const scssFormatters: FormatBuilder[] = [
   // Formatter for all tokens
@@ -27,8 +26,6 @@ export const scssFormatters: FormatBuilder[] = [
   getFormatBuilder({
     name,
     fileHeaderTitle,
-    category: CustomFormatterCategory.SCSS,
-    wrapper: wrapInSassMap,
-    definer: defineSassMapValues
+    category: CustomFormatterCategory.SCSS
   })
 );

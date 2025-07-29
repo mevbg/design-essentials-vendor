@@ -1,10 +1,12 @@
 import { CodeBlockContentParams, CodeBlockWrapperParams } from '../../types/index.js';
 import { toKebabCase } from '../../utils/strings.utils.js';
 
-export const wrapInSassMap = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+// Wraps a code block in a Sass map
+export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
-export const defineSassMapValues = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+// Defines the values of a Sass map
+export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
   tokens
     .map(
       ({ name, $type, $value }, index) =>

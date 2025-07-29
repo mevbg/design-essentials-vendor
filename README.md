@@ -446,6 +446,7 @@ Processes standard tokens with simple string values.
 - `params.definer: Function` - Platform-specific definer function
 
 **Features:**
+
 - Special handling for "Other" tokens with type-based grouping
 - Platform-specific output formatting
 - Configurable chapter titles
@@ -499,26 +500,24 @@ Each platform provides its own utility functions through `{platform}.utils.ts` f
 ### CSS Utilities (`src/platforms/css/css.utils.ts`)
 
 ```typescript
-export const wrapInCssSelector = ({
-  name = ':root',
-  code,
-  indent = ''
-}: CodeBlockWrapperParams): string => `${indent}${name} {\n${code}\n${indent}}`;
+// Wraps a code block in a CSS selector
+export const wrapper = ({ name = ':root', code, indent = '' }: CodeBlockWrapperParams): string =>
+  `${indent}${name} {\n${code}\n${indent}}`;
 
-export const defineCssCustomProperties = ({
-  tokens,
-  indent = '  '
-}: CodeBlockContentParams): string =>
+// Defines the custom properties of a CSS selector
+export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
 ```
 
 ### SCSS Utilities (`src/platforms/scss/scss.utils.ts`)
 
 ```typescript
-export const wrapInSassMap = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+// Wraps a code block in a Sass map
+export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
-export const defineSassMapValues = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+// Defines the values of a Sass map
+export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
   tokens
     .map(
       ({ name, $type, $value }, index) =>
@@ -530,16 +529,13 @@ export const defineSassMapValues = ({ tokens, indent = '  ' }: CodeBlockContentP
 ### JavaScript Utilities (`src/platforms/js/js.utils.ts`)
 
 ```typescript
-export const wrapInJsObject = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+// Wraps a code block in a JS object
+export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
   (!indent ? `export const ${spaceCaseToCamelCase(name)} =` : `${indent}${name}:`) +
-  ` {\n${code}\n${indent}}`;
+  ` {\n${code}\n${indent}}${!indent ? ';' : ''}`;
 
-export const defineJsObjectItems = ({
-  type,
-  tokens,
-  options,
-  indent = '  '
-}: CodeBlockContentParams): string =>
+// Defines the items of a JS object
+export const definer = ({ type, tokens, options, indent = '  ' }: CodeBlockContentParams): string =>
   tokens
     .map(({ name, path, $type = '', $value }, index) =>
       type === JsFormatterType.STATIC
@@ -775,6 +771,25 @@ Each platform provides utility functions through `{platform}.utils.ts` files tha
 - `wrapper`: Function to wrap token output (e.g., CSS selectors, SCSS maps, JS objects)
 - `definer`: Function to define token values (e.g., CSS custom properties, SCSS variables, JS exports)
 - Platform-specific formatting logic and naming conventions
+
+### Platform Formats
+
+Each platform also provides format builders through `{platform}.formats.ts` files:
+
+#### CSS Formats (`src/platforms/css/css.formats.ts`)
+- **Root Font Size**: Generates responsive root font size variables
+- **All Tokens**: Combines all tokens with root font size prefix
+- **Core Tokens**: Individual token type files
+- **Other Tokens**: Non-core token types
+
+#### SCSS Formats (`src/platforms/scss/scss.formats.ts`)
+- **All Tokens**: All tokens in a single SCSS file
+- **Core Tokens**: Individual token type files
+- **Other Tokens**: Non-core token types
+
+#### JavaScript Formats (`src/platforms/js/js.formats.ts`)
+- **Static**: Token values as static strings
+- **Variable**: CSS custom property references
 
 ### Handler Resolvers
 

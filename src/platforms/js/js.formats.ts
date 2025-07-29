@@ -1,6 +1,5 @@
 import { CustomFormatterCategory, FormatBuilder, JsFormatterType } from '../../types/index.js';
 import { allFormatterTemplate } from '../../utils/formats.utils.js';
-import { defineJsObjectItems, wrapInJsObject } from './js.utils.js';
 
 export const jsFormatters: FormatBuilder[] = [
   {
@@ -18,8 +17,6 @@ export const jsFormatters: FormatBuilder[] = [
     name,
     type,
     fileHeaderTitle,
-    category: CustomFormatterCategory.JS,
-    wrapper: wrapInJsObject,
-    definer: defineJsObjectItems
+    category: CustomFormatterCategory.JS
   })
 );

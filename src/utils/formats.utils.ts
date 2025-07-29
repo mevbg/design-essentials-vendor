@@ -8,7 +8,8 @@ import {
   CoreTokensHandlerResolvers,
   CustomFormatterCategory,
   CustomFormatterType,
-  FormatBuilder
+  FormatBuilder,
+  HandlerConfig
 } from '../types/index.js';
 import { PlatformName } from '../types/platform.types.js';
 import { capitalize, toSpaceCase } from './strings.utils.js';
@@ -17,14 +18,10 @@ import { tokenIsFluid } from './tokens/fluid-tokens.utils.js';
 // Returns an object of core tokens keys with handlers builders for each type
 export const getCoreTokensHandlerResolvers = ({
   category,
-  type,
-  wrapper,
-  definer
+  type
 }: {
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
-  wrapper: (params: CodeBlockWrapperParams) => string;
-  definer: (params: CodeBlockContentParams) => string;
 }): CoreTokensHandlerResolvers =>
   Object.fromEntries(
     CORE_TOKENS.map((token: CoreToken) => [
@@ -50,8 +47,6 @@ export const getCoreTokensHandlerResolvers = ({
           name,
           category,
           type,
-          wrapper,
-          definer,
           formatArgs,
           tokens,
           config
@@ -64,10 +59,6 @@ export const getCoreTokensHandlerResolvers = ({
 export const fileHeader = (name: string): string =>
   `/* =================================================== */\n/* ${name.toUpperCase()} */\n/* =================================================== */\n`;
 
-// Defines a comment-separated chapter in a file with a provided name and code
-export const wrapInFileChapter = (name: string, code: string, noChapterTitle?: boolean): string =>
-  noChapterTitle ? `${code}\n` : `\n${`/* ${name} Tokens */`.toUpperCase()}\n\n${code}\n`;
-
 // Returns a pair of spaces multiplied by the provided number
 export const tab = (c: number = 1): string => '  '.repeat(c);
 
@@ -78,6 +69,38 @@ export const getDestinationFileName = (platform: PlatformName, name: string) =>
 // Returns a formatter name
 export const getFormatterName = (platform: PlatformName, name: string) => `mev/${platform}/${name}`;
 
+// Returns a promise with the output for a file
+export const getFileOutput = async ({
+  name,
+  category,
+  config,
+  parser
+}: {
+  name: string;
+  category: CustomFormatterCategory;
+  config?: HandlerConfig;
+  parser: (
+    output: string[],
+    wrapper: (args: CodeBlockWrapperParams) => string,
+    definer: (args: CodeBlockContentParams) => string
+  ) => void;
+}): Promise<string> => {
+  // Import the wrapper and definer functions for the current category
+  const { wrapper, definer } = await import(`../platforms/${category}/${category}.utils.js`);
+
+  // Define the output array
+  const output: string[] = [];
+
+  // Populate the output array with the parsed tokens
+  parser(output, wrapper, definer);
+
+  // Return the output
+  const code = output.join('\n');
+  return config?.noChapterTitle
+    ? `${code}\n`
+    : `\n${`/* ${name} Tokens */`.toUpperCase()}\n\n${code}\n`;
+};
+
 // Returns a function for a formatter
 // that handles all tokens in a single file
 export const allFormatterTemplate =
@@ -86,17 +109,13 @@ export const allFormatterTemplate =
     category,
     type,
     fileHeaderTitle,
-    prefixOutput = () => {},
-    wrapper,
-    definer
+    prefixOutput = () => {}
   }: {
     name: string;
     category: CustomFormatterCategory;
     type?: CustomFormatterType;
     fileHeaderTitle: string;
     prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
-    wrapper: (params: CodeBlockWrapperParams) => string;
-    definer: (params: CodeBlockContentParams) => string;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(category, name),
@@ -104,9 +123,7 @@ export const allFormatterTemplate =
       // Get the core token handlers
       const coreTokensHandlerResolvers: CoreTokensHandlerResolvers = getCoreTokensHandlerResolvers({
         category,
-        type,
-        wrapper,
-        definer
+        type
       });
 
       // Define the output array
@@ -142,12 +159,10 @@ export const allFormatterTemplate =
       );
       if (otherTokens.length) {
         output.push(
-          handlers.basicHandler({
+          await handlers.basicHandler({
             name: 'Other',
             category,
             type,
-            wrapper,
-            definer,
             formatArgs,
             tokens: otherTokens
           })
@@ -165,15 +180,11 @@ export const coreFormatterTemplate =
   ({
     name,
     category,
-    type,
-    wrapper,
-    definer
+    type
   }: {
     name: string;
     category: CustomFormatterCategory;
     type?: CustomFormatterType;
-    wrapper: (params: CodeBlockWrapperParams) => string;
-    definer: (params: CodeBlockContentParams) => string;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(category, name),
@@ -184,9 +195,7 @@ export const coreFormatterTemplate =
       // Get the core token handlers
       const coreTokensHandlerResolvers: CoreTokensHandlerResolvers = getCoreTokensHandlerResolvers({
         category,
-        type,
-        wrapper,
-        definer
+        type
       });
 
       // Define the output array
@@ -216,20 +225,16 @@ export const coreFormatterTemplate =
   });
 
 // Returns a function for a formatter
-// that handles a given type of core tokens individually
+// that handles all tokens that don't have a core handler
 export const othersFormatterTemplate =
   ({
     name,
     category,
-    type,
-    wrapper,
-    definer
+    type
   }: {
     name: string;
     category: CustomFormatterCategory;
     type?: CustomFormatterType;
-    wrapper: (params: CodeBlockWrapperParams) => string;
-    definer: (params: CodeBlockContentParams) => string;
   }): FormatBuilder =>
   () => ({
     name: getFormatterName(category, name),
@@ -248,12 +253,10 @@ export const othersFormatterTemplate =
 
       // Parse tokens that don't have a core handler
       output.push(
-        handlers.basicHandler({
+        await handlers.basicHandler({
           name: 'Other',
           category,
           type,
-          wrapper,
-          definer,
           formatArgs,
           tokens,
           config: { noChapterTitle: true }

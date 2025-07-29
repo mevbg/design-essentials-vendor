@@ -10,16 +10,13 @@ import {
   toKebabCase
 } from '../../utils/strings.utils.js';
 
-export const wrapInJsObject = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+// Wraps a code block in a JS object
+export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
   (!indent ? `export const ${spaceCaseToCamelCase(name)} =` : `${indent}${name}:`) +
-  ` {\n${code}\n${indent}}`;
+  ` {\n${code}\n${indent}}${!indent ? ';' : ''}`;
 
-export const defineJsObjectItems = ({
-  type,
-  tokens,
-  options,
-  indent = '  '
-}: CodeBlockContentParams): string =>
+// Defines the items of a JS object
+export const definer = ({ type, tokens, options, indent = '  ' }: CodeBlockContentParams): string =>
   tokens
     .map(({ name, path, $type = '', $value }, index) =>
       type === JsFormatterType.STATIC

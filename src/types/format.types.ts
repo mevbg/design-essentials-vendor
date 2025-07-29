@@ -52,6 +52,4 @@ export type GeneralHandlerParams = {
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
   config?: HandlerConfig;
-  wrapper: (params: CodeBlockWrapperParams) => string;
-  definer: (params: CodeBlockContentParams) => string;
 };
