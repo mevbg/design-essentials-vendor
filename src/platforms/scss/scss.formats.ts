@@ -1,29 +1,30 @@
-import { CustomFormatterCategory, FormatBuilder } from '../../types/index.js';
+import { Format } from 'style-dictionary/types';
+import { CustomFormatterCategory } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
 
-export const scssFormatters: FormatBuilder[] = [
+export const scssFormatters: Format[] = [
   // Formatter for all tokens
   {
     name: 'all',
     fileHeaderTitle: 'SCSS Tokens',
-    getFormatBuilder: allFormatterTemplate
+    getFormatter: allFormatterTemplate
   },
   // Formatter for core tokens
   {
     name: 'core',
-    getFormatBuilder: coreFormatterTemplate
+    getFormatter: coreFormatterTemplate
   },
   // Formatter for non-core tokens
   {
     name: 'others',
-    getFormatBuilder: othersFormatterTemplate
+    getFormatter: othersFormatterTemplate
   }
-].map(({ name, fileHeaderTitle = '', getFormatBuilder }) =>
-  getFormatBuilder({
+].map(({ name, fileHeaderTitle = '', getFormatter }) =>
+  getFormatter({
     name,
     fileHeaderTitle,
     category: CustomFormatterCategory.SCSS

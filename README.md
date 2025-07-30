@@ -603,9 +603,9 @@ CORE_TOKENS = [
 - `getCoreTokensHandlerResolvers(config): CoreTokensHandlerResolvers` - Returns handler resolvers for core token types
 - `getDestinationFileName(platform: PlatformName, name: string): string` - Generates output file names
 - `getFormatterName(platform: PlatformName, name: string): string` - Generates formatter names
-- `allFormatterTemplate(config): FormatBuilder` - Template for "all tokens" formatters
-- `coreFormatterTemplate(config): FormatBuilder` - Template for individual token type formatters
-- `othersFormatterTemplate(config): FormatBuilder` - Template for "other tokens" formatters
+- `allFormatterTemplate(config): Format` - Template for "all tokens" formatters
+- `coreFormatterTemplate(config): Format` - Template for individual token type formatters
+- `othersFormatterTemplate(config): Format` - Template for "other tokens" formatters
 
 ### String Utilities (`src/utils/strings.utils.ts`)
 
@@ -777,17 +777,20 @@ Each platform provides utility functions through `{platform}.utils.ts` files tha
 Each platform also provides format builders through `{platform}.formats.ts` files:
 
 #### CSS Formats (`src/platforms/css/css.formats.ts`)
+
 - **Root Font Size**: Generates responsive root font size variables
 - **All Tokens**: Combines all tokens with root font size prefix
 - **Core Tokens**: Individual token type files
 - **Other Tokens**: Non-core token types
 
 #### SCSS Formats (`src/platforms/scss/scss.formats.ts`)
+
 - **All Tokens**: All tokens in a single SCSS file
 - **Core Tokens**: Individual token type files
 - **Other Tokens**: Non-core token types
 
 #### JavaScript Formats (`src/platforms/js/js.formats.ts`)
+
 - **Static**: Token values as static strings
 - **Variable**: CSS custom property references
 

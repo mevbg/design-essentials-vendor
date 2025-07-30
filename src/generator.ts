@@ -1,5 +1,6 @@
 import path from 'path';
 import StyleDictionary from 'style-dictionary';
+import { Format } from 'style-dictionary/types';
 import {
   defaultColorSchemeConfig as colorScheme,
   defaultFluidScaleSchemeConfig as fluidScaleScheme,
@@ -8,7 +9,7 @@ import {
 import { DEFAULT_BASE_FONT_SIZE, DEFAULT_PLATFORMS, DEFAULT_PREFIX } from './constants.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
-import type { FormatBuilder, GeneratorConfig } from './types/index.js';
+import type { GeneratorConfig } from './types/index.js';
 
 export async function generateDesignTokens({
   sourcePath,
@@ -25,10 +26,8 @@ export async function generateDesignTokens({
   // Register custom formats
   Object.values(formats)
     .flatMap((formatterGroup) => Object.values(formatterGroup))
-    .forEach((formatBuilder: FormatBuilder) => {
-      if (typeof formatBuilder === 'function') {
-        StyleDictionary.registerFormat(formatBuilder());
-      }
+    .forEach((format: Format) => {
+      StyleDictionary.registerFormat(format);
     });
 
   // Resolve the source path

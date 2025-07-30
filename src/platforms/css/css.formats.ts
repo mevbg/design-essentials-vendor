@@ -1,5 +1,5 @@
-import { FormatFnArguments } from 'style-dictionary/types';
-import { CustomFormatterCategory, FormatBuilder } from '../../types/index.js';
+import { Format, FormatFnArguments } from 'style-dictionary/types';
+import { CustomFormatterCategory } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
@@ -17,9 +17,9 @@ const outputRootFontSize = async (output: string[], formatArgs: FormatFnArgument
   );
 };
 
-export const cssFormatters: FormatBuilder[] = [
+export const cssFormatters: Format[] = [
   // Root font size formatter
-  () => ({
+  {
     name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
     format: async function (formatArgs: FormatFnArguments) {
       // Define the output array
@@ -34,27 +34,27 @@ export const cssFormatters: FormatBuilder[] = [
       // Join the output array into a string and return it
       return output.join('\n');
     }
-  }),
+  },
   ...[
     // Formatter for all tokens
     {
       name: 'all',
       fileHeaderTitle: 'CSS Custom Properties',
-      getFormatBuilder: allFormatterTemplate,
+      getFormatter: allFormatterTemplate,
       prefixOutput: outputRootFontSize
     },
     // Formatter for tokens with a core handler
     {
       name: 'core',
-      getFormatBuilder: coreFormatterTemplate
+      getFormatter: coreFormatterTemplate
     },
     // Formatter for non-core tokens
     {
       name: 'others',
-      getFormatBuilder: othersFormatterTemplate
+      getFormatter: othersFormatterTemplate
     }
-  ].map(({ name, prefixOutput, fileHeaderTitle = '', getFormatBuilder }) =>
-    getFormatBuilder({
+  ].map(({ name, prefixOutput, fileHeaderTitle = '', getFormatter }) =>
+    getFormatter({
       name,
       fileHeaderTitle,
       prefixOutput,

@@ -1,4 +1,4 @@
-import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
+import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CoreToken } from './tokens.types.js';
 
 export type CodeBlockWrapperParams = {
@@ -29,8 +29,6 @@ export type HandlerResolver = (
 ) => Promise<string>;
 
 export type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
-
-export type FormatBuilder = () => Format;
 
 export enum CustomFormatterCategory {
   CSS = 'css',
