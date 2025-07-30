@@ -1,4 +1,93 @@
-import { CodeBlockContentParams, CodeBlockWrapperParams } from '../../types/index.js';
+import { Format, FormatFnArguments } from 'style-dictionary/types';
+import {
+  CodeBlockContentParams,
+  CodeBlockWrapperParams,
+  CustomFormatterCategory
+} from '../../types/index.js';
+import { fileHeader, getFileOutput, getFormatterName, tab } from '../../utils/formats.utils.js';
+
+const rootFontSizeTitle = 'Root Font Size';
+
+export const outputRootFontSize = async (
+  output: string[],
+  formatArgs: FormatFnArguments
+): Promise<void> => {
+  const config = { prefix: formatArgs?.platform?.prefix };
+  output.push(
+    await getFileOutput({
+      name: rootFontSizeTitle,
+      category: CustomFormatterCategory.CSS,
+      config,
+      parser: (output, wrapper) => {
+        const {
+          rootScaleScheme: { minViewportW, maxViewportW },
+          baseFontSize
+        } = formatArgs?.options || {};
+
+        const prefix = config?.prefix ? `${config.prefix}-` : '';
+
+        const variants = [
+          // from 0 up to min breakpoint
+          {
+            media: `(max-width: ${minViewportW - 1}px)`,
+            wrappers: [
+              {
+                code: `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${minViewportW});`
+              }
+            ]
+          },
+          // from min breakpoint up to max breakpoint
+          {
+            media: `(min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px)`,
+            wrappers: [
+              {
+                code: `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`
+              }
+            ]
+          },
+          // scalable from max breakpoint up to ∞
+          {
+            media: `(min-width: ${maxViewportW + 1}px)`,
+            wrappers: [
+              {
+                code: `${tab(2)}--${prefix}root-font-size: var(--${prefix}font-size-base-percentage);`
+              },
+              {
+                name: 'html.presentation-mode',
+                code: `${tab(2)}--${prefix}root-font-size: calc((${baseFontSize} * 100vw) / ${maxViewportW});`
+              }
+            ]
+          }
+        ];
+
+        variants.forEach(({ media, wrappers }, index) => {
+          output.push(`@media all and ${media} {`);
+          wrappers.forEach(({ name, code }) => {
+            output.push(wrapper({ name, code, indent: tab() }));
+          });
+          output.push(`}${index < variants.length - 1 ? '\n' : ''}`);
+        });
+      }
+    })
+  );
+};
+
+export const getRootFontSizeFormatter: () => Format = () => ({
+  name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
+  format: async function (formatArgs: FormatFnArguments) {
+    // Define the output array
+    const output: string[] = [];
+
+    // Add header to the output array
+    output.push(fileHeader(rootFontSizeTitle));
+
+    // Handle the root font size
+    await outputRootFontSize(output, formatArgs);
+
+    // Join the output array into a string and return it
+    return output.join('\n');
+  }
+});
 
 // Wraps a code block in a CSS selector
 export const wrapper = ({ name = ':root', code, indent = '' }: CodeBlockWrapperParams): string =>

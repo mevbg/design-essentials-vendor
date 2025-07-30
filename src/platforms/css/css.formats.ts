@@ -1,62 +1,27 @@
-import { Format, FormatFnArguments } from 'style-dictionary/types';
+import { Format } from 'style-dictionary/types';
 import { CustomFormatterCategory } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
-  fileHeader,
-  getFormatterName,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
-import { rootHandler } from './handlers/root.handler.js';
-
-const rootFontSizeTitle = 'Root Font Size';
-
-const outputRootFontSize = async (output: string[], formatArgs: FormatFnArguments) => {
-  output.push(
-    await rootHandler(rootFontSizeTitle, formatArgs, { prefix: formatArgs?.platform?.prefix })
-  );
-};
+import { getRootFontSizeFormatter, outputRootFontSize } from './css.utils.js';
 
 export const cssFormatters: Format[] = [
-  // Root font size formatter
-  {
-    name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
-    format: async function (formatArgs: FormatFnArguments) {
-      // Define the output array
-      const output: string[] = [];
-
-      // Add header to the output array
-      output.push(fileHeader(rootFontSizeTitle));
-
-      // Handle the root font size
-      await outputRootFontSize(output, formatArgs);
-
-      // Join the output array into a string and return it
-      return output.join('\n');
-    }
-  },
-  ...[
-    // Formatter for all tokens
-    {
-      name: 'all',
-      getFormatter: allFormatterTemplate,
-      prefixOutput: outputRootFontSize
-    },
-    // Formatter for tokens with a core handler
-    {
-      name: 'core',
-      getFormatter: coreFormatterTemplate
-    },
-    // Formatter for non-core tokens
-    {
-      name: 'others',
-      getFormatter: othersFormatterTemplate
-    }
-  ].map(({ name, prefixOutput, getFormatter }) =>
+  ...Object.entries({
+    all: allFormatterTemplate, // Formatter for all tokens
+    core: coreFormatterTemplate, // Formatter for tokens with a core handler
+    others: othersFormatterTemplate // Formatter for non-core tokens
+  }).map(([name, getFormatter]) =>
     getFormatter({
       name,
-      prefixOutput,
+      // prefixOutput is only used for the "all" formatter so to include the root font size tokens in the output
+      prefixOutput: name === 'all' ? outputRootFontSize : undefined,
       category: CustomFormatterCategory.CSS
     })
-  )
+  ),
+
+  // An individual formatter for the root font size tokens
+  // so to have them in a separate file as well
+  getRootFontSizeFormatter()
 ];

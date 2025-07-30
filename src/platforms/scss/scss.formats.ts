@@ -6,23 +6,11 @@ import {
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
 
-export const scssFormatters: Format[] = [
-  // Formatter for all tokens
-  {
-    name: 'all',
-    getFormatter: allFormatterTemplate
-  },
-  // Formatter for core tokens
-  {
-    name: 'core',
-    getFormatter: coreFormatterTemplate
-  },
-  // Formatter for non-core tokens
-  {
-    name: 'others',
-    getFormatter: othersFormatterTemplate
-  }
-].map(({ name, getFormatter }) =>
+export const scssFormatters: Format[] = Object.entries({
+  all: allFormatterTemplate, // Formatter for all tokens
+  core: coreFormatterTemplate, // Formatter for core tokens
+  others: othersFormatterTemplate // Formatter for non-core tokens
+}).map(([name, getFormatter]) =>
   getFormatter({
     name,
     category: CustomFormatterCategory.SCSS
