@@ -1,9 +1,5 @@
 import { Format, FormatFnArguments } from 'style-dictionary/types';
-import {
-  CodeBlockContentParams,
-  CodeBlockWrapperParams,
-  CustomFormatterCategory
-} from '../../types/index.js';
+import { CustomFormatterCategory, DefinerParams, WrapperParams } from '../../types/index.js';
 import { fileHeader, getFileOutput, getFormatterName, tab } from '../../utils/formats.utils.js';
 
 const rootFontSizeTitle = 'Root Font Size';
@@ -90,9 +86,9 @@ export const getRootFontSizeFormatter: () => Format = () => ({
 });
 
 // Wraps a code block in a CSS selector
-export const wrapper = ({ name = ':root', code, indent = '' }: CodeBlockWrapperParams): string =>
+export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): string =>
   `${indent}${name} {\n${code}\n${indent}}`;
 
 // Defines the custom properties of a CSS selector
-export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');

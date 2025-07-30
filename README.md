@@ -501,11 +501,11 @@ Each platform provides its own utility functions through `{platform}.utils.ts` f
 
 ```typescript
 // Wraps a code block in a CSS selector
-export const wrapper = ({ name = ':root', code, indent = '' }: CodeBlockWrapperParams): string =>
+export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): string =>
   `${indent}${name} {\n${code}\n${indent}}`;
 
 // Defines the custom properties of a CSS selector
-export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
 ```
 
@@ -513,11 +513,11 @@ export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): stri
 
 ```typescript
 // Wraps a code block in a Sass map
-export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
 // Defines the values of a Sass map
-export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): string =>
+export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens
     .map(
       ({ name, $type, $value }, index) =>
@@ -530,12 +530,12 @@ export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): stri
 
 ```typescript
 // Wraps a code block in a JS object
-export const wrapper = ({ name = '', code, indent = '' }: CodeBlockWrapperParams): string =>
+export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string =>
   (!indent ? `export const ${spaceCaseToCamelCase(name)} =` : `${indent}${name}:`) +
   ` {\n${code}\n${indent}}${!indent ? ';' : ''}`;
 
 // Defines the items of a JS object
-export const definer = ({ type, tokens, options, indent = '  ' }: CodeBlockContentParams): string =>
+export const definer = ({ type, tokens, options, indent = '  ' }: DefinerParams): string =>
   tokens
     .map(({ name, path, $type = '', $value }, index) =>
       type === JsFormatterType.STATIC
@@ -699,8 +699,8 @@ type GeneralHandlerParams = {
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
   config?: HandlerConfig;
-  wrapper: (params: CodeBlockWrapperParams) => string;
-  definer: (params: CodeBlockContentParams) => string;
+  wrapper: (params: WrapperParams) => string;
+  definer: (params: DefinerParams) => string;
 }; // this is the type of params for all common handlers regardless the custom formatter
 
 type HandlerResolver = (

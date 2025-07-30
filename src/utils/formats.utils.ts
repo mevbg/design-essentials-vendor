@@ -2,13 +2,13 @@ import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/ty
 import { CORE_TOKENS } from '../constants.js';
 import * as handlers from '../handlers/index.js';
 import {
-  CodeBlockContentParams,
-  CodeBlockWrapperParams,
   CoreToken,
   CoreTokensHandlerResolvers,
   CustomFormatterCategory,
   CustomFormatterType,
-  HandlerConfig
+  DefinerParams,
+  HandlerConfig,
+  WrapperParams
 } from '../types/index.js';
 import { PlatformName } from '../types/platform.types.js';
 import { capitalize, toSpaceCase } from './strings.utils.js';
@@ -80,8 +80,8 @@ export const getFileOutput = async ({
   config?: HandlerConfig;
   parser: (
     output: string[],
-    wrapper: (args: CodeBlockWrapperParams) => string,
-    definer: (args: CodeBlockContentParams) => string
+    wrapper: (args: WrapperParams) => string,
+    definer: (args: DefinerParams) => string
   ) => void;
 }): Promise<string> => {
   // Import the wrapper and definer functions for the current category

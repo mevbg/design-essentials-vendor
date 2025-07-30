@@ -1,19 +1,6 @@
 import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CoreToken } from './tokens.types.js';
 
-export type CodeBlockWrapperParams = {
-  code: string;
-  name?: string;
-  indent?: string;
-};
-
-export type CodeBlockContentParams = {
-  type?: JsFormatterType;
-  tokens: TransformedToken[];
-  options?: FormatFnArguments['options'];
-  indent?: string;
-};
-
 export type HandlerConfig = {
   noChapterTitle?: boolean;
   prefix?: string;
@@ -50,4 +37,17 @@ export type GeneralHandlerParams = {
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
   config?: HandlerConfig;
+};
+
+export type WrapperParams = {
+  code: string;
+  name?: string;
+  indent?: string;
+};
+
+export type DefinerParams = {
+  type?: CustomFormatterType;
+  tokens: TransformedToken[];
+  options?: FormatFnArguments['options'];
+  indent?: string;
 };
