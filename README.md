@@ -71,18 +71,18 @@ src/
 ├── platforms/                  # Platform-specific modules
 │   ├── css/
 │   │   ├── index.ts            # Platform configuration
-│   │   ├── css.formats.ts      # CSS formatters
-│   │   ├── css.utils.ts        # CSS utility functions
+│   │   ├── formats.ts      # CSS formatters
+│   │   ├── utils.ts        # CSS utility functions
 │   │   └── handlers/           # Platform-specific handlers
 │   │       └── root.handler.ts # CSS root font size handler
 │   ├── scss/                   # SCSS platform modules
 │   │   ├── index.ts
-│   │   ├── scss.formats.ts
-│   │   └── scss.utils.ts
+│   │   ├── formats.ts
+│   │   └── utils.ts
 │   ├── js/                     # JavaScript platform modules
 │   │   ├── index.ts
-│   │   ├── js.formats.ts
-│   │   └── js.utils.ts
+│   │   ├── formats.ts
+│   │   └── utils.ts
 │   └── json/                   # JSON platform modules
 │       └── index.ts
 ├── types/                      # TypeScript type definitions
@@ -497,7 +497,7 @@ Handles color tokens with scheme support and platform-specific formatting.
 
 Each platform provides its own utility functions through `{platform}.utils.ts` files:
 
-### CSS Utilities (`src/platforms/css/css.utils.ts`)
+### CSS Utilities (`src/platforms/css/utils.ts`)
 
 ```typescript
 // Wraps a code block in a CSS selector
@@ -509,7 +509,7 @@ export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): stri
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
 ```
 
-### SCSS Utilities (`src/platforms/scss/scss.utils.ts`)
+### SCSS Utilities (`src/platforms/scss/utils.ts`)
 
 ```typescript
 // Wraps a code block in a Sass map
@@ -526,7 +526,7 @@ export const definer = ({ tokens, indent = '  ' }: CodeBlockContentParams): stri
     .join('\n');
 ```
 
-### JavaScript Utilities (`src/platforms/js/js.utils.ts`)
+### JavaScript Utilities (`src/platforms/js/utils.ts`)
 
 ```typescript
 // Wraps a code block in a JS object
@@ -776,20 +776,20 @@ Each platform provides utility functions through `{platform}.utils.ts` files tha
 
 Each platform also provides format builders through `{platform}.formats.ts` files:
 
-#### CSS Formats (`src/platforms/css/css.formats.ts`)
+#### CSS Formats (`src/platforms/css/formats.ts`)
 
 - **Root Font Size**: Generates responsive root font size variables
 - **All Tokens**: Combines all tokens with root font size prefix
 - **Core Tokens**: Individual token type files
 - **Other Tokens**: Non-core token types
 
-#### SCSS Formats (`src/platforms/scss/scss.formats.ts`)
+#### SCSS Formats (`src/platforms/scss/formats.ts`)
 
 - **All Tokens**: All tokens in a single SCSS file
 - **Core Tokens**: Individual token type files
 - **Other Tokens**: Non-core token types
 
-#### JavaScript Formats (`src/platforms/js/js.formats.ts`)
+#### JavaScript Formats (`src/platforms/js/formats.ts`)
 
 - **Static**: Token values as static strings
 - **Variable**: CSS custom property references

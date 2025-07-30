@@ -5,7 +5,7 @@ import {
   coreFormatterTemplate,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
-import { getRootFontSizeFormatter, outputRootFontSize } from './css.utils.js';
+import { getRootFontSizeFormatter, outputRootFontSize } from './utils.js';
 
 export const cssFormatters: Format[] = [
   ...Object.entries({

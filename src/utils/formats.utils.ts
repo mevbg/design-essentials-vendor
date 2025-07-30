@@ -85,7 +85,7 @@ export const getFileOutput = async ({
   ) => void;
 }): Promise<string> => {
   // Import the wrapper and definer functions for the current category
-  const { wrapper, definer } = await import(`../platforms/${category}/${category}.utils.js`);
+  const { wrapper, definer } = await import(`../platforms/${category}/utils.js`);
 
   // Define the output array
   const output: string[] = [];
