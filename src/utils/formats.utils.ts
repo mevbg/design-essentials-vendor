@@ -94,8 +94,9 @@ export const getFileOutput = async ({
   parser(output, wrapper, definer);
 
   // Return the output
-  const code = output.join('\n');
-  return config?.noChapterTitle ? `${code}\n` : `\n${`/* ${name} */`.toUpperCase()}\n\n${code}\n`;
+  return config?.noChapterTitle
+    ? `${output.join('\n')}\n`
+    : `\n${`/* ${name} */`.toUpperCase()}\n\n${output.join('\n')}\n`;
 };
 
 // Returns a format config
