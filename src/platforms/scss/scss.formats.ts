@@ -10,7 +10,6 @@ export const scssFormatters: Format[] = [
   // Formatter for all tokens
   {
     name: 'all',
-    fileHeaderTitle: 'SCSS Tokens',
     getFormatter: allFormatterTemplate
   },
   // Formatter for core tokens
@@ -23,10 +22,9 @@ export const scssFormatters: Format[] = [
     name: 'others',
     getFormatter: othersFormatterTemplate
   }
-].map(({ name, fileHeaderTitle = '', getFormatter }) =>
+].map(({ name, getFormatter }) =>
   getFormatter({
     name,
-    fileHeaderTitle,
     category: CustomFormatterCategory.SCSS
   })
 );

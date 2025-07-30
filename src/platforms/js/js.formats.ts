@@ -7,7 +7,6 @@ export const jsFormatters: Format[] = [JsFormatterType.STATIC, JsFormatterType.V
     allFormatterTemplate({
       name: item,
       type: item,
-      fileHeaderTitle: `JS Tokens (${item} values)`,
       category: CustomFormatterCategory.JS
     })
 );

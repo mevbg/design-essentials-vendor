@@ -39,7 +39,6 @@ export const cssFormatters: Format[] = [
     // Formatter for all tokens
     {
       name: 'all',
-      fileHeaderTitle: 'CSS Custom Properties',
       getFormatter: allFormatterTemplate,
       prefixOutput: outputRootFontSize
     },
@@ -53,10 +52,9 @@ export const cssFormatters: Format[] = [
       name: 'others',
       getFormatter: othersFormatterTemplate
     }
-  ].map(({ name, prefixOutput, fileHeaderTitle = '', getFormatter }) =>
+  ].map(({ name, prefixOutput, getFormatter }) =>
     getFormatter({
       name,
-      fileHeaderTitle,
       prefixOutput,
       category: CustomFormatterCategory.CSS
     })

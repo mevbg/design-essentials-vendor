@@ -95,9 +95,7 @@ export const getFileOutput = async ({
 
   // Return the output
   const code = output.join('\n');
-  return config?.noChapterTitle
-    ? `${code}\n`
-    : `\n${`/* ${name} Tokens */`.toUpperCase()}\n\n${code}\n`;
+  return config?.noChapterTitle ? `${code}\n` : `\n${`/* ${name} */`.toUpperCase()}\n\n${code}\n`;
 };
 
 // Returns a format config
@@ -106,13 +104,11 @@ export const allFormatterTemplate = ({
   name,
   category,
   type,
-  fileHeaderTitle,
   prefixOutput = () => {}
 }: {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
-  fileHeaderTitle: string;
   prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
 }): Format => ({
   name: getFormatterName(category, name),
@@ -130,7 +126,7 @@ export const allFormatterTemplate = ({
     const { allTokens } = formatArgs.dictionary;
 
     // Add header to the output array
-    output.push(fileHeader(fileHeaderTitle));
+    output.push(fileHeader(`${category} Tokens${type ? ` (${type})` : ''}`));
 
     // Handle the prefix output (if such)
     prefixOutput(output, formatArgs);
