@@ -1,12 +1,11 @@
-import { JsFormatterType } from '../../types/format.types.js';
-import { PlatformConfigProvider } from '../../types/index.js';
+import { JsPlatformFileType, PlatformConfigProvider } from '../../types/index.js';
 
-export const js: PlatformConfigProvider = ({ prefix, options }) => ({
+export const js: PlatformConfigProvider = ({ prefix, designData }) => ({
   config: {
     options: {
-      ...options,
-      prefix
+      prefix,
+      designData
     }
   },
-  files: Object.values(JsFormatterType)
+  customFiles: Object.values(JsPlatformFileType)
 });

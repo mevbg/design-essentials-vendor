@@ -1,5 +1,4 @@
 import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
-import { CORE_TOKENS } from '../constants.js';
 import * as handlers from '../handlers/index.js';
 import {
   CoreToken,
@@ -10,7 +9,7 @@ import {
   HandlerConfig,
   WrapperParams
 } from '../types/index.js';
-import { PlatformName } from '../types/platform.types.js';
+import { PlatformFilename, PlatformType } from '../types/platform.types.js';
 import { capitalize, toSpaceCase } from './strings.utils.js';
 import { tokenIsFluid } from './tokens/fluid-tokens.utils.js';
 
@@ -23,7 +22,7 @@ export const getCoreTokensHandlerResolvers = ({
   type?: CustomFormatterType;
 }): CoreTokensHandlerResolvers =>
   Object.fromEntries(
-    CORE_TOKENS.map((token: CoreToken) => [
+    Object.values(CoreToken).map((token: CoreToken) => [
       token,
       // HandlerResolver
       async (formatArgs, tokens, config) => {
@@ -62,11 +61,12 @@ export const fileHeader = (name: string): string =>
 export const tab = (c: number = 1): string => '  '.repeat(c);
 
 // Returns a destination file name
-export const getDestinationFileName = (platform: PlatformName, name: string) =>
-  `${name}.design-tokens.${platform}`;
+export const getDestinationFileName = (platformType: PlatformType, name: PlatformFilename) =>
+  `${name}.design-tokens.${platformType}`;
 
 // Returns a formatter name
-export const getFormatterName = (platform: PlatformName, name: string) => `mev/${platform}/${name}`;
+export const getFormatterName = (category: CustomFormatterCategory, name: string) =>
+  `mev/${category}/${name}`;
 
 // Returns a promise with the output for a file
 export const getFileOutput = async ({

@@ -1,16 +1,16 @@
-import { PlatformConfigProvider } from '../../types/index.js';
+import { CommonPlatformFileType, PlatformConfigProvider, PlatformType } from '../../types/index.js';
 import { getDestinationFileName } from '../../utils/formats.utils.js';
 
-export const json: PlatformConfigProvider = ({ options }) => ({
+export const json: PlatformConfigProvider = ({ prefix }) => ({
   config: {
-    transformGroup: 'js',
+    transformGroup: PlatformType.JS,
     options: {
-      ...options,
+      prefix,
       showFileHeader: false
     },
     files: [
       {
-        destination: getDestinationFileName('json', 'all'),
+        destination: getDestinationFileName(PlatformType.JSON, CommonPlatformFileType.ALL),
         format: 'json/nested'
       }
     ]

@@ -1,4 +1,4 @@
-import { DefinerParams, JsFormatterType, WrapperParams } from '../../types/index.js';
+import { DefinerParams, JsCustomFormatterType, WrapperParams } from '../../types/index.js';
 import {
   capitalize,
   spaceCaseToCamelCase,
@@ -15,7 +15,7 @@ export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string
 export const definer = ({ type, tokens, options, indent = '  ' }: DefinerParams): string =>
   tokens
     .map(({ name, path, $type = '', $value }, index) =>
-      type === JsFormatterType.STATIC
+      type === JsCustomFormatterType.STATIC
         ? `${indent}'${toCamelCase(name.replace(capitalize($type), ''))}': '${$value}'${index < tokens.length - 1 ? ',' : ''}`
         : `${indent}'${toKebabCase(toCamelCase(name.replace(capitalize($type), '')))}': 'var(--${options?.prefix}-${toKebabCase(path.join('-')).replace('$', '')})'${index < tokens.length - 1 ? ',' : ''}`
     )

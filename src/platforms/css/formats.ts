@@ -1,5 +1,5 @@
 import { Format } from 'style-dictionary/types';
-import { CustomFormatterCategory } from '../../types/index.js';
+import { CssCustomFormatterType, CustomFormatterCategory } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
@@ -16,7 +16,7 @@ export const cssFormatters: Format[] = [
     getFormatter({
       name,
       // prefixOutput is only used for the "all" formatter so to include the root font size tokens in the output
-      prefixOutput: name === 'all' ? outputRootFontSize : undefined,
+      prefixOutput: name === CssCustomFormatterType.ALL ? outputRootFontSize : undefined,
       category: CustomFormatterCategory.CSS
     })
   ),

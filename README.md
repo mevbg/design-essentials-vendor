@@ -71,10 +71,8 @@ src/
 ├── platforms/                  # Platform-specific modules
 │   ├── css/
 │   │   ├── index.ts            # Platform configuration
-│   │   ├── formats.ts      # CSS formatters
-│   │   ├── utils.ts        # CSS utility functions
-│   │   └── handlers/           # Platform-specific handlers
-│   │       └── root.handler.ts # CSS root font size handler
+│   │   ├── formats.ts          # CSS formatters
+│   │   └── utils.ts            # CSS utility functions
 │   ├── scss/                   # SCSS platform modules
 │   │   ├── index.ts
 │   │   ├── formats.ts
@@ -336,15 +334,15 @@ type GeneratorConfig = {
   sourcePath: string; // Glob pattern for source files
   buildPath: string; // Output directory
   prefix?: string; // Token name prefix (default: 'tk')
-  platforms?: PlatformName[]; // Platforms to generate
-  options: GeneratorOptions; // Generation options
+  platforms?: PlatformType[]; // Platforms to generate for
+  designData: DesignData; // Design parameters
 };
 ```
 
-### Generator Options
+### Design Data
 
 ```typescript
-type GeneratorOptions = {
+type DesignData = {
   baseFontSize: number; // Base font size for rem calculations
   colorScheme: ColorSchemeConfig; // Color scheme configuration
   fluidScaleScheme: FluidScaleSchemeConfig; // Responsive scaling viewport range
@@ -406,8 +404,8 @@ Main function to generate design tokens across specified platforms.
 - `config.sourcePath: string` - Glob pattern for token source files (e.g., `'./tokens/**/index.ts'`)
 - `config.buildPath: string` - Output directory path for generated files
 - `config.prefix?: string` - Token name prefix (default: `'tk'`)
-- `config.platforms?: PlatformName[]` - Array of platforms to generate (default: `['css', 'scss', 'js', 'json']`)
-- `config.options: GeneratorOptions` - Generation configuration options
+- `config.platforms?: PlatformType[]` - Array of platforms to generate (default: `['css', 'scss', 'js', 'json']`)
+- `config.designData: DesignData` - Generation configuration options
 
 **Returns:** `Promise<StyleDictionary>` - Style Dictionary instance after build completion
 
@@ -419,7 +417,7 @@ const styleDictionary = await generateDesignTokens({
   buildPath: './dist/tokens',
   prefix: 'app',
   platforms: ['css', 'js'],
-  options: {
+  designData: {
     baseFontSize: 16,
     colorScheme: { default: 'light', method: 'combined' },
     fluidScaleScheme: { minViewportW: 768, maxViewportW: 1440 },
@@ -430,7 +428,7 @@ const styleDictionary = await generateDesignTokens({
 
 ### Handler Functions (`src/handlers/`)
 
-#### `basicHandler(params: GeneralHandlerParams): string`
+#### `basicHandler(params: CommonHandlerParams): string`
 
 Processes standard tokens with simple string values.
 
@@ -442,8 +440,6 @@ Processes standard tokens with simple string values.
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
 - `params.config: HandlerConfig` - Optional handler configuration
-- `params.wrapper: Function` - Platform-specific wrapper function
-- `params.definer: Function` - Platform-specific definer function
 
 **Features:**
 
@@ -451,7 +447,7 @@ Processes standard tokens with simple string values.
 - Platform-specific output formatting
 - Configurable chapter titles
 
-#### `fluidHandler(params: GeneralHandlerParams): string`
+#### `fluidHandler(params: CommonHandlerParams): string`
 
 Processes responsive tokens with min/max values and automatic fluid separation.
 
@@ -462,8 +458,6 @@ Processes responsive tokens with min/max values and automatic fluid separation.
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
 - `params.config: HandlerConfig` - Optional handler configuration
-- `params.wrapper: Function` - Platform-specific wrapper function
-- `params.definer: Function` - Platform-specific definer function
 
 **Features:**
 
@@ -472,7 +466,7 @@ Processes responsive tokens with min/max values and automatic fluid separation.
 - CSS media query generation for responsive breakpoints
 - Platform-specific output formatting
 
-#### `colorHandler(params: GeneralHandlerParams): string`
+#### `colorHandler(params: CommonHandlerParams): string`
 
 Handles color tokens with scheme support and platform-specific formatting.
 
@@ -483,8 +477,6 @@ Handles color tokens with scheme support and platform-specific formatting.
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
 - `params.config: HandlerConfig` - Optional handler configuration
-- `params.wrapper: Function` - Platform-specific wrapper function
-- `params.definer: Function` - Platform-specific definer function
 
 **Features:**
 
@@ -507,6 +499,14 @@ export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): s
 // Defines the custom properties of a CSS selector
 export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
+
+// Root font size formatter
+export const getRootFontSizeFormatter: () => Format = () => ({
+  name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
+  format: async function (formatArgs: FormatFnArguments) {
+    // Implementation for responsive root font size generation
+  }
+});
 ```
 
 ### SCSS Utilities (`src/platforms/scss/utils.ts`)
@@ -538,7 +538,7 @@ export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string
 export const definer = ({ type, tokens, options, indent = '  ' }: DefinerParams): string =>
   tokens
     .map(({ name, path, $type = '', $value }, index) =>
-      type === JsFormatterType.STATIC
+      type === JsCustomFormatterType.STATIC
         ? `${indent}'${toCamelCase(name.replace(capitalize($type), ''))}': '${$value}'${index < tokens.length - 1 ? ',' : ''}`
         : `${indent}'${toKebabCase(toCamelCase(name.replace(capitalize($type), '')))}': 'var(--${options?.prefix}-${toKebabCase(path.join('-')).replace('$', '')})'${index < tokens.length - 1 ? ',' : ''}`
     )
@@ -598,11 +598,11 @@ CORE_TOKENS = [
 ### Format Utilities (`src/utils/formats.utils.ts`)
 
 - `fileHeader(name: string): string` - Generates standardized file headers
-- `wrapInFileChapter(name: string, code: string, noChapterTitle?: boolean): string` - Creates comment-separated sections
 - `tab(count?: number): string` - Generates consistent indentation
 - `getCoreTokensHandlerResolvers(config): CoreTokensHandlerResolvers` - Returns handler resolvers for core token types
-- `getDestinationFileName(platform: PlatformName, name: string): string` - Generates output file names
-- `getFormatterName(platform: PlatformName, name: string): string` - Generates formatter names
+- `getDestinationFileName(platformType: PlatformType, name: PlatformFilename): string` - Generates output file names
+- `getFormatterName(category: CustomFormatterCategory, name: string): string` - Generates formatter names
+- `getFileOutput(config): Promise<string>` - Returns file output with dynamic wrapper/definer imports
 - `allFormatterTemplate(config): Format` - Template for "all tokens" formatters
 - `coreFormatterTemplate(config): Format` - Template for individual token type formatters
 - `othersFormatterTemplate(config): Format` - Template for "other tokens" formatters
@@ -684,23 +684,28 @@ The entire codebase uses TypeScript with strict configuration and ES modules. Al
 
 ```typescript
 // Main configuration types
-type GeneratorConfig = { sourcePath; buildPath; prefix?; platforms?; options };
-type GeneratorOptions = { baseFontSize; colorScheme; fluidScaleScheme; rootScaleScheme };
+type GeneratorConfig = { sourcePath; buildPath; prefix?; platforms?; designData };
+type DesignData = { baseFontSize; colorScheme; fluidScaleScheme; rootScaleScheme };
 
 // Platform types
-type PlatformName = 'css' | 'scss' | 'js' | 'json';
-type PlatformConfigBuilder = (params: PlatformConfigBuilderParams) => PlatformConfig;
+enum PlatformType {
+  CSS = 'css',
+  SCSS = 'scss',
+  JS = 'js',
+  JSON = 'json'
+}
+type PlatformConfigProvider = (
+  params: PlatformConfigsBuilderParams
+) => PlatformConfigProviderResponse;
 
 // Handler types
-type GeneralHandlerParams = {
+type CommonHandlerParams = {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
   config?: HandlerConfig;
-  wrapper: (params: WrapperParams) => string;
-  definer: (params: DefinerParams) => string;
 }; // this is the type of params for all common handlers regardless the custom formatter
 
 type HandlerResolver = (
@@ -713,15 +718,26 @@ type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
 
 // Format types
 enum CustomFormatterCategory {
-  CSS = 'css',
-  SCSS = 'scss',
-  JS = 'js'
+  CSS = PlatformType.CSS,
+  SCSS = PlatformType.SCSS,
+  JS = PlatformType.JS
 }
-enum JsFormatterType {
+enum CssCustomFormatterType {
+  ALL = 'all',
+  CORE = 'core',
+  OTHERS = 'others',
+  ROOT_FONT_SIZE = 'root-font-size'
+}
+enum ScssCustomFormatterType {
+  ALL = 'all',
+  CORE = 'core',
+  OTHERS = 'others'
+}
+enum JsCustomFormatterType {
   STATIC = 'static',
   VARIABLE = 'variable'
 }
-type CustomFormatterType = JsFormatterType;
+type CustomFormatterType = CssCustomFormatterType | ScssCustomFormatterType | JsCustomFormatterType;
 
 // Scheme types
 enum ColorSchemeType {

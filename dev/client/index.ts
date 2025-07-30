@@ -1,5 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { type GeneratorConfig } from '../../src/types/generator.types.js';
 import {
   BASE_FONT_SIZE,
   COLOR_SCHEME_METHOD,
@@ -24,7 +25,7 @@ export const generateDevClientTokens: () => Promise<void> = async () => {
       buildPath: path.resolve(__dirname, '../dist'),
       prefix: PREFIX,
       platforms: PLATFORMS,
-      options: {
+      designData: {
         baseFontSize: BASE_FONT_SIZE,
         colorScheme: {
           default: DEFAULT_COLOR_SCHEME,
@@ -39,7 +40,7 @@ export const generateDevClientTokens: () => Promise<void> = async () => {
           maxViewportW: ROOT_SCALE_MAX_VIEWPORT
         }
       }
-    });
+    } as GeneratorConfig);
     console.info('Design tokens generated successfully!');
   } catch (err) {
     console.error('Failed to generate design tokens:', err);

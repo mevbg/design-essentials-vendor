@@ -1,7 +1,14 @@
-import { PlatformConfigProvider } from '../../types/index.js';
+import { CssPlatformFileType, PlatformConfigProvider } from '../../types/index.js';
 
-export const css: PlatformConfigProvider = ({ prefix, options }) => ({
-  config: { prefix, options },
-  coreFiles: true,
-  files: ['all', 'root-font-size']
+export const css: PlatformConfigProvider = ({ prefix, designData }) => ({
+  config: {
+    prefix,
+    options: {
+      prefix,
+      designData
+    }
+  },
+  allTokensFile: true,
+  tokenTypeFiles: true,
+  customFiles: [CssPlatformFileType.ROOT_FONT_SIZE]
 });

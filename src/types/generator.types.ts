@@ -3,9 +3,9 @@ import {
   FluidScaleSchemeConfig,
   RootScaleSchemeConfig
 } from '../types/scheme.types.js';
-import { PlatformName } from './platform.types.js';
+import { PlatformType } from './platform.types.js';
 
-export type GeneratorOptions = {
+export type DesignData = {
   baseFontSize: number;
   colorScheme: ColorSchemeConfig;
   fluidScaleScheme: FluidScaleSchemeConfig;
@@ -16,6 +16,6 @@ export type GeneratorConfig = {
   sourcePath: string;
   buildPath: string;
   prefix?: string;
-  platforms?: PlatformName[];
-  options: GeneratorOptions;
+  platforms?: PlatformType[];
+  designData: DesignData;
 };

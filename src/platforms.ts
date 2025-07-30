@@ -1,56 +1,98 @@
 import path from 'path';
 import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
-import { CORE_TOKENS } from './constants.js';
+import { DesignData } from './types/generator.types.js';
 import {
+  CommonPlatformFileType,
+  CustomFormatterCategory,
   PlatformConfigProvider,
-  PlatformConfigsBuilderParams,
-  PlatformName
+  PlatformFilename,
+  PlatformType
 } from './types/index.js';
 import { CoreToken } from './types/tokens.types.js';
 import { getDestinationFileName, getFormatterName } from './utils/formats.utils.js';
 import { toKebabCase } from './utils/strings.utils.js';
 
-export const getPlatformConfigs = async (
-  platforms: PlatformName[],
-  params: PlatformConfigsBuilderParams
-): Promise<Partial<Record<PlatformName, PlatformConfig>>> => {
-  const imports: Promise<Record<PlatformName, PlatformConfigProvider>>[] = platforms.map(
-    (platformName) => import(`./platforms/${platformName}/index.js`)
+export const getPlatformConfigs = async ({
+  platforms,
+  buildPath,
+  designData,
+  prefix
+}: {
+  platforms: PlatformType[];
+  buildPath: string;
+  designData: DesignData;
+  prefix: string;
+}): Promise<Partial<Record<PlatformType, PlatformConfig>>> => {
+  const providersImports: Promise<Record<PlatformType, PlatformConfigProvider>>[] = platforms.map(
+    (platformType) => import(`./platforms/${platformType}/index.js`)
   );
-  const arrOfBuilders = await Promise.all(imports);
+  const platformConfigProviders = await Promise.all(providersImports);
 
   const platformConfigs = Object.fromEntries(
-    arrOfBuilders.map((builder, index) => {
-      const platform = platforms[index];
-      const { config, files = [], coreFiles } = builder[platform](params);
+    platformConfigProviders.map((item, index) => {
+      const platformType = platforms[index];
+      const provider = item[platformType];
+      const formatterCategory = Object.values(CustomFormatterCategory).find(
+        (category) => (category as string) === (platformType as string)
+      ) as CustomFormatterCategory;
+      const {
+        config,
+        customFiles = [],
+        allTokensFile,
+        tokenTypeFiles
+      } = provider({
+        designData,
+        prefix
+      });
 
       return [
-        platform,
+        platformType,
         {
-          transformGroup: platform,
-          buildPath: `${path.resolve(params.buildPath)}/${platform}`,
+          transformGroup: platformType,
+          buildPath: `${path.resolve(buildPath)}/${platformType}`,
           files: [
-            ...files.map((file) => ({
-              destination: getDestinationFileName(platform, file),
-              format: getFormatterName(platform, file)
-            })),
-            ...(coreFiles
-              ? CORE_TOKENS.map((key) => ({
-                  destination: getDestinationFileName(platform, toKebabCase(key)),
-                  format: getFormatterName(platform, 'core'),
+            // if allTokensFile is true, a file with all tokens should be created
+            ...(allTokensFile
+              ? [
+                  {
+                    destination: getDestinationFileName(platformType, CommonPlatformFileType.ALL),
+                    format: getFormatterName(formatterCategory, CommonPlatformFileType.ALL)
+                  }
+                ]
+              : []),
+
+            // if tokenTypeFiles is true, a file for each token type should be created
+            ...(tokenTypeFiles
+              ? Object.values(CoreToken).map((key) => ({
+                  destination: getDestinationFileName(
+                    platformType,
+                    toKebabCase(key) as PlatformFilename
+                  ),
+                  format: getFormatterName(formatterCategory, CommonPlatformFileType.CORE),
                   filter: (token: TransformedToken) => token.$type === key
                 }))
               : []),
-            ...(coreFiles
+
+            // if tokenTypeFiles is true, a file for "others" (if such, not in the core list) should be created
+            ...(tokenTypeFiles
               ? [
                   {
-                    destination: getDestinationFileName(platform, 'others'),
-                    format: getFormatterName(platform, 'others'),
+                    destination: getDestinationFileName(
+                      platformType,
+                      CommonPlatformFileType.OTHERS
+                    ),
+                    format: getFormatterName(formatterCategory, CommonPlatformFileType.OTHERS),
                     filter: (token: TransformedToken) =>
-                      !CORE_TOKENS.includes(token.$type as CoreToken)
+                      !Object.values(CoreToken).includes(token.$type as CoreToken)
                   }
                 ]
-              : [])
+              : []),
+
+            // if customFiles is provided, a file for each one of them should be created
+            ...customFiles.map((file) => ({
+              destination: getDestinationFileName(platformType, file as PlatformFilename),
+              format: getFormatterName(formatterCategory, file)
+            }))
           ],
           ...config
         }

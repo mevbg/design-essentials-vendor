@@ -1,5 +1,5 @@
 import { TransformedToken } from 'style-dictionary/types';
-import { CustomFormatterCategory, GeneralHandlerParams } from '../types/format.types.js';
+import { CommonHandlerParams, CustomFormatterCategory } from '../types/format.types.js';
 import { getFileOutput, tab } from '../utils/formats.utils.js';
 import { toSpaceCase } from '../utils/strings.utils.js';
 
@@ -11,7 +11,7 @@ export const basicHandler = ({
   formatArgs,
   tokens,
   config
-}: GeneralHandlerParams): Promise<string> =>
+}: CommonHandlerParams): Promise<string> =>
   getFileOutput({
     name,
     category,
@@ -37,36 +37,31 @@ export const basicHandler = ({
 
         if (category === CustomFormatterCategory.CSS) {
           code = Object.values(groupedTokens)
-            .map(
-              (tokens) =>
-                wrapper({
-                  code: definer({ type, tokens, indent: tab(2), options: formatArgs?.options }),
-                  indent: tab()
-                }) + `\n`
+            .map((tokens) =>
+              wrapper({
+                code: definer({ type, tokens, indent: tab(), options: formatArgs?.options })
+              })
             )
             .join('\n');
         } else {
-          code =
-            wrapper({
-              name,
-              code: Object.entries(groupedTokens)
-                .map(
-                  ([groupName, tokens], index) =>
-                    wrapper({
-                      name:
-                        category === CustomFormatterCategory.JS
-                          ? groupName
-                          : toSpaceCase(groupName),
-                      code: definer({ type, tokens, indent: tab(2), options: formatArgs?.options }),
-                      indent: tab()
-                    }) +
-                    (index < Object.entries(groupedTokens).length - 1 &&
-                    category === CustomFormatterCategory.JS
-                      ? ','
-                      : '')
-                )
-                .join('\n')
-            }) + '\n';
+          code = wrapper({
+            name,
+            code: Object.entries(groupedTokens)
+              .map(
+                ([groupName, tokens], index) =>
+                  wrapper({
+                    name:
+                      category === CustomFormatterCategory.JS ? groupName : toSpaceCase(groupName),
+                    code: definer({ type, tokens, indent: tab(2), options: formatArgs?.options }),
+                    indent: tab()
+                  }) +
+                  (index < Object.entries(groupedTokens).length - 1 &&
+                  category === CustomFormatterCategory.JS
+                    ? ','
+                    : '')
+              )
+              .join('\n')
+          });
         }
       }
 

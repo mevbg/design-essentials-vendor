@@ -1,7 +1,7 @@
 import {
+  CommonHandlerParams,
   CustomFormatterCategory,
-  GeneralHandlerParams,
-  JsFormatterType
+  JsCustomFormatterType
 } from '../types/format.types.js';
 import { getFileOutput, tab } from '../utils/formats.utils.js';
 import { capitalize } from '../utils/strings.utils.js';
@@ -15,7 +15,7 @@ export const colorHandler = async ({
   formatArgs,
   tokens,
   config
-}: GeneralHandlerParams): Promise<string> =>
+}: CommonHandlerParams): Promise<string> =>
   getFileOutput({
     name,
     category,
@@ -23,9 +23,10 @@ export const colorHandler = async ({
     parser: (output, wrapper, definer) => {
       // Get the options from the format arguments
       const { options } = formatArgs;
+      const { designData } = options;
 
       // Parse color scheme tokens
-      if (category !== CustomFormatterCategory.JS || type !== JsFormatterType.VARIABLE) {
+      if (category !== CustomFormatterCategory.JS || type !== JsCustomFormatterType.VARIABLE) {
         const colorScheme = getColorScheme(
           tokens,
           category === CustomFormatterCategory.JS ? 'pascal' : 'kebab'
@@ -34,21 +35,21 @@ export const colorHandler = async ({
         const parsers = {
           css: () => {
             // no method case
-            if (!options?.colorScheme?.method) {
+            if (!designData.colorScheme?.method) {
               output.push(
                 wrapper({
                   code: definer({
-                    tokens: colorScheme[options?.colorScheme?.default]
+                    tokens: colorScheme[designData.colorScheme?.default]
                   })
                 }) + '\n'
               );
             }
             // media and combined methods
-            if (['media', 'combined'].includes(options?.colorScheme?.method)) {
+            if (['media', 'combined'].includes(designData.colorScheme?.method)) {
               output.push(
                 wrapper({
                   code: definer({
-                    tokens: colorScheme[options?.colorScheme?.default]
+                    tokens: colorScheme[designData.colorScheme?.default]
                   })
                 }) + '\n'
               );
@@ -64,7 +65,7 @@ export const colorHandler = async ({
               });
             }
             // class and combined methods
-            if (['class', 'combined'].includes(options?.colorScheme?.method)) {
+            if (['class', 'combined'].includes(designData.colorScheme?.method)) {
               Object.entries(colorScheme).forEach(([scheme, tokens]) => {
                 output.push(
                   wrapper({
@@ -118,18 +119,22 @@ export const colorHandler = async ({
       // Single color tokens
       const nonSchemeTokens = tokens.filter(({ attributes }) => attributes?.type !== 'scheme');
       const jsVariableTokens =
-        category === CustomFormatterCategory.JS && type === JsFormatterType.VARIABLE
+        category === CustomFormatterCategory.JS && type === JsCustomFormatterType.VARIABLE
           ? tokens
               .filter(
                 ({ attributes }) =>
-                  attributes?.type === 'scheme' && attributes?.item === options?.colorScheme.default
+                  attributes?.type === 'scheme' &&
+                  attributes?.item === designData.colorScheme.default
               )
               .map((token) => {
                 token.path.splice(1, 2);
 
                 return {
                   ...token,
-                  name: token.name.replace(`Scheme${capitalize(options?.colorScheme.default)}`, ''),
+                  name: token.name.replace(
+                    `Scheme${capitalize(designData.colorScheme.default)}`,
+                    ''
+                  ),
                   path: token.path
                 };
               })

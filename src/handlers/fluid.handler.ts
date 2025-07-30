@@ -1,7 +1,7 @@
 import {
+  CommonHandlerParams,
   CustomFormatterCategory,
-  GeneralHandlerParams,
-  JsFormatterType
+  JsCustomFormatterType
 } from '../types/format.types.js';
 import { getFileOutput, tab } from '../utils/formats.utils.js';
 import {
@@ -19,7 +19,7 @@ export const fluidHandler = async ({
   formatArgs,
   tokens,
   config
-}: GeneralHandlerParams): Promise<string> =>
+}: CommonHandlerParams): Promise<string> =>
   getFileOutput({
     name,
     category,
@@ -30,11 +30,11 @@ export const fluidHandler = async ({
 
       // Separate fluid and basic tokens
       const { fluidTokens, basicTokens } = separateFluidAndBasicTokens(tokens);
-      const { fluidScaleScheme, baseFontSize } = options || {};
+      const { fluidScaleScheme, baseFontSize } = options?.designData || {};
       const { minViewportW, maxViewportW } = fluidScaleScheme;
       const separation =
         [CustomFormatterCategory.CSS, CustomFormatterCategory.SCSS].includes(category) ||
-        type === JsFormatterType.STATIC;
+        type === JsCustomFormatterType.STATIC;
 
       if (separation) {
         const tokens = {

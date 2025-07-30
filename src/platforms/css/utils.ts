@@ -1,14 +1,19 @@
 import { Format, FormatFnArguments } from 'style-dictionary/types';
-import { CustomFormatterCategory, DefinerParams, WrapperParams } from '../../types/index.js';
+import {
+  CustomFormatterCategory,
+  DefinerParams,
+  HandlerConfig,
+  WrapperParams
+} from '../../types/index.js';
 import { fileHeader, getFileOutput, getFormatterName, tab } from '../../utils/formats.utils.js';
 
 const rootFontSizeTitle = 'Root Font Size';
 
 export const outputRootFontSize = async (
   output: string[],
-  formatArgs: FormatFnArguments
+  formatArgs: FormatFnArguments,
+  config?: HandlerConfig
 ): Promise<void> => {
-  const config = { prefix: formatArgs?.platform?.prefix };
   output.push(
     await getFileOutput({
       name: rootFontSizeTitle,
@@ -18,9 +23,9 @@ export const outputRootFontSize = async (
         const {
           rootScaleScheme: { minViewportW, maxViewportW },
           baseFontSize
-        } = formatArgs?.options || {};
+        } = formatArgs.options.designData || {};
 
-        const prefix = config?.prefix ? `${config.prefix}-` : '';
+        const prefix = formatArgs.options.prefix ? `${formatArgs.options.prefix}-` : '';
 
         const variants = [
           // from 0 up to min breakpoint
@@ -58,8 +63,10 @@ export const outputRootFontSize = async (
 
         variants.forEach(({ media, wrappers }, index) => {
           output.push(`@media all and ${media} {`);
-          wrappers.forEach(({ name, code }) => {
-            output.push(wrapper({ name, code, indent: tab() }));
+          wrappers.forEach(({ name, code }, index) => {
+            output.push(
+              wrapper({ name, code, indent: tab() }) + (index < wrappers.length - 1 ? '\n' : '')
+            );
           });
           output.push(`}${index < variants.length - 1 ? '\n' : ''}`);
         });
@@ -78,7 +85,7 @@ export const getRootFontSizeFormatter: () => Format = () => ({
     output.push(fileHeader(rootFontSizeTitle));
 
     // Handle the root font size
-    await outputRootFontSize(output, formatArgs);
+    await outputRootFontSize(output, formatArgs, { noChapterTitle: true });
 
     // Join the output array into a string and return it
     return output.join('\n');
