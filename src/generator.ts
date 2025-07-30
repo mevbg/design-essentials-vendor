@@ -14,7 +14,7 @@ export async function generateDesignTokens({
   sourcePath,
   buildPath,
   prefix = DEFAULT_PREFIX,
-  platforms = [...DEFAULT_PLATFORMS],
+  platforms: platformsList = [...DEFAULT_PLATFORMS],
   options = {
     baseFontSize: DEFAULT_BASE_FONT_SIZE,
     colorScheme,
@@ -31,9 +31,18 @@ export async function generateDesignTokens({
       }
     });
 
-  return new StyleDictionary({
-    source: [path.resolve(sourcePath)],
+  // Resolve the source path
+  const source = [path.resolve(sourcePath)];
 
-    platforms: await getPlatformConfigs(platforms, { buildPath, options, prefix })
-  }).buildAllPlatforms();
+  // Get the platform configs
+  const platforms = await getPlatformConfigs(platformsList, { buildPath, options, prefix });
+
+  // Define the StyleDictionary instance
+  const dictionary = new StyleDictionary({
+    source,
+    platforms
+  });
+
+  // Generate the design tokens and return the StyleDictionary instance
+  return dictionary.buildAllPlatforms();
 }
