@@ -4,7 +4,7 @@ import { DesignData } from './types/generator.types.js';
 import {
   CommonPlatformFileType,
   CustomFormatterCategory,
-  PlatformConfigProvider,
+  PlatformContextGetter,
   PlatformFilename,
   PlatformType
 } from './types/index.js';
@@ -12,6 +12,11 @@ import { CoreToken } from './types/tokens.types.js';
 import { getDestinationFileName, getFormatterName } from './utils/formats.utils.js';
 import { toKebabCase } from './utils/strings.utils.js';
 
+// getPlatformConfigs is a function that is responsible
+// for preparing the configurations for the Style Dictionary platforms object.
+// It iterates through the provided list of platform names,
+// dynamically imports the platform context getters for each given platform type,
+// runs them and returns the platform configs based on the context received.
 export const getPlatformConfigs = async ({
   platforms,
   buildPath,
@@ -23,82 +28,94 @@ export const getPlatformConfigs = async ({
   designData: DesignData;
   prefix: string;
 }): Promise<Partial<Record<PlatformType, PlatformConfig>>> => {
-  const providersImports: Promise<Record<PlatformType, PlatformConfigProvider>>[] = platforms.map(
-    (platformType) => import(`./platforms/${platformType}/index.js`)
-  );
-  const platformConfigProviders = await Promise.all(providersImports);
+  // Dynamically import the platform context getters for each given platform type
+  const platformContextImports: Promise<Record<PlatformType, PlatformContextGetter>>[] =
+    platforms.map((platformType) => import(`./platforms/${platformType}/index.js`));
+  const platformContextGetters = await Promise.all(platformContextImports);
 
-  const platformConfigs = Object.fromEntries(
-    platformConfigProviders.map((item, index) => {
+  // Return "platforms" object with the configs,
+  // by iterating over the platform context getters,
+  // preparing the platform configs with the received context
+  // and returning them as a key-value pair [PlatformType, PlatformConfig]
+  // which is then converted to an object with the PlatformType as the key
+  // and the PlatformConfig as the value.
+  return Object.fromEntries(
+    platformContextGetters.map((item, index) => {
+      // Get the platform type
       const platformType = platforms[index];
-      const provider = item[platformType];
-      const formatterCategory = Object.values(CustomFormatterCategory).find(
-        (category) => (category as string) === (platformType as string)
-      ) as CustomFormatterCategory;
+
+      // Get the PlatformContextGetter function for the given platform type
+      const getPlatformContext = item[platformType];
+
+      // Get the platform context
       const {
         config,
         customFiles = [],
         allTokensFile,
         tokenTypeFiles
-      } = provider({
+      } = getPlatformContext({
         designData,
         prefix
       });
 
-      return [
-        platformType,
-        {
-          transformGroup: platformType,
-          buildPath: `${path.resolve(buildPath)}/${platformType}`,
-          files: [
-            // if allTokensFile is true, a file with all tokens should be created
-            ...(allTokensFile
-              ? [
-                  {
-                    destination: getDestinationFileName(platformType, CommonPlatformFileType.ALL),
-                    format: getFormatterName(formatterCategory, CommonPlatformFileType.ALL)
-                  }
-                ]
-              : []),
+      // It is necessary to define the formatter category (based on the platform type),
+      // because the getFormatterName function expects CustomFormatterCategory as the first argument
+      // and the platform type is not a valid CustomFormatterCategory.
+      const formatterCategory = Object.values(CustomFormatterCategory).find(
+        (category) => (category as string) === (platformType as string)
+      ) as CustomFormatterCategory;
 
-            // if tokenTypeFiles is true, a file for each token type should be created
-            ...(tokenTypeFiles
-              ? Object.values(CoreToken).map((key) => ({
-                  destination: getDestinationFileName(
-                    platformType,
-                    toKebabCase(key) as PlatformFilename
-                  ),
-                  format: getFormatterName(formatterCategory, CommonPlatformFileType.CORE),
-                  filter: (token: TransformedToken) => token.$type === key
-                }))
-              : []),
+      // Prepare the platform config with the received context
+      const platformConfig: PlatformConfig = {
+        transformGroup: platformType,
+        buildPath: `${path.resolve(buildPath)}/${platformType}`,
+        files: [
+          // if allTokensFile is true, a file with all tokens should be created
+          ...(allTokensFile
+            ? [
+                {
+                  destination: getDestinationFileName(platformType, CommonPlatformFileType.ALL),
+                  format: getFormatterName(formatterCategory, CommonPlatformFileType.ALL)
+                }
+              ]
+            : []),
 
-            // if tokenTypeFiles is true, a file for "others" (if such, not in the core list) should be created
-            ...(tokenTypeFiles
-              ? [
-                  {
-                    destination: getDestinationFileName(
-                      platformType,
-                      CommonPlatformFileType.OTHERS
-                    ),
-                    format: getFormatterName(formatterCategory, CommonPlatformFileType.OTHERS),
-                    filter: (token: TransformedToken) =>
-                      !Object.values(CoreToken).includes(token.$type as CoreToken)
-                  }
-                ]
-              : []),
+          // if tokenTypeFiles is true, a file for each token type should be created
+          ...(tokenTypeFiles
+            ? Object.values(CoreToken).map((key) => ({
+                destination: getDestinationFileName(
+                  platformType,
+                  toKebabCase(key) as PlatformFilename
+                ),
+                format: getFormatterName(formatterCategory, CommonPlatformFileType.CORE),
+                filter: (token: TransformedToken) => token.$type === key
+              }))
+            : []),
 
-            // if customFiles is provided, a file for each one of them should be created
-            ...customFiles.map((file) => ({
-              destination: getDestinationFileName(platformType, file as PlatformFilename),
-              format: getFormatterName(formatterCategory, file)
-            }))
-          ],
-          ...config
-        }
-      ];
+          // if tokenTypeFiles is true, a file for "others" (if such, not in the core list) should be created
+          ...(tokenTypeFiles
+            ? [
+                {
+                  destination: getDestinationFileName(platformType, CommonPlatformFileType.OTHERS),
+                  format: getFormatterName(formatterCategory, CommonPlatformFileType.OTHERS),
+                  filter: (token: TransformedToken) =>
+                    !Object.values(CoreToken).includes(token.$type as CoreToken)
+                }
+              ]
+            : []),
+
+          // if customFiles is provided, a file for each one of them should be created
+          ...customFiles.map((file) => ({
+            destination: getDestinationFileName(platformType, file as PlatformFilename),
+            format: getFormatterName(formatterCategory, file)
+          }))
+        ],
+
+        // Spread the specific platform config (if any)
+        ...config
+      };
+
+      return [platformType, platformConfig];
     })
   );
-
-  return platformConfigs;
 };

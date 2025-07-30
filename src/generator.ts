@@ -30,7 +30,12 @@ export async function generateDesignTokens({
     fluidScaleScheme
   }
 }: GeneratorConfig): Promise<StyleDictionary> {
-  // Register custom formats
+  // All custom formats are defined in separated files
+  // based on the platform type (platforms/**/formats.ts)
+  // and are collected and exported by the formats.ts file
+  // so to be imported all at once in here,
+  // where they get registered in the StyleDictionary instance,
+  // by being gathered in a flat array and iterated over.
   Object.values(formats)
     .flatMap((formatterGroup) => Object.values(formatterGroup))
     .forEach((format: Format) => {
@@ -49,6 +54,7 @@ export async function generateDesignTokens({
   });
 
   // Define the StyleDictionary instance
+  // with the resolved source path and the platform configs
   const dictionary = new StyleDictionary({
     source,
     platforms: platformConfigs

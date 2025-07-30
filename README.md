@@ -31,7 +31,7 @@ await generateDesignTokens({
   buildPath: './dist',
   prefix: 'tk',
   platforms: ['css', 'scss', 'js', 'json'],
-  options: {
+  designData: {
     baseFontSize: 10,
     colorScheme: {
       default: 'light',
@@ -181,7 +181,7 @@ Tokens follow the W3C Design Token Community Group format specification with `$t
 
 ### Supported Token Types
 
-The generator supports these core token types (defined in `CORE_TOKENS`):
+The generator supports these core token types (defined in `CoreToken` enum):
 
 - **Typography**: `fontFamily`, `fontSize`, `fontWeight`, `letterSpacing`, `lineHeight`
 - **Color**: `color` (with light/dark scheme support)
@@ -405,7 +405,7 @@ Main function to generate design tokens across specified platforms.
 - `config.buildPath: string` - Output directory path for generated files
 - `config.prefix?: string` - Token name prefix (default: `'tk'`)
 - `config.platforms?: PlatformType[]` - Array of platforms to generate (default: `['css', 'scss', 'js', 'json']`)
-- `config.designData: DesignData` - Generation configuration options
+- `config.designData: DesignData` - Generation configuration design data
 
 **Returns:** `Promise<StyleDictionary>` - Style Dictionary instance after build completion
 
@@ -500,6 +500,15 @@ export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): s
 export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');
 
+// Root font size output function
+export const outputRootFontSize = async (
+  output: string[],
+  formatArgs: FormatFnArguments,
+  config?: HandlerConfig
+): Promise<void> => {
+  // Implementation for responsive root font size generation with media queries
+};
+
 // Root font size formatter
 export const getRootFontSizeFormatter: () => Format = () => ({
   name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
@@ -558,27 +567,7 @@ DEFAULT_FLUID_SCALE_MIN_VIEWPORT = 600; // Fluid scaling minimum viewport
 DEFAULT_FLUID_SCALE_MAX_VIEWPORT = 1200; // Fluid scaling maximum viewport
 DEFAULT_ROOT_SCALE_MIN_VIEWPORT = 300; // Root scaling minimum viewport
 DEFAULT_ROOT_SCALE_MAX_VIEWPORT = 2100; // Root scaling maximum viewport
-DEFAULT_PLATFORMS = ['css', 'scss', 'js', 'json']; // Default platforms
-
-CORE_TOKENS = [
-  'fontFamily',
-  'fontSize',
-  'fontWeight',
-  'letterSpacing',
-  'lineHeight',
-  'color',
-  'size',
-  'borderColor',
-  'borderRadius',
-  'borderStyle',
-  'borderWidth',
-  'boxShadow',
-  'breakpoint',
-  'dimensions',
-  'icon',
-  'opacity',
-  'transition'
-];
+DEFAULT_PLATFORMS = [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON]; // Default platforms
 ```
 
 ## Utility Functions
@@ -684,71 +673,189 @@ The entire codebase uses TypeScript with strict configuration and ES modules. Al
 
 ```typescript
 // Main configuration types
-type GeneratorConfig = { sourcePath; buildPath; prefix?; platforms?; designData };
-type DesignData = { baseFontSize; colorScheme; fluidScaleScheme; rootScaleScheme };
+export type GeneratorConfig = {
+  sourcePath: string;
+  buildPath: string;
+  prefix?: string;
+  platforms?: PlatformType[];
+  designData: DesignData;
+};
+
+export type DesignData = {
+  baseFontSize: number;
+  colorScheme: ColorSchemeConfig;
+  fluidScaleScheme: FluidScaleSchemeConfig;
+  rootScaleScheme: RootScaleSchemeConfig;
+};
 
 // Platform types
-enum PlatformType {
+export enum PlatformType {
   CSS = 'css',
   SCSS = 'scss',
   JS = 'js',
   JSON = 'json'
 }
-type PlatformConfigProvider = (
-  params: PlatformConfigsBuilderParams
-) => PlatformConfigProviderResponse;
+
+export type PlatformConfigsBuilderParams = {
+  designData: DesignData;
+  prefix?: string;
+};
+
+export type PlatformContext = {
+  config: PlatformConfig;
+  allTokensFile?: boolean;
+  tokenTypeFiles?: boolean;
+  customFiles?: string[];
+};
+
+export type PlatformContextGetter = (params: PlatformConfigsBuilderParams) => PlatformContext;
+
+export enum CommonPlatformFileType {
+  ALL = 'all',
+  CORE = 'core',
+  OTHERS = 'others'
+}
+
+export enum CssPlatformFileType {
+  ROOT_FONT_SIZE = 'root-font-size'
+}
+
+export enum JsPlatformFileType {
+  STATIC = 'static',
+  VARIABLE = 'variable'
+}
+
+export type PlatformFilename =
+  | CommonPlatformFileType.ALL
+  | CommonPlatformFileType.OTHERS
+  | CssPlatformFileType.ROOT_FONT_SIZE
+  | JsPlatformFileType.STATIC
+  | JsPlatformFileType.VARIABLE
+  | CoreTokenKebabValues;
 
 // Handler types
-type CommonHandlerParams = {
+export type HandlerConfig = {
+  noChapterTitle?: boolean;
+  prefix?: string;
+};
+
+export type HandlerResolver = (
+  formatArgs: FormatFnArguments,
+  tokens: TransformedToken[],
+  config?: HandlerConfig
+) => Promise<string>;
+
+export type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
+
+export type CommonHandlerParams = {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
   config?: HandlerConfig;
-}; // this is the type of params for all common handlers regardless the custom formatter
-
-type HandlerResolver = (
-  formatArgs: FormatFnArguments,
-  tokens: TransformedToken[],
-  config?: HandlerConfig
-) => Promise<string>;
-
-type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
+};
 
 // Format types
-enum CustomFormatterCategory {
+export enum CustomFormatterCategory {
   CSS = PlatformType.CSS,
   SCSS = PlatformType.SCSS,
   JS = PlatformType.JS
 }
-enum CssCustomFormatterType {
-  ALL = 'all',
-  CORE = 'core',
-  OTHERS = 'others',
-  ROOT_FONT_SIZE = 'root-font-size'
+
+export enum CssCustomFormatterType {
+  ALL = CommonPlatformFileType.ALL,
+  CORE = CommonPlatformFileType.CORE,
+  OTHERS = CommonPlatformFileType.OTHERS,
+  ROOT_FONT_SIZE = CssPlatformFileType.ROOT_FONT_SIZE
 }
-enum ScssCustomFormatterType {
-  ALL = 'all',
-  CORE = 'core',
-  OTHERS = 'others'
+
+export enum ScssCustomFormatterType {
+  ALL = CommonPlatformFileType.ALL,
+  CORE = CommonPlatformFileType.CORE,
+  OTHERS = CommonPlatformFileType.OTHERS
 }
-enum JsCustomFormatterType {
-  STATIC = 'static',
-  VARIABLE = 'variable'
+
+export enum JsCustomFormatterType {
+  STATIC = JsPlatformFileType.STATIC,
+  VARIABLE = JsPlatformFileType.VARIABLE
 }
-type CustomFormatterType = CssCustomFormatterType | ScssCustomFormatterType | JsCustomFormatterType;
+
+export type CustomFormatterType =
+  | CssCustomFormatterType
+  | ScssCustomFormatterType
+  | JsCustomFormatterType;
+
+export type WrapperParams = {
+  code: string;
+  name?: string;
+  indent?: string;
+};
+
+export type DefinerParams = {
+  type?: CustomFormatterType;
+  tokens: TransformedToken[];
+  options?: FormatFnArguments['options'];
+  indent?: string;
+};
+
+export type FormatterTemplateFn = (params: {
+  name: string;
+  category: CustomFormatterCategory;
+  type?: CustomFormatterType;
+  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
+}) => Format;
+
+// Token types
+export enum CoreToken {
+  FONT_FAMILY = 'fontFamily',
+  FONT_SIZE = 'fontSize',
+  FONT_WEIGHT = 'fontWeight',
+  LETTER_SPACING = 'letterSpacing',
+  LINE_HEIGHT = 'lineHeight',
+  COLOR = 'color',
+  SIZE = 'size',
+  BORDER_COLOR = 'borderColor',
+  BORDER_RADIUS = 'borderRadius',
+  BORDER_STYLE = 'borderStyle',
+  BORDER_WIDTH = 'borderWidth',
+  BOX_SHADOW = 'boxShadow',
+  BREAKPOINT = 'breakpoint',
+  DIMENSIONS = 'dimensions',
+  ICON = 'icon',
+  OPACITY = 'opacity',
+  TRANSITION = 'transition'
+}
+
+export type CoreTokenCamelValues = `${CoreToken}`;
+export type CoreTokenKebabValues = `${Kebab<CoreToken>}`;
 
 // Scheme types
-enum ColorSchemeType {
+export enum ColorSchemeType {
   LIGHT = 'light',
   DARK = 'dark'
 }
-enum ColorSchemeMethod {
+
+export enum ColorSchemeMethod {
   MEDIA = 'media',
   CLASS = 'class',
   COMBINED = 'combined'
 }
+
+export type ColorSchemeConfig = {
+  default?: ColorSchemeType;
+  method?: ColorSchemeMethod;
+};
+
+export type FluidScaleSchemeConfig = {
+  minViewportW: number;
+  maxViewportW: number;
+};
+
+export type RootScaleSchemeConfig = {
+  minViewportW: number;
+  maxViewportW: number;
+};
 ```
 
 ## Advanced Features
@@ -788,27 +895,29 @@ Each platform provides utility functions through `{platform}.utils.ts` files tha
 - `definer`: Function to define token values (e.g., CSS custom properties, SCSS variables, JS exports)
 - Platform-specific formatting logic and naming conventions
 
-### Platform Formats
+### Platform Contexts
 
-Each platform also provides format builders through `{platform}.formats.ts` files:
+Each platform provides a context getter through `{platform}/index.ts` files that defines what files should be generated:
 
-#### CSS Formats (`src/platforms/css/formats.ts`)
+#### CSS Platform Context (`src/platforms/css/index.ts`)
 
-- **Root Font Size**: Generates responsive root font size variables
-- **All Tokens**: Combines all tokens with root font size prefix
-- **Core Tokens**: Individual token type files
-- **Other Tokens**: Non-core token types
+- **All Tokens File**: `true` - Generates a file with all tokens
+- **Token Type Files**: `true` - Generates individual files for each token type
+- **Custom Files**: `['root-font-size']` - Generates responsive root font size variables
 
-#### SCSS Formats (`src/platforms/scss/formats.ts`)
+#### SCSS Platform Context (`src/platforms/scss/index.ts`)
 
-- **All Tokens**: All tokens in a single SCSS file
-- **Core Tokens**: Individual token type files
-- **Other Tokens**: Non-core token types
+- **All Tokens File**: `true` - Generates a file with all tokens
+- **Token Type Files**: `true` - Generates individual files for each token type
 
-#### JavaScript Formats (`src/platforms/js/formats.ts`)
+#### JavaScript Platform Context (`src/platforms/js/index.ts`)
 
-- **Static**: Token values as static strings
-- **Variable**: CSS custom property references
+- **Custom Files**: `['static', 'variable']` - Generates static values and CSS variable references
+
+#### JSON Platform Context (`src/platforms/json/index.ts`)
+
+- **Native Config**: Uses Style Dictionary's native JSON formatter
+- **Single File**: Generates one file with all tokens in nested JSON format
 
 ### Handler Resolvers
 
@@ -818,7 +927,7 @@ The system uses `HandlerResolver` functions that take `FormatFnArguments`, token
 
 Some platforms include specialized handlers:
 
-- **CSS Root Handler**: Located in `src/platforms/css/handlers/root.handler.ts`, generates root font size variables with responsive scaling
+- **CSS Root Font Size**: Integrated into `src/platforms/css/utils.ts`, generates responsive root font size variables with media query breakpoints
 
 ### Flexible Output Organization
 

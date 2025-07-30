@@ -1,4 +1,4 @@
-import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
+import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import {
   CommonPlatformFileType,
   CssPlatformFileType,
@@ -75,3 +75,10 @@ export type DefinerParams = {
   options?: FormatFnArguments['options'];
   indent?: string;
 };
+
+export type FormatterTemplateFn = (params: {
+  name: string;
+  category: CustomFormatterCategory;
+  type?: CustomFormatterType;
+  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
+}) => Format;

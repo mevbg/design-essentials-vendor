@@ -1,6 +1,10 @@
-import { JsPlatformFileType, PlatformConfigProvider } from '../../types/index.js';
+import { JsPlatformFileType, PlatformContextGetter } from '../../types/index.js';
 
-export const js: PlatformConfigProvider = ({ prefix, designData }) => ({
+// This is the platform context getter for the JS platform.
+// It returns the platform context that brings the following info:
+// • two custom files (static and variable) should be created;
+// • no other files should be created.
+export const js: PlatformContextGetter = ({ prefix, designData }) => ({
   config: {
     options: {
       prefix,

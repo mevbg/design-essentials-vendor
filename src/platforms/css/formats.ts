@@ -7,6 +7,7 @@ import {
 } from '../../utils/formats.utils.js';
 import { getRootFontSizeFormatter, outputRootFontSize } from './utils.js';
 
+// This is the list of formatters for the CSS platform.
 export const cssFormatters: Format[] = [
   ...Object.entries({
     all: allFormatterTemplate, // Formatter for all tokens

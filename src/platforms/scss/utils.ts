@@ -1,11 +1,12 @@
 import { DefinerParams, WrapperParams } from '../../types/index.js';
 import { toKebabCase } from '../../utils/strings.utils.js';
 
-// Wraps a code block in a Sass map
+// This is the function that wraps a code block in a Sass map.
+// It may be a nested map or a root map, defined as a Sass variable.
 export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string =>
   `${indent}${indent ? '' : '$'}${name.toLowerCase().split(' ').join('-')}: (\n${code}\n${indent})${indent ? ',' : ';'}`;
 
-// Defines the values of a Sass map
+// This is the function that defines the list of values in a Sass map.
 export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens
     .map(

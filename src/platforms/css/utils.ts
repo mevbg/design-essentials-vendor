@@ -9,6 +9,9 @@ import { fileHeader, getFileOutput, getFormatterName, tab } from '../../utils/fo
 
 const rootFontSizeTitle = 'Root Font Size';
 
+// This is the function that outputs the root font size tokens.
+// It is used to output the root font size tokens
+// in a separate file as well as in the all tokens file.
 export const outputRootFontSize = async (
   output: string[],
   formatArgs: FormatFnArguments,
@@ -75,6 +78,8 @@ export const outputRootFontSize = async (
   );
 };
 
+// This is the function that returns the formatter for the root font size tokens.
+// It is used to generate the separate file with these tokens.
 export const getRootFontSizeFormatter: () => Format = () => ({
   name: getFormatterName(CustomFormatterCategory.CSS, 'root-font-size'),
   format: async function (formatArgs: FormatFnArguments) {
@@ -92,10 +97,10 @@ export const getRootFontSizeFormatter: () => Format = () => ({
   }
 });
 
-// Wraps a code block in a CSS selector
+// This is the function that wraps a code block in a given CSS selector.
 export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): string =>
   `${indent}${name} {\n${code}\n${indent}}`;
 
-// Defines the custom properties of a CSS selector
+// This is the function that defines the list of custom properties.
 export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
   tokens.map(({ name, $value }) => `${indent}--${name}: ${$value};`).join('\n');

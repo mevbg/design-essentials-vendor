@@ -1,6 +1,11 @@
-import { CssPlatformFileType, PlatformConfigProvider } from '../../types/index.js';
+import { CssPlatformFileType, PlatformContextGetter } from '../../types/index.js';
 
-export const css: PlatformConfigProvider = ({ prefix, designData }) => ({
+// This is the platform context getter for the CSS platform.
+// It returns the platform context that brings the following info:
+// • a file with all tokens should be created;
+// • a file for each token type should be created
+// • a custom file for the root font size should be created.
+export const css: PlatformContextGetter = ({ prefix, designData }) => ({
   config: {
     prefix,
     options: {

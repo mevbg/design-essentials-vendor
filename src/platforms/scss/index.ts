@@ -1,6 +1,10 @@
-import { PlatformConfigProvider } from '../../types/index.js';
+import { PlatformContextGetter } from '../../types/index.js';
 
-export const scss: PlatformConfigProvider = ({ designData }) => ({
+// This is the platform context getter for the SCSS platform.
+// It returns the platform context that brings the following info:
+// • a file with all tokens should be created;
+// • a file for each token type should be created;
+export const scss: PlatformContextGetter = ({ designData }) => ({
   config: {
     options: { designData }
   },

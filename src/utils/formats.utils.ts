@@ -1,4 +1,4 @@
-import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
+import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import * as handlers from '../handlers/index.js';
 import {
   CoreToken,
@@ -6,6 +6,7 @@ import {
   CustomFormatterCategory,
   CustomFormatterType,
   DefinerParams,
+  FormatterTemplateFn,
   HandlerConfig,
   WrapperParams
 } from '../types/index.js';
@@ -68,7 +69,8 @@ export const getDestinationFileName = (platformType: PlatformType, name: Platfor
 export const getFormatterName = (category: CustomFormatterCategory, name: string) =>
   `mev/${category}/${name}`;
 
-// Returns a promise with the output for a file
+// This function returns a promise with the output for a file.
+// It is used by all handlers
 export const getFileOutput = async ({
   name,
   category,
@@ -99,19 +101,14 @@ export const getFileOutput = async ({
     : `\n${`/* ${name} */`.toUpperCase()}\n\n${output.join('\n')}\n`;
 };
 
-// Returns a format config
-// that handles all tokens in a single file
-export const allFormatterTemplate = ({
+// This function represents a template for a format config
+// that prepares one for formatting all tokens available.
+export const allFormatterTemplate: FormatterTemplateFn = ({
   name,
   category,
   type,
   prefixOutput = () => {}
-}: {
-  name: string;
-  category: CustomFormatterCategory;
-  type?: CustomFormatterType;
-  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
-}): Format => ({
+}) => ({
   name: getFormatterName(category, name),
   format: async function (formatArgs: FormatFnArguments) {
     // Get the core token handlers
@@ -168,17 +165,9 @@ export const allFormatterTemplate = ({
   }
 });
 
-// Returns a format config
-// that handles a given type of core tokens individually
-export const coreFormatterTemplate = ({
-  name,
-  category,
-  type
-}: {
-  name: string;
-  category: CustomFormatterCategory;
-  type?: CustomFormatterType;
-}): Format => ({
+// This function represents a template for a format config
+// that prepares one for formatting individual files for each core token available.
+export const coreFormatterTemplate: FormatterTemplateFn = ({ name, category, type }) => ({
   name: getFormatterName(category, name),
   format: async function (formatArgs: FormatFnArguments) {
     // Get the dictionary and the options from the format arguments
@@ -216,17 +205,9 @@ export const coreFormatterTemplate = ({
   }
 });
 
-// Returns a format config
-// that handles all tokens that don't have a core handler
-export const othersFormatterTemplate = ({
-  name,
-  category,
-  type
-}: {
-  name: string;
-  category: CustomFormatterCategory;
-  type?: CustomFormatterType;
-}): Format => ({
+// This function represents a template for a format config
+// that prepares one for formatting all tokens that don't have a core handler (if such).
+export const othersFormatterTemplate: FormatterTemplateFn = ({ name, category, type }) => ({
   name: getFormatterName(category, name),
   format: async function (formatArgs: FormatFnArguments) {
     // Get the dictionary and the options from the format arguments

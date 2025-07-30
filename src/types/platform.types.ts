@@ -14,7 +14,8 @@ export type PlatformConfigsBuilderParams = {
   prefix?: string;
 };
 
-export type PlatformConfigProvider = (params: PlatformConfigsBuilderParams) => {
+export type PlatformContext = {
+  // the platform config
   config: PlatformConfig;
 
   // determines if the platform needs a file with all tokens
@@ -28,6 +29,8 @@ export type PlatformConfigProvider = (params: PlatformConfigsBuilderParams) => {
   // such as root font size, etc.
   customFiles?: string[];
 };
+
+export type PlatformContextGetter = (params: PlatformConfigsBuilderParams) => PlatformContext;
 
 export enum CommonPlatformFileType {
   ALL = 'all',
