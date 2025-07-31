@@ -439,7 +439,7 @@ Processes standard tokens with simple string values.
 - `params.type: CustomFormatterType` - JS format type (static/variable)
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
-- `params.config: HandlerConfig` - Optional handler configuration
+- `params.config: OutputConfig` - Optional output configuration
 
 **Features:**
 
@@ -457,7 +457,7 @@ Processes responsive tokens with min/max values and automatic fluid separation.
 - `params.type: CustomFormatterType` - JS format type (static/variable)
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
-- `params.config: HandlerConfig` - Optional handler configuration
+- `params.config: OutputConfig` - Optional output configuration
 
 **Features:**
 
@@ -476,7 +476,7 @@ Handles color tokens with scheme support and platform-specific formatting.
 - `params.type: CustomFormatterType` - JS format type (static/variable)
 - `params.formatArgs: FormatFnArguments` - Style Dictionary format arguments
 - `params.tokens: TransformedToken[]` - Tokens to process
-- `params.config: HandlerConfig` - Optional handler configuration
+- `params.config: OutputConfig` - Optional output configuration
 
 **Features:**
 
@@ -504,7 +504,7 @@ export const definer = ({ tokens, indent = '  ' }: DefinerParams): string =>
 export const outputRootFontSize = async (
   output: string[],
   formatArgs: FormatFnArguments,
-  config?: HandlerConfig
+  config?: OutputConfig
 ): Promise<void> => {
   // Implementation for responsive root font size generation with media queries
 };
@@ -696,11 +696,6 @@ export enum PlatformType {
   JSON = 'json'
 }
 
-export type PlatformConfigsBuilderParams = {
-  designData: DesignData;
-  prefix?: string;
-};
-
 export type PlatformContext = {
   config: PlatformConfig;
   allTokensFile?: boolean;
@@ -708,7 +703,10 @@ export type PlatformContext = {
   customFiles?: string[];
 };
 
-export type PlatformContextGetter = (params: PlatformConfigsBuilderParams) => PlatformContext;
+export type PlatformContextGetter = (params: {
+  designData: DesignData;
+  prefix?: string;
+}) => PlatformContext;
 
 export enum CommonPlatformFileType {
   ALL = 'all',
@@ -716,11 +714,11 @@ export enum CommonPlatformFileType {
   OTHERS = 'others'
 }
 
-export enum CssPlatformFileType {
+export enum CssCustomPlatformFileType {
   ROOT_FONT_SIZE = 'root-font-size'
 }
 
-export enum JsPlatformFileType {
+export enum JsCustomPlatformFileType {
   STATIC = 'static',
   VARIABLE = 'variable'
 }
@@ -728,13 +726,13 @@ export enum JsPlatformFileType {
 export type PlatformFilename =
   | CommonPlatformFileType.ALL
   | CommonPlatformFileType.OTHERS
-  | CssPlatformFileType.ROOT_FONT_SIZE
-  | JsPlatformFileType.STATIC
-  | JsPlatformFileType.VARIABLE
+  | CssCustomPlatformFileType.ROOT_FONT_SIZE
+  | JsCustomPlatformFileType.STATIC
+  | JsCustomPlatformFileType.VARIABLE
   | CoreTokenKebabValues;
 
 // Handler types
-export type HandlerConfig = {
+export type OutputConfig = {
   noChapterTitle?: boolean;
   prefix?: string;
 };
@@ -742,7 +740,7 @@ export type HandlerConfig = {
 export type HandlerResolver = (
   formatArgs: FormatFnArguments,
   tokens: TransformedToken[],
-  config?: HandlerConfig
+  config?: OutputConfig
 ) => Promise<string>;
 
 export type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
@@ -753,7 +751,7 @@ export type CommonHandlerParams = {
   type?: CustomFormatterType;
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
-  config?: HandlerConfig;
+  config?: OutputConfig;
 };
 
 // Format types
@@ -767,7 +765,7 @@ export enum CssCustomFormatterType {
   ALL = CommonPlatformFileType.ALL,
   CORE = CommonPlatformFileType.CORE,
   OTHERS = CommonPlatformFileType.OTHERS,
-  ROOT_FONT_SIZE = CssPlatformFileType.ROOT_FONT_SIZE
+  ROOT_FONT_SIZE = CssCustomPlatformFileType.ROOT_FONT_SIZE
 }
 
 export enum ScssCustomFormatterType {
@@ -777,8 +775,8 @@ export enum ScssCustomFormatterType {
 }
 
 export enum JsCustomFormatterType {
-  STATIC = JsPlatformFileType.STATIC,
-  VARIABLE = JsPlatformFileType.VARIABLE
+  STATIC = JsCustomPlatformFileType.STATIC,
+  VARIABLE = JsCustomPlatformFileType.VARIABLE
 }
 
 export type CustomFormatterType =

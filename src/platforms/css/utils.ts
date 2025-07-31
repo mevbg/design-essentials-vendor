@@ -2,7 +2,7 @@ import { Format, FormatFnArguments } from 'style-dictionary/types';
 import {
   CustomFormatterCategory,
   DefinerParams,
-  HandlerConfig,
+  OutputConfig,
   WrapperParams
 } from '../../types/index.js';
 import { fileHeader, getFileOutput, getFormatterName, tab } from '../../utils/formats.utils.js';
@@ -15,7 +15,7 @@ const rootFontSizeTitle = 'Root Font Size';
 export const outputRootFontSize = async (
   output: string[],
   formatArgs: FormatFnArguments,
-  config?: HandlerConfig
+  config?: OutputConfig
 ): Promise<void> => {
   output.push(
     await getFileOutput({

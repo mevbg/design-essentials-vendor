@@ -2,6 +2,11 @@ import { PlatformConfig } from 'style-dictionary/types';
 import { DesignData } from './generator.types.js';
 import { CoreTokenKebabValues } from './tokens.types.js';
 
+//
+// ------------------------------------------------------------
+// PLATFORM TYPES
+
+// This enum contains the types of platforms that are supported.
 export enum PlatformType {
   CSS = 'css',
   SCSS = 'scss',
@@ -9,11 +14,11 @@ export enum PlatformType {
   JSON = 'json'
 }
 
-export type PlatformConfigsBuilderParams = {
-  designData: DesignData;
-  prefix?: string;
-};
+//
+// ------------------------------------------------------------
+// PLATFORM CONTEXT
 
+// This type defines the platform context that is returned by the platform context getter.
 export type PlatformContext = {
   // the platform config
   config: PlatformConfig;
@@ -30,38 +35,66 @@ export type PlatformContext = {
   customFiles?: string[];
 };
 
-export type PlatformContextGetter = (params: PlatformConfigsBuilderParams) => PlatformContext;
+// This type defines the function that returns the platform context.
+export type PlatformContextGetter = (params: {
+  designData: DesignData;
+  prefix?: string;
+}) => PlatformContext;
 
+//
+// ------------------------------------------------------------
+// FILE TYPES
+
+// This type determines the common file types for CSS & SCSS platforms
 export enum CommonPlatformFileType {
+  // file that contains all tokens
   ALL = 'all',
+
+  // individual files for each token type in the core list
   CORE = 'core',
+
+  // conditional file that depends on whether a token type that is not in the core list is used
   OTHERS = 'others'
 }
 
-export enum CssPlatformFileType {
+// This type determines the custom file types for the CSS platform
+export enum CssCustomPlatformFileType {
   ROOT_FONT_SIZE = 'root-font-size'
 }
 
-export enum JsPlatformFileType {
+// This type determines the custom file types for the JS platform
+export enum JsCustomPlatformFileType {
+  // file that contains all tokens with printed static values
   STATIC = 'static',
+
+  // file that contains all tokens with printed CSS custom properties as values
   VARIABLE = 'variable'
 }
 
+//
+// ------------------------------------------------------------
+// FILE NAMES
+
+// This type contains the names of all possible output files for the CSS platform
 type CssPlatformFilename =
   | CommonPlatformFileType.ALL
   | CommonPlatformFileType.OTHERS
-  | CssPlatformFileType.ROOT_FONT_SIZE
+  | CssCustomPlatformFileType.ROOT_FONT_SIZE
   | CoreTokenKebabValues;
 
+// This type contains the names of all possible output files for the SCSS platform
 type ScssPlatformFilename =
   | CommonPlatformFileType.ALL
   | CommonPlatformFileType.OTHERS
   | CoreTokenKebabValues;
 
-type JsPlatformFilename = JsPlatformFileType.STATIC | JsPlatformFileType.VARIABLE;
+// This type contains the names of all possible output files for the JS platform
+type JsPlatformFilename = JsCustomPlatformFileType.STATIC | JsCustomPlatformFileType.VARIABLE;
 
+// This type contains the names of all possible output files for the JSON platform
 type JsonPlatformFilename = CommonPlatformFileType.ALL;
 
+// This type contains the names of all possible output files for all platforms
 export type PlatformFilename =
   | CssPlatformFilename
   | ScssPlatformFilename

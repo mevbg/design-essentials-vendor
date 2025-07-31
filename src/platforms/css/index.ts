@@ -1,4 +1,4 @@
-import { CssPlatformFileType, PlatformContextGetter } from '../../types/index.js';
+import { CssCustomPlatformFileType, PlatformContextGetter } from '../../types/index.js';
 
 // This is the platform context getter for the CSS platform.
 // It returns the platform context that brings the following info:
@@ -15,5 +15,5 @@ export const css: PlatformContextGetter = ({ prefix, designData }) => ({
   },
   allTokensFile: true,
   tokenTypeFiles: true,
-  customFiles: [CssPlatformFileType.ROOT_FONT_SIZE]
+  customFiles: [CssCustomPlatformFileType.ROOT_FONT_SIZE]
 });

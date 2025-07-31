@@ -1,8 +1,16 @@
-type Kebab<T extends string> = T extends `${infer F}${infer R}`
-  ? R extends Uncapitalize<R>
-    ? `${Lowercase<F>}${Kebab<R>}`
-    : `${Lowercase<F>}-${Kebab<Uncapitalize<R>>}`
-  : T;
+import { type Kebab } from './utils.types.js';
+
+//
+// ------------------------------------------------------------
+// CORE TOKENS
+
+// Core tokens are those tokens that are most often the subject of definitions
+// and almost certainly expect values to be passed for them,
+// for which output is expected to be generated.
+
+// Therefore, they are registered as reserved, with some of them having key names
+// to which specific logic is attached and a specific structure is expected.
+// Such a type is "color", to which logic for defining color schemes is attached.
 
 export enum CoreToken {
   // Typography
@@ -43,6 +51,8 @@ export enum CoreToken {
   TRANSITION = 'transition'
 }
 
+// This type contains the camelCase values for the core tokens.
 export type CoreTokenCamelValues = `${CoreToken}`;
 
+// This type contains the kebab-case values for the core tokens.
 export type CoreTokenKebabValues = `${Kebab<CoreToken>}`;

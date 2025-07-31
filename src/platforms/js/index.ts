@@ -1,4 +1,4 @@
-import { JsPlatformFileType, PlatformContextGetter } from '../../types/index.js';
+import { JsCustomPlatformFileType, PlatformContextGetter } from '../../types/index.js';
 
 // This is the platform context getter for the JS platform.
 // It returns the platform context that brings the following info:
@@ -11,5 +11,5 @@ export const js: PlatformContextGetter = ({ prefix, designData }) => ({
       designData
     }
   },
-  customFiles: Object.values(JsPlatformFileType)
+  customFiles: Object.values(JsCustomPlatformFileType)
 });

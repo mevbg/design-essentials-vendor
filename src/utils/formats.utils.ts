@@ -7,7 +7,7 @@ import {
   CustomFormatterType,
   DefinerParams,
   FormatterTemplateFn,
-  HandlerConfig,
+  OutputConfig,
   WrapperParams
 } from '../types/index.js';
 import { PlatformFilename, PlatformType } from '../types/platform.types.js';
@@ -79,7 +79,7 @@ export const getFileOutput = async ({
 }: {
   name: string;
   category: CustomFormatterCategory;
-  config?: HandlerConfig;
+  config?: OutputConfig;
   parser: (
     output: string[],
     wrapper: (args: WrapperParams) => string,

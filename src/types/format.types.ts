@@ -1,36 +1,43 @@
 import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import {
   CommonPlatformFileType,
-  CssPlatformFileType,
-  JsPlatformFileType,
+  CssCustomPlatformFileType,
+  JsCustomPlatformFileType,
   PlatformType
 } from './platform.types.js';
 import { CoreToken } from './tokens.types.js';
 
-export type HandlerConfig = {
+//
+// ------------------------------------------------------------
+// OUTPUT CONFIG
+
+// This type defines the configuration for the output of the tokens.
+export type OutputConfig = {
   noChapterTitle?: boolean;
   prefix?: string;
 };
 
-export type HandlerResolver = (
-  formatArgs: FormatFnArguments,
-  tokens: TransformedToken[],
-  config?: HandlerConfig
-) => Promise<string>;
+//
+// ------------------------------------------------------------
+// CUSTOM FORMATTER CATEGORIES
 
-export type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
-
+// This enum contains the categories of custom formatters.
 export enum CustomFormatterCategory {
   CSS = PlatformType.CSS,
   SCSS = PlatformType.SCSS,
   JS = PlatformType.JS
 }
 
+//
+// ------------------------------------------------------------
+// CUSTOM FORMATTER TYPES
+
+// This enum contains the types of custom formatters.
 export enum CssCustomFormatterType {
   ALL = CommonPlatformFileType.ALL,
   CORE = CommonPlatformFileType.CORE,
   OTHERS = CommonPlatformFileType.OTHERS,
-  ROOT_FONT_SIZE = CssPlatformFileType.ROOT_FONT_SIZE
+  ROOT_FONT_SIZE = CssCustomPlatformFileType.ROOT_FONT_SIZE
 }
 
 export enum ScssCustomFormatterType {
@@ -40,8 +47,8 @@ export enum ScssCustomFormatterType {
 }
 
 export enum JsCustomFormatterType {
-  STATIC = JsPlatformFileType.STATIC,
-  VARIABLE = JsPlatformFileType.VARIABLE
+  STATIC = JsCustomPlatformFileType.STATIC,
+  VARIABLE = JsCustomPlatformFileType.VARIABLE
 }
 
 // Defines the type of custom formatter
@@ -49,6 +56,32 @@ export type CustomFormatterType =
   | CssCustomFormatterType
   | ScssCustomFormatterType
   | JsCustomFormatterType;
+
+//
+// ------------------------------------------------------------
+// FORMATTING TEMPLATE FUNCTIONS
+
+// This type defines the template function for the custom formatters.
+export type FormatterTemplateFn = (params: {
+  name: string;
+  category: CustomFormatterCategory;
+  type?: CustomFormatterType;
+  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
+}) => Format;
+
+//
+// ------------------------------------------------------------
+// HANDLERS
+
+// This type defines the resolver for the handler of the tokens.
+export type HandlerResolver = (
+  formatArgs: FormatFnArguments,
+  tokens: TransformedToken[],
+  config?: OutputConfig
+) => Promise<string>;
+
+// This type defines the resolvers for the handlers of the tokens.
+export type CoreTokensHandlerResolvers = Record<CoreToken, HandlerResolver>;
 
 // Defines the parameters for the functions
 // that represents common handlers of tokens for any of the custom formatters
@@ -58,8 +91,12 @@ export type CommonHandlerParams = {
   type?: CustomFormatterType;
   formatArgs: FormatFnArguments;
   tokens: TransformedToken[];
-  config?: HandlerConfig;
+  config?: OutputConfig;
 };
+
+//
+// ------------------------------------------------------------
+// OUTPUT HANDLER TYPES
 
 // Defines the parameters for the functions that wrap code blocks
 export type WrapperParams = {
@@ -75,10 +112,3 @@ export type DefinerParams = {
   options?: FormatFnArguments['options'];
   indent?: string;
 };
-
-export type FormatterTemplateFn = (params: {
-  name: string;
-  category: CustomFormatterCategory;
-  type?: CustomFormatterType;
-  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
-}) => Format;
