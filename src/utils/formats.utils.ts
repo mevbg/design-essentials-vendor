@@ -28,12 +28,18 @@ export const getCoreTokensHandlerResolvers = ({
       // HandlerResolver
       async (formatArgs, tokens, config) => {
         const name = capitalize(toSpaceCase(token));
-        const handlerType =
-          tokens.length && tokens[0].$type === 'color'
-            ? 'color'
-            : tokens.some(tokenIsFluid)
-              ? 'fluid'
-              : 'basic';
+
+        let handlerType: string = '';
+        switch (true) {
+          case tokens.length && tokens[0].$type === 'color':
+            handlerType = 'color';
+            break;
+          case tokens.some(tokenIsFluid):
+            handlerType = 'fluid';
+            break;
+          default:
+            handlerType = 'basic';
+        }
 
         // if (handlerType === 'SPECIFIC') {
         //   const { default: handler } = await import(
@@ -42,7 +48,10 @@ export const getCoreTokensHandlerResolvers = ({
         //   return handler(...args);
         // }
 
-        return handlers[`${handlerType}Handler` as keyof typeof handlers]({
+        // Get the handler function
+        const handleTokens = handlers[`${handlerType}Handler` as keyof typeof handlers];
+
+        return handleTokens({
           name,
           category,
           type,
