@@ -6,13 +6,13 @@ import {
   toKebabCase
 } from '../../utils/strings.utils.js';
 
-// This is the function that wraps a code block in a JS object.
+// This function wraps a code block in a JS object.
 // It could be a nested object or a root object, defined as a const.
 export const wrapper = ({ name = '', code, indent = '' }: WrapperParams): string =>
   (!indent ? `export const ${spaceCaseToCamelCase(name)} =` : `${indent}${name}:`) +
   ` {\n${code}\n${indent}}${!indent ? ';' : ''}`;
 
-// This is the function that defines the list of properties in a JS object.
+// This function defines the list of properties in a JS object.
 // The values may contain static or variable kind of data, depending on the formatter type.
 export const definer = ({ type, tokens, options, indent = '  ' }: DefinerParams): string =>
   tokens

@@ -71,8 +71,11 @@ export const fileHeader = (name: string): string =>
 export const tab = (c: number = 1): string => '  '.repeat(c);
 
 // Returns a destination file name
-export const getDestinationFileName = (platformType: PlatformType, name: PlatformFilename) =>
-  `${name}.design-tokens.${platformType}`;
+export const getDestinationFileName = (
+  platformType: PlatformType,
+  name: PlatformFilename,
+  dir = 'tokens'
+) => `${dir ? `${dir}/` : ''}${name}.${platformType}`;
 
 // Returns a formatter name
 export const getFormatterName = (category: CustomFormatterCategory, name: string) =>
@@ -112,12 +115,7 @@ export const getFileOutput = async ({
 
 // This function represents a template for a format config
 // that prepares one for formatting all tokens available.
-export const allFormatterTemplate: FormatterTemplateFn = ({
-  name,
-  category,
-  type,
-  prefixOutput = () => {}
-}) => ({
+export const allFormatterTemplate: FormatterTemplateFn = ({ name, category, type }) => ({
   name: getFormatterName(category, name),
   format: async function (formatArgs: FormatFnArguments) {
     // Get the core token handlers
@@ -134,9 +132,6 @@ export const allFormatterTemplate: FormatterTemplateFn = ({
 
     // Add header to the output array
     output.push(fileHeader(`${category} Tokens${type ? ` (${type})` : ''}`));
-
-    // Handle the prefix output (if such)
-    prefixOutput(output, formatArgs);
 
     // Parse tokens that have a core handler
     const getCoreTokens = (type: string): TransformedToken[] =>

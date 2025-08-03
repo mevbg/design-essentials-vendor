@@ -2,34 +2,63 @@ import path from 'path';
 import StyleDictionary from 'style-dictionary';
 import { Format } from 'style-dictionary/types';
 import {
-  defaultColorSchemeConfig as colorScheme,
-  defaultFluidScaleSchemeConfig as fluidScaleScheme,
-  defaultRootScaleSchemeConfig as rootScaleScheme
-} from './configs.js';
-import { DEFAULT_BASE_FONT_SIZE, DEFAULT_PLATFORMS, DEFAULT_PREFIX } from './constants.js';
+  DEFAULT_BASE_FONT_SIZE,
+  DEFAULT_COLOR_SCHEME,
+  DEFAULT_COLOR_SCHEME_METHOD,
+  DEFAULT_FLUID_SCALE_MAX_VIEWPORT,
+  DEFAULT_FLUID_SCALE_MIN_VIEWPORT,
+  DEFAULT_PLATFORMS,
+  DEFAULT_PREFIX,
+  DEFAULT_ROOT_SCALE_MAX_VIEWPORT,
+  DEFAULT_ROOT_SCALE_MIN_VIEWPORT
+} from './constants.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
-import type { GeneratorConfig } from './types/index.js';
+import type {
+  ColorSchemeMethod,
+  ColorSchemeType,
+  DesignConfig,
+  GeneratorConfig
+} from './types/index.js';
 
-// This is the main exposed function that initializes the design tokens generation process.
+// This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
-// - sourcePath: Path to the design tokens definitions
 // - buildPath: Path to the directory where the generated output files will be created
-// - prefix: Prefix that will be used when creating CSS custom properties
-// - platforms: Array of platform names (CSS, SCSS, JS, JSON) for which output is expected to be generated
-// - options: Configuration data for color scheme, scaling, etc.
-export async function generateDesignTokens({
-  sourcePath,
+// - baseFontSize: Base font size for the design system
+// - tokens: configuration for the design tokens
+//    - sourcePath: Path to the design tokens definitions
+//    - prefix: Prefix that will be used when creating CSS custom properties
+//    - platforms: Array of platform names (CSS, SCSS, JS, JSON) for which output is expected to be generated
+// - colorScheme: Configuration data for the color scheme
+// - rootScaleScheme: Configuration data for root scale scheme
+// - fluidScaleScheme: Configuration data for fluid scale scheme
+export async function generateDesignEssentials({
   buildPath,
-  prefix = DEFAULT_PREFIX,
-  platforms = [...DEFAULT_PLATFORMS],
-  designData = {
-    baseFontSize: DEFAULT_BASE_FONT_SIZE,
+  baseFontSize = DEFAULT_BASE_FONT_SIZE,
+  tokens,
+  colorScheme = {
+    default: DEFAULT_COLOR_SCHEME as ColorSchemeType,
+    method: DEFAULT_COLOR_SCHEME_METHOD as ColorSchemeMethod
+  },
+  rootScaleScheme = {
+    minViewportW: DEFAULT_ROOT_SCALE_MIN_VIEWPORT,
+    maxViewportW: DEFAULT_ROOT_SCALE_MAX_VIEWPORT
+  },
+  fluidScaleScheme = {
+    minViewportW: DEFAULT_FLUID_SCALE_MIN_VIEWPORT,
+    maxViewportW: DEFAULT_FLUID_SCALE_MAX_VIEWPORT
+  },
+  fontsPath
+}: GeneratorConfig): Promise<StyleDictionary> {
+  const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
+  const designConfig: DesignConfig = {
+    baseFontSize,
     colorScheme,
     rootScaleScheme,
-    fluidScaleScheme
-  }
-}: GeneratorConfig): Promise<StyleDictionary> {
+    fluidScaleScheme,
+    fontsPath: process.env.FONTS_PATH || fontsPath
+  };
+
   // All custom formats are defined in separated files
   // based on the platform type (platforms/**/formats.ts)
   // and are collected and exported by the formats.ts file
@@ -49,7 +78,7 @@ export async function generateDesignTokens({
   const platformConfigs = await getPlatformConfigs({
     platforms,
     buildPath,
-    designData,
+    designConfig,
     prefix
   });
 

@@ -1,6 +1,6 @@
-import { ColorSchemeMethod, ColorSchemeType } from '../../src/types/scheme.types.js';
+import { ColorSchemeMethod, ColorSchemeType } from '../src/types/scheme.types.js';
 
-export { BASE_FONT_SIZE } from './design/constants/typography.constants';
+export { BASE_FONT_SIZE } from './design/constants/typography.constants.js';
 
 export const PREFIX: string = 'dev';
 

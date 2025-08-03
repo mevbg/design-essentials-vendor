@@ -66,7 +66,6 @@ export type FormatterTemplateFn = (params: {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
-  prefixOutput?: (output: string[], formatArgs: FormatFnArguments) => void;
 }) => Format;
 
 //

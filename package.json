@@ -1,17 +1,21 @@
 {
-  "name": "@mevbg/design-tokens-generator",
-  "title": "DesignTokensGenerator",
-  "version": "2.8.1",
-  "description": "Mev’s personal design tokens generator.",
+  "name": "@mevbg/dev",
+  "title": "Design Essentials Vendor",
+  "version": "0.0.0",
+  "description": "Mev’s personal vendor of design system essentials.",
   "keywords": [
-    "style-dictionary",
-    "design tokens",
-    "token builder",
-    "style dictionary wrapper",
+    "design essentials vendor",
+    "design essentials",
     "design system",
+    "design tokens",
+    "vendor",
+    "factory",
+    "builder",
+    "generator",
+    "style-dictionary",
+    "style dictionary wrapper",
     "mevbg",
     "personal",
-    "opinionated",
     "css variables",
     "javascript tokens",
     "token pipeline",
@@ -20,13 +24,13 @@
     "style config",
     "build tool"
   ],
-  "homepage": "https://github.com/mevbg/design-tokens-generator#readme",
+  "homepage": "https://github.com/mevbg/design-essentials-vendor#readme",
   "bugs": {
-    "url": "https://github.com/mevbg/design-tokens-generator/issues"
+    "url": "https://github.com/mevbg/design-essentials-vendor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/mevbg/design-tokens-generator.git"
+    "url": "git+ssh://git@github.com/mevbg/design-essentials-vendor.git"
   },
   "license": "ISC",
   "author": {
@@ -47,15 +51,15 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsx dev/index.ts",
-    "dev:watch": "nodemon --exec \"tsx dev/index.ts\" --ext ts,js --watch src --watch dev/client",
+    "dev:generate": "tsx index.ts",
+    "dev:watch": "nodemon --exec \"tsx index.ts\" --ext ts,js --watch src --watch client",
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "clean:all": "del-cli dist dev/dist",
+    "clean:all": "del-cli dist client/dist",
     "clean:build": "del-cli dist",
-    "clean:dev": "del-cli dev/dist"
+    "clean:dev": "del-cli client/dist"
   },
   "engines": {
     "node": ">=22.x",

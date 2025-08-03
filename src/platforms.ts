@@ -1,6 +1,6 @@
 import path from 'path';
 import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
-import { DesignData } from './types/generator.types.js';
+import { DesignConfig } from './types/generator.types.js';
 import {
   CommonPlatformFileType,
   CustomFormatterCategory,
@@ -20,12 +20,12 @@ import { toKebabCase } from './utils/strings.utils.js';
 export const getPlatformConfigs = async ({
   platforms,
   buildPath,
-  designData,
+  designConfig,
   prefix
 }: {
   platforms: PlatformType[];
   buildPath: string;
-  designData: DesignData;
+  designConfig: DesignConfig;
   prefix: string;
 }): Promise<Partial<Record<PlatformType, PlatformConfig>>> => {
   // Dynamically import the platform context getters for each given platform type
@@ -54,7 +54,7 @@ export const getPlatformConfigs = async ({
         allTokensFile,
         tokenTypeFiles
       } = getPlatformContext({
-        designData,
+        designConfig,
         prefix
       });
 
@@ -106,7 +106,11 @@ export const getPlatformConfigs = async ({
 
           // if customFiles is provided, a file for each one of them should be created
           ...customFiles.map((file) => ({
-            destination: getDestinationFileName(platformType, file as PlatformFilename),
+            destination: getDestinationFileName(
+              platformType,
+              file as PlatformFilename,
+              platformType === 'css' ? '' : undefined // keeps custom CSS files outside "tokens" directory
+            ),
             format: getFormatterName(formatterCategory, file)
           }))
         ],

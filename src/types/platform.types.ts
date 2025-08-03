@@ -1,5 +1,5 @@
 import { PlatformConfig } from 'style-dictionary/types';
-import { DesignData } from './generator.types.js';
+import { DesignConfig } from './generator.types.js';
 import { CoreTokenKebabValues } from './tokens.types.js';
 
 //
@@ -37,7 +37,7 @@ export type PlatformContext = {
 
 // This type defines the function that returns the platform context.
 export type PlatformContextGetter = (params: {
-  designData: DesignData;
+  designConfig: DesignConfig;
   prefix?: string;
 }) => PlatformContext;
 
@@ -59,7 +59,8 @@ export enum CommonPlatformFileType {
 
 // This type determines the custom file types for the CSS platform
 export enum CssCustomPlatformFileType {
-  ROOT_FONT_SIZE = 'root-font-size'
+  ROOT_FONT_SIZE = 'root-font-size',
+  FONT_FACES = 'font-faces'
 }
 
 // This type determines the custom file types for the JS platform

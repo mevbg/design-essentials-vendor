@@ -30,7 +30,7 @@ export const fluidHandler = async ({
 
       // Separate fluid and basic tokens
       const { fluidTokens, basicTokens } = separateFluidAndBasicTokens(tokens);
-      const { fluidScaleScheme, baseFontSize } = options?.designData || {};
+      const { fluidScaleScheme, baseFontSize } = options?.designConfig || {};
       const { minViewportW, maxViewportW } = fluidScaleScheme;
       const separation =
         [CustomFormatterCategory.CSS, CustomFormatterCategory.SCSS].includes(category) ||

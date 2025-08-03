@@ -1,11 +1,11 @@
 import chokidar, { type FSWatcher } from 'chokidar';
-import { generateDevClientTokens } from './client/index';
+import { generateDevClientEssentials } from './client/index';
 
-(chokidar.watch([`./src`, `./dev/client`], { ignoreInitial: true }) as FSWatcher).on(
+(chokidar.watch([`./src`, `./client`], { ignoreInitial: true }) as FSWatcher).on(
   'ready',
   async () => {
     try {
-      await generateDevClientTokens();
+      await generateDevClientEssentials();
       console.info('✅ Build completed.');
     } catch (error) {
       console.error('❌ Build failed:', error);

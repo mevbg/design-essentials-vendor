@@ -4,9 +4,9 @@ import { PlatformContextGetter } from '../../types/index.js';
 // It returns the platform context that brings the following info:
 // • a file with all tokens should be created;
 // • a file for each token type should be created;
-export const scss: PlatformContextGetter = ({ designData }) => ({
+export const scss: PlatformContextGetter = ({ designConfig }) => ({
   config: {
-    options: { designData }
+    options: { designConfig }
   },
   allTokensFile: true,
   tokenTypeFiles: true

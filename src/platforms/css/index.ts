@@ -5,15 +5,18 @@ import { CssCustomPlatformFileType, PlatformContextGetter } from '../../types/in
 // • a file with all tokens should be created;
 // • a file for each token type should be created
 // • a custom file for the root font size should be created.
-export const css: PlatformContextGetter = ({ prefix, designData }) => ({
+export const css: PlatformContextGetter = ({ prefix, designConfig }) => ({
   config: {
     prefix,
     options: {
       prefix,
-      designData
+      designConfig
     }
   },
   allTokensFile: true,
   tokenTypeFiles: true,
-  customFiles: [CssCustomPlatformFileType.ROOT_FONT_SIZE]
+  customFiles: [
+    CssCustomPlatformFileType.ROOT_FONT_SIZE,
+    ...(designConfig.fontsPath ? [CssCustomPlatformFileType.FONT_FACES] : [])
+  ]
 });

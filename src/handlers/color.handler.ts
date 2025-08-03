@@ -23,7 +23,7 @@ export const colorHandler = async ({
     parser: (output, wrapper, definer) => {
       // Get the options from the format arguments
       const { options } = formatArgs;
-      const { designData } = options;
+      const { designConfig } = options;
 
       // Parse color scheme tokens
       if (category !== CustomFormatterCategory.JS || type !== JsCustomFormatterType.VARIABLE) {
@@ -35,21 +35,21 @@ export const colorHandler = async ({
         const parsers = {
           css: () => {
             // no method case
-            if (!designData.colorScheme?.method) {
+            if (!designConfig.colorScheme?.method) {
               output.push(
                 wrapper({
                   code: definer({
-                    tokens: colorScheme[designData.colorScheme?.default]
+                    tokens: colorScheme[designConfig.colorScheme?.default]
                   })
                 }) + '\n'
               );
             }
             // media and combined methods
-            if (['media', 'combined'].includes(designData.colorScheme?.method)) {
+            if (['media', 'combined'].includes(designConfig.colorScheme?.method)) {
               output.push(
                 wrapper({
                   code: definer({
-                    tokens: colorScheme[designData.colorScheme?.default]
+                    tokens: colorScheme[designConfig.colorScheme?.default]
                   })
                 }) + '\n'
               );
@@ -65,7 +65,7 @@ export const colorHandler = async ({
               });
             }
             // class and combined methods
-            if (['class', 'combined'].includes(designData.colorScheme?.method)) {
+            if (['class', 'combined'].includes(designConfig.colorScheme?.method)) {
               Object.entries(colorScheme).forEach(([scheme, tokens]) => {
                 output.push(
                   wrapper({
@@ -124,7 +124,7 @@ export const colorHandler = async ({
               .filter(
                 ({ attributes }) =>
                   attributes?.type === 'scheme' &&
-                  attributes?.item === designData.colorScheme.default
+                  attributes?.item === designConfig.colorScheme.default
               )
               .map((token) => {
                 token.path.splice(1, 2);
@@ -132,7 +132,7 @@ export const colorHandler = async ({
                 return {
                   ...token,
                   name: token.name.replace(
-                    `Scheme${capitalize(designData.colorScheme.default)}`,
+                    `Scheme${capitalize(designConfig.colorScheme.default)}`,
                     ''
                   ),
                   path: token.path

@@ -7,18 +7,26 @@ import { PlatformType } from './platform.types.js';
 
 //
 // ------------------------------------------------------------
-// DESIGN DATA
+// DESIGN CONFIG
 
 // This is the object that contains the key data
 // necessary for defining typography system,
 // color scheme, typography & layout scaling etc.
-// It is required to be passed to the generator
+// Its content is required to be passed to the generator
 // as part of the GeneratorConfig object.
-export type DesignData = {
-  baseFontSize: number;
-  colorScheme: ColorSchemeConfig;
-  fluidScaleScheme: FluidScaleSchemeConfig;
-  rootScaleScheme: RootScaleSchemeConfig;
+export type DesignConfig = {
+  colorScheme?: ColorSchemeConfig;
+  fluidScaleScheme?: FluidScaleSchemeConfig;
+  rootScaleScheme?: RootScaleSchemeConfig;
+  baseFontSize?: number;
+  icons?: Record<string, string>;
+  fontsPath?: string;
+  scrollbar?: {
+    areaWidth: number;
+    thumbSizeBase: number;
+    thumbSizeOver: number;
+    thumbMinSize: number;
+  };
 };
 
 //
@@ -29,9 +37,10 @@ export type DesignData = {
 // this generator accepts and requires in order to generate
 // a proper output of all design tokens.
 export type GeneratorConfig = {
-  sourcePath: string;
   buildPath: string;
-  prefix?: string;
-  platforms?: PlatformType[];
-  designData: DesignData;
-};
+  tokens: {
+    sourcePath: string;
+    prefix?: string;
+    platforms?: PlatformType[];
+  };
+} & DesignConfig;

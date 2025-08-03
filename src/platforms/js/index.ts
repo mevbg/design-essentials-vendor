@@ -4,11 +4,11 @@ import { JsCustomPlatformFileType, PlatformContextGetter } from '../../types/ind
 // It returns the platform context that brings the following info:
 // • two custom files (static and variable) should be created;
 // • no other files should be created.
-export const js: PlatformContextGetter = ({ prefix, designData }) => ({
+export const js: PlatformContextGetter = ({ prefix, designConfig }) => ({
   config: {
     options: {
       prefix,
-      designData
+      designConfig
     }
   },
   customFiles: Object.values(JsCustomPlatformFileType)
