@@ -4,22 +4,16 @@ import { Format } from 'style-dictionary/types';
 import {
   DEFAULT_BASE_FONT_SIZE,
   DEFAULT_COLOR_SCHEME,
-  DEFAULT_COLOR_SCHEME_METHOD,
-  DEFAULT_FLUID_SCALE_MAX_VIEWPORT,
-  DEFAULT_FLUID_SCALE_MIN_VIEWPORT,
+  DEFAULT_FLUID_SCALE_SCHEME,
+  DEFAULT_ICONOGRAPHY,
   DEFAULT_PLATFORMS,
   DEFAULT_PREFIX,
-  DEFAULT_ROOT_SCALE_MAX_VIEWPORT,
-  DEFAULT_ROOT_SCALE_MIN_VIEWPORT
-} from './constants.js';
+  DEFAULT_ROOT_SCALE_SCHEME,
+  DEFAULT_SCROLLBAR
+} from './config.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
-import type {
-  ColorSchemeMethod,
-  ColorSchemeType,
-  DesignConfig,
-  GeneratorConfig
-} from './types/index.js';
+import type { DesignConfig, GeneratorConfig } from './types/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -32,23 +26,20 @@ import type {
 // - colorScheme: Configuration data for the color scheme
 // - rootScaleScheme: Configuration data for root scale scheme
 // - fluidScaleScheme: Configuration data for fluid scale scheme
+// - fonts: Configuration data for embedded fonts (if such)
+// - iconography: Configuration data for iconography (if such)
+// - scrollbar: Configuration data for scrollbar (if such)
+
 export async function generateDesignEssentials({
   buildPath,
-  baseFontSize = DEFAULT_BASE_FONT_SIZE,
   tokens,
-  colorScheme = {
-    default: DEFAULT_COLOR_SCHEME as ColorSchemeType,
-    method: DEFAULT_COLOR_SCHEME_METHOD as ColorSchemeMethod
-  },
-  rootScaleScheme = {
-    minViewportW: DEFAULT_ROOT_SCALE_MIN_VIEWPORT,
-    maxViewportW: DEFAULT_ROOT_SCALE_MAX_VIEWPORT
-  },
-  fluidScaleScheme = {
-    minViewportW: DEFAULT_FLUID_SCALE_MIN_VIEWPORT,
-    maxViewportW: DEFAULT_FLUID_SCALE_MAX_VIEWPORT
-  },
-  fontsPath
+  baseFontSize = DEFAULT_BASE_FONT_SIZE,
+  colorScheme = DEFAULT_COLOR_SCHEME,
+  rootScaleScheme = DEFAULT_ROOT_SCALE_SCHEME,
+  fluidScaleScheme = DEFAULT_FLUID_SCALE_SCHEME,
+  fonts,
+  iconography,
+  scrollbar
 }: GeneratorConfig): Promise<StyleDictionary> {
   const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
   const designConfig: DesignConfig = {
@@ -56,7 +47,20 @@ export async function generateDesignEssentials({
     colorScheme,
     rootScaleScheme,
     fluidScaleScheme,
-    fontsPath: process.env.FONTS_PATH || fontsPath
+    fonts:
+      fonts || process.env.FONTS_PATH
+        ? {
+            path: fonts?.path || process.env.FONTS_PATH || ''
+          }
+        : undefined,
+    iconography: iconography && {
+      ...DEFAULT_ICONOGRAPHY,
+      ...iconography
+    },
+    scrollbar: scrollbar && {
+      ...DEFAULT_SCROLLBAR,
+      ...scrollbar
+    }
   };
 
   // All custom formats are defined in separated files

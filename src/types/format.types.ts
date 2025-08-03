@@ -66,6 +66,11 @@ export type FormatterTemplateFn = (params: {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
+  customOutputHandler?: (
+    output: string[],
+    formatArgs: FormatFnArguments,
+    config?: OutputConfig
+  ) => Promise<void>;
 }) => Format;
 
 //

@@ -1,6 +1,6 @@
 import path from 'path';
 import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
-import { DesignConfig } from './types/generator.types.js';
+import { DesignConfig } from './types/design.types.js';
 import {
   CommonPlatformFileType,
   CustomFormatterCategory,

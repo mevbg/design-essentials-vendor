@@ -1,5 +1,5 @@
 import { PlatformConfig } from 'style-dictionary/types';
-import { DesignConfig } from './generator.types.js';
+import { type DesignConfig } from './design.types.js';
 import { CoreTokenKebabValues } from './tokens.types.js';
 
 //
@@ -60,7 +60,9 @@ export enum CommonPlatformFileType {
 // This type determines the custom file types for the CSS platform
 export enum CssCustomPlatformFileType {
   ROOT_FONT_SIZE = 'root-font-size',
-  FONT_FACES = 'font-faces'
+  FONT_FACES = 'font-faces',
+  ICONOGRAPHY = 'iconography',
+  SCROLLBAR = 'scrollbar'
 }
 
 // This type determines the custom file types for the JS platform

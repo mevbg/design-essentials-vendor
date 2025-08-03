@@ -1,60 +1,29 @@
-import { Format, FormatFnArguments } from 'style-dictionary/types';
+import { Format } from 'style-dictionary/types';
 import { CssCustomPlatformFileType, CustomFormatterCategory } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,
-  fileHeader,
-  getFormatterName,
+  customFormatterTemplate,
   othersFormatterTemplate
 } from '../../utils/formats.utils.js';
-import { outputFontFaces, outputRootFontSize } from './utils.js';
-
-// This function returns the formatter for the root font size.
-// It is used to generate the separate file with this definition.
-const getRootFontSizeFormatter: () => Format = () => ({
-  name: getFormatterName(CustomFormatterCategory.CSS, CssCustomPlatformFileType.ROOT_FONT_SIZE),
-  format: async function (formatArgs: FormatFnArguments) {
-    // Define the output array
-    const output: string[] = [];
-
-    // Add header to the output array
-    output.push(fileHeader('Root Font Size'));
-
-    // Handle the root font size
-    await outputRootFontSize(output, formatArgs, { noChapterTitle: true });
-
-    // Join the output array into a string and return it
-    return output.join('\n');
-  }
-});
-
-// This function returns the formatter for the font faces.
-// It is used to generate the separate file with this definition.
-const getFontFacesFormatter: () => Format = () => ({
-  name: getFormatterName(CustomFormatterCategory.CSS, CssCustomPlatformFileType.FONT_FACES),
-  format: async function (formatArgs: FormatFnArguments) {
-    if (!formatArgs.options.designConfig.fontsPath) return;
-
-    // Define the output array
-    const output: string[] = [];
-
-    // Add header to the output array
-    output.push(fileHeader('Font Faces'));
-
-    // Handle the font faces
-    await outputFontFaces(output, formatArgs, { noChapterTitle: true });
-
-    // Join the output array into a string and return it
-    return output.join('\n');
-  }
-});
+import {
+  outputFontFaces,
+  outputIconography,
+  outputRootFontSize,
+  outputScrollbar
+} from './parsers/index.js';
 
 // This is the list of formatters for the CSS platform.
 export const cssFormatters: Format[] = [
   ...Object.entries({
-    all: allFormatterTemplate, // Formatter for all tokens
-    core: coreFormatterTemplate, // Formatter for tokens with a core handler
-    others: othersFormatterTemplate // Formatter for non-core tokens
+    // Formatter for all tokens
+    all: allFormatterTemplate,
+
+    // Formatter for tokens with a core handler
+    core: coreFormatterTemplate,
+
+    // Formatter for non-core tokens
+    others: othersFormatterTemplate
   }).map(([name, getFormatter]) =>
     getFormatter({
       name,
@@ -62,11 +31,27 @@ export const cssFormatters: Format[] = [
     })
   ),
 
-  // An individual formatter for the root font size tokens
-  // so to have them in a separate file as well
-  getRootFontSizeFormatter(),
+  ...Object.entries({
+    // An individual formatter for the root font size definition
+    // so to have it in a separate file
+    [CssCustomPlatformFileType.ROOT_FONT_SIZE]: outputRootFontSize,
 
-  // An individual formatter for the font faces
-  // so to have them in a separate file as well
-  getFontFacesFormatter()
+    // An individual formatter for the font face definitions
+    // so to have them in a separate file
+    [CssCustomPlatformFileType.FONT_FACES]: outputFontFaces,
+
+    // An individual formatter for the iconography definitions
+    // so to have them in a separate file
+    [CssCustomPlatformFileType.ICONOGRAPHY]: outputIconography,
+
+    // An individual formatter for the scrollbar styles
+    // so to have them in a separate file
+    [CssCustomPlatformFileType.SCROLLBAR]: outputScrollbar
+  }).map(([name, customOutputHandler]) =>
+    customFormatterTemplate({
+      name,
+      category: CustomFormatterCategory.CSS,
+      customOutputHandler
+    })
+  )
 ];

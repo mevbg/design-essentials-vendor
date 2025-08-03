@@ -1,10 +1,10 @@
-import { BASE_FONT_SIZE } from '../../constants/typography.constants';
+import { baseFontSize } from '../../configs/index.js';
 import { $150, $175, $200, $225, $250, $300, $400, $500 } from '../../constants/sizes.constants';
 
 export default {
   $type: 'fontSize',
   
-  base:           { $value: `${BASE_FONT_SIZE}PX` },
+  base:           { $value: `${baseFontSize}PX` },
   basePercentage: { $value: '62.5%' },
 
    display: { $value: { min: $400, max: $500 } }, // 34x40

@@ -4,11 +4,11 @@ export default {
   size: {
     $type: 'size',
     
-    $050x050: { $value: { min: $050, max: $050 } }, // 4x4
-    $050x075: { $value: { min: $050, max: $075 } }, // 4x6
-    $075x100: { $value: { min: $075, max: $100 } }, // 6x8
-    $075x125: { $value: { min: $075, max: $125 } }, // 6x10
-    $100x150: { $value: { min: $100, max: $150 } }, // 8x12
+    $050x050: { $value: { min: $050, max: $050 } }, //  4x4
+    $050x075: { $value: { min: $050, max: $075 } }, //  4x6
+    $075x100: { $value: { min: $075, max: $100 } }, //  6x8
+    $075x125: { $value: { min: $075, max: $125 } }, //  6x10
+    $100x150: { $value: { min: $100, max: $150 } }, //  8x12
     $125x175: { $value: { min: $125, max: $175 } }, // 10x14
     $150x200: { $value: { min: $150, max: $200 } }, // 12x16
     $175x225: { $value: { min: $175, max: $225 } }, // 14x18

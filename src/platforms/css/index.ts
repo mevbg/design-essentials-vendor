@@ -17,6 +17,8 @@ export const css: PlatformContextGetter = ({ prefix, designConfig }) => ({
   tokenTypeFiles: true,
   customFiles: [
     CssCustomPlatformFileType.ROOT_FONT_SIZE,
-    ...(designConfig.fontsPath ? [CssCustomPlatformFileType.FONT_FACES] : [])
+    ...(designConfig.fonts ? [CssCustomPlatformFileType.FONT_FACES] : []),
+    ...(designConfig.iconography ? [CssCustomPlatformFileType.ICONOGRAPHY] : []),
+    ...(designConfig.scrollbar ? [CssCustomPlatformFileType.SCROLLBAR] : [])
   ]
 });

@@ -41,9 +41,6 @@ export enum CoreToken {
   // Dimensions
   DIMENSIONS = 'dimensions',
 
-  // Icon
-  ICON = 'icon',
-
   // Opacity
   OPACITY = 'opacity',
 

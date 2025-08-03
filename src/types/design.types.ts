@@ -69,3 +69,55 @@ export type RootScaleSchemeConfig = {
   // the root scale scheme is applied. (if in presentation mode)
   maxViewportW: number;
 };
+
+//
+// ------------------------------------------------------------
+// FONTS
+
+export type FontsConfig = {
+  path: string;
+};
+
+//
+// ------------------------------------------------------------
+// ICONOGRAPHY
+
+export type IconographyConfig = {
+  fontFamily?: string;
+  color?: string;
+  list: Record<string, string>;
+};
+
+//
+// ------------------------------------------------------------
+// SCROLLBAR
+
+export type ScrollbarConfig = {
+  areaWidth?: number;
+  thumbSizeBase?: number;
+  thumbSizeOver?: number;
+  thumbMinSize?: number;
+  scrollbarBackground?: string;
+  thumbColor?: string;
+  thumbColorHover?: string;
+  thumbColorActive?: string;
+};
+
+//
+// ------------------------------------------------------------
+// DESIGN CONFIG
+
+// This is the object that contains the key data
+// necessary for defining typography system,
+// color scheme, typography & layout scaling etc.
+// Its content is required to be passed to the generator
+// as part of the GeneratorConfig object.
+export type DesignConfig = {
+  colorScheme?: ColorSchemeConfig;
+  fluidScaleScheme?: FluidScaleSchemeConfig;
+  rootScaleScheme?: RootScaleSchemeConfig;
+  baseFontSize?: number;
+  fonts?: FontsConfig;
+  iconography?: IconographyConfig;
+  scrollbar?: ScrollbarConfig;
+};

@@ -16,6 +16,8 @@ Design Essentials Vendor is not just a design token generator — it’s a compr
 - **Multi-Platform Output**: CSS, SCSS, JavaScript, and JSON formats
 - **Advanced Token Processing**: Specialized handlers for different token types
 - **Font Management**: Automatic font face generation and root font size configuration
+- **Iconography System**: Complete icon font system with CSS attribute selectors
+- **Scrollbar System**: Custom scrollbar styling with WebKit support
 
 ### Supported Platforms
 
@@ -39,7 +41,6 @@ import { generateDesignEssentials } from '@mevbg/dev';
 
 await generateDesignEssentials({
   buildPath: './dist',
-  fontsPath: './fonts',
   baseFontSize: 10,
   tokens: {
     sourcePath: './design/tokens/**/index.ts',
@@ -57,6 +58,29 @@ await generateDesignEssentials({
   rootScaleScheme: {
     minViewportW: 300,
     maxViewportW: 2100
+  },
+  fonts: {
+    path: './fonts'
+  },
+  iconography: {
+    fontFamily: 'DevIcons',
+    color: 'var(--dev-color-content-gray-weak)',
+    list: {
+      main: 'E000',
+      search: 'E002',
+      close: 'E006'
+      // ... more icons
+    }
+  },
+  scrollbar: {
+    areaWidth: 16,
+    thumbSizeBase: 4,
+    thumbSizeOver: 10,
+    thumbMinSize: 80,
+    scrollbarBackground: 'transparent',
+    thumbColor: 'var(--dev-color-content-gray-weak)',
+    thumbColorHover: 'var(--dev-color-content-gray-weak)',
+    thumbColorActive: 'var(--dev-color-content-gray-weak)'
   }
 });
 ```
@@ -76,10 +100,27 @@ type GeneratorConfig = {
     platforms?: PlatformType[]; // Output platforms
   };
   baseFontSize?: number; // Base font size (default: 10)
-  fontsPath?: string; // Path to font files
   colorScheme?: ColorSchemeConfig; // Color scheme configuration
   fluidScaleScheme?: FluidScaleSchemeConfig; // Fluid scaling configuration
-  rootScaleScheme?: RootScaleSchemeConfig; // Root scaling configuration
+  rootScaleScheme?: RootScaleSchemeConfig; // Root scaling configuration,
+  fonts?: {
+    path: string; // Path to font files
+  };
+  iconography?: {
+    fontFamily?: string; // Icon font family (default: 'Iconography')
+    color?: string; // Icon color (default: 'currentColor')
+    list: Record<string, string>; // Icon code mappings
+  };
+  scrollbar?: {
+    areaWidth?: number; // Scrollbar area width
+    thumbSizeBase?: number; // Base thumb size
+    thumbSizeOver?: number; // Thumb size on hover
+    thumbMinSize?: number; // Minimum thumb size
+    scrollbarBackground?: string; // Scrollbar background color
+    thumbColor?: string; // Thumb color
+    thumbColorHover?: string; // Thumb color on hover
+    thumbColorActive?: string; // Thumb color when active
+  };
 };
 ```
 
@@ -116,6 +157,31 @@ type RootScaleSchemeConfig = {
 };
 ```
 
+#### Iconography Configuration
+
+```typescript
+type IconographyConfig = {
+  fontFamily?: string; // Icon font family (default: 'Iconography')
+  color?: string; // Icon color (default: 'currentColor')
+  list: Record<string, string>; // Icon code mappings
+};
+```
+
+#### Scrollbar Configuration
+
+```typescript
+type ScrollbarConfig = {
+  areaWidth?: number; // Scrollbar area width
+  thumbSizeBase?: number; // Base thumb size
+  thumbSizeOver?: number; // Thumb size on hover
+  thumbMinSize?: number; // Minimum thumb size
+  scrollbarBackground?: string; // Scrollbar background color
+  thumbColor?: string; // Thumb color
+  thumbColorHover?: string; // Thumb color on hover
+  thumbColorActive?: string; // Thumb color when active
+};
+```
+
 ## 🏗️ Architecture
 
 ### Core Components
@@ -132,7 +198,13 @@ export async function generateDesignEssentials(config: GeneratorConfig): Promise
 
 Platform-specific configurations and formatters:
 
-- **CSS Platform** (`src/platforms/css/`): CSS custom properties with media queries
+- **CSS Platform** (`src/platforms/css/`): CSS custom properties with media queries and custom parsers
+  - **Formatters** (`formats.ts`): Standard token formatters for CSS output
+  - **Parsers** (`parsers/`): Specialized parsers for custom CSS generation
+    - `root-font-size.ts`: Responsive root font size generation
+    - `font-faces.ts`: Dynamic font face declarations
+    - `iconography.ts`: Icon font system generation
+    - `scrollbar.ts`: WebKit scrollbar styling
 - **SCSS Platform** (`src/platforms/scss/`): SCSS variables and mixins
 - **JavaScript Platform** (`src/platforms/js/`): Static values and variable references
 - **JSON Platform** (`src/platforms/json/`): Structured token data
@@ -161,9 +233,8 @@ enum CoreToken {
   // Color
   COLOR = 'color',
 
-  // Size & Layout
+  // Size
   SIZE = 'size',
-  DIMENSIONS = 'dimensions',
 
   // Border
   BORDER_COLOR = 'borderColor',
@@ -171,13 +242,19 @@ enum CoreToken {
   BORDER_STYLE = 'borderStyle',
   BORDER_WIDTH = 'borderWidth',
 
-  // Effects
+  // Box Shadow
   BOX_SHADOW = 'boxShadow',
+
+  // Breakpoint
+  BREAKPOINT = 'breakpoint',
+
+  // Dimensions
+  DIMENSIONS = 'dimensions',
+
+  // Opacity
   OPACITY = 'opacity',
 
-  // Layout
-  BREAKPOINT = 'breakpoint',
-  ICON = 'icon',
+  // Transition
   TRANSITION = 'transition'
 }
 ```
@@ -243,13 +320,22 @@ design-essentials-vendor/
 │   ├── formats.ts                # Format registration
 │   ├── types/                    # TypeScript type definitions
 │   │   ├── generator.types.ts    # Generator configuration types
-│   │   ├── scheme.types.ts       # Color and scale scheme types
+│   │   ├── design.types.ts       # Design-related types
 │   │   ├── platform.types.ts     # Platform-specific types
 │   │   ├── tokens.types.ts       # Token type definitions
 │   │   ├── format.types.ts       # Format and handler types
 │   │   └── utils.types.ts        # Utility type definitions
 │   ├── platforms/                # Platform-specific implementations
 │   │   ├── css/                  # CSS platform
+│   │   │   ├── index.ts          # Platform configuration
+│   │   │   ├── formats.ts        # CSS formatters
+│   │   │   ├── utils.ts          # CSS utility functions
+│   │   │   └── parsers/          # CSS custom output parsers
+│   │   │       ├── index.ts      # Parser exports
+│   │   │       ├── root-font-size.ts    # Root font size parser
+│   │   │       ├── font-faces.ts        # Font faces parser
+│   │   │       ├── iconography.ts       # Iconography parser
+│   │   │       └── scrollbar.ts         # Scrollbar parser
 │   │   ├── scss/                 # SCSS platform
 │   │   ├── js/                   # JavaScript platform
 │   │   └── json/                 # JSON platform
@@ -290,6 +376,14 @@ client/design/
 │   ├── sizes.constants.ts        # Size definitions
 │   ├── typography.constants.ts   # Typography constants
 │   └── opacities.constants.ts    # Opacity values
+├── configs/                      # Configuration files
+│   ├── fonts.config.ts           # Font configuration
+│   ├── iconography.config.ts     # Iconography configuration
+│   ├── scrollbar.config.ts       # Scrollbar configuration
+│   ├── color-scheme.config.ts    # Color scheme configuration
+│   ├── fluid-scale-scheme.config.ts # Fluid scale configuration
+│   ├── root-scale-scheme.config.ts # Root scale configuration
+│   └── index.ts                  # Config exports
 ├── tokens/                       # Token definitions
 │   ├── color/                    # Color tokens
 │   ├── typography/               # Typography tokens
@@ -298,13 +392,53 @@ client/design/
 │   ├── shadow/                   # Shadow tokens
 │   ├── breakpoint/               # Breakpoint tokens
 │   ├── dimensions/               # Dimension tokens
-│   ├── icon/                     # Icon tokens
 │   └── opacity/                  # Opacity tokens
 └── utils/                        # Design utilities
     ├── colors.utils.ts           # Color transformation utilities
     ├── strings.utils.ts          # String manipulation utilities
     └── units.utils.ts            # Unit conversion utilities
 ```
+
+### Configuration Management
+
+The system now uses a modular configuration approach with separate TypeScript files for each aspect:
+
+```typescript
+// client/design/configs/index.ts
+export * from './fonts.config.js';
+export * from './iconography.config.js';
+export * from './scrollbar.config.js';
+export * from './color-scheme.config.js';
+export * from './fluid-scale-scheme.config.js';
+export * from './root-scale-scheme.config.js';
+```
+
+**Configuration Files:**
+
+- `fonts.config.ts` - Font paths and settings
+- `iconography.config.ts` - Icon font family, colors, and icon mappings
+- `scrollbar.config.ts` - Scrollbar dimensions and colors
+- `color-scheme.config.ts` - Light/dark theme configuration
+- `fluid-scale-scheme.config.ts` - Responsive scaling viewport ranges
+- `root-scale-scheme.config.ts` - Root font scaling configuration
+
+### CSS Platform Parsers
+
+The CSS platform includes specialized parsers for generating custom output files:
+
+**Parser System:**
+
+- **Root Font Size Parser** (`root-font-size.ts`) - Generates responsive root font size CSS with media queries for different viewport ranges
+- **Font Faces Parser** (`font-faces.ts`) - Scans font directories and generates `@font-face` declarations for all available font weights and styles
+- **Iconography Parser** (`iconography.ts`) - Generates CSS for icon font system using `data-i` attribute selectors
+- **Scrollbar Parser** (`scrollbar.ts`) - Generates comprehensive WebKit scrollbar styling with hover and active states
+
+**Parser Features:**
+
+- **Modular Architecture**: Each parser is a separate module with focused responsibility
+- **Dynamic Generation**: Font faces parser automatically scans directories for available fonts
+- **Responsive Design**: Root font size parser creates media query breakpoints for different viewport sizes
+- **Custom Styling**: Iconography and scrollbar parsers generate complete CSS systems with multiple states
 
 ### Token Transformation
 
@@ -349,7 +483,7 @@ npm run clean:all
 ### Development Workflow
 
 1. **Token Definition**: Define tokens in `client/design/tokens/`
-2. **Configuration**: Update constants in `client/constants.ts`
+2. **Configuration**: Update configuration files in `client/design/configs/`
 3. **Generation**: Run `npm run dev:generate` to generate outputs
 4. **Integration**: Use generated files in your projects
 
@@ -385,7 +519,9 @@ dist/css/
 │   ├── opacity.css               # Opacity tokens only
 │   └── others.css                # Other token types
 ├── root-font-size.css            # Root font size configuration
-└── font-faces.css                # Font face declarations
+├── font-faces.css                # Font face declarations
+├── iconography.css               # Iconography definitions
+└── scrollbar.css                 # Scrollbar styles
 ```
 
 ### SCSS Platform Output
@@ -424,6 +560,99 @@ dist/json/
 ```
 
 ## 🎯 Advanced Features
+
+### Iconography System
+
+The system includes a comprehensive iconography solution that generates CSS for icon fonts using attribute selectors:
+
+```css
+/* Generated CSS for iconography */
+[data-i] {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: var(--dev-color-content-gray-weak);
+  font-family: DevIcons;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+}
+
+[data-i]::after {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  font-size: 1.25em;
+  line-height: 0.6em;
+}
+
+[data-i='search']::after {
+  content: '\E002';
+}
+
+[data-i='close']::after {
+  content: '\E006';
+}
+```
+
+**Usage in HTML:**
+
+```html
+<span data-i="search"></span> <span data-i="close"></span>
+```
+
+### Scrollbar System
+
+The system includes a comprehensive scrollbar styling solution that generates CSS for custom scrollbars:
+
+```css
+/* Generated CSS for scrollbar */
+html:not(.isMacOs) {
+  --scrollbar-area: 16px;
+  --scrollbar-thumb-size-base: 4px;
+  --scrollbar-thumb-size-over: 10px;
+  --scrollbar-gap-size-base: calc((var(--scrollbar-area) - var(--scrollbar-thumb-size-base)) / 2);
+  --scrollbar-gap-size-over: calc((var(--scrollbar-area) - var(--scrollbar-thumb-size-over)) / 2);
+  --scrollbar-background: transparent;
+  --scrollbar-thumb-color: var(--dev-color-content-gray-weak);
+  --scrollbar-thumb-color-hover: var(--dev-color-content-gray-weak);
+  --scrollbar-thumb-color-active: var(--dev-color-content-gray-weak);
+  --scrollbar-thumb-min-size: 80px;
+
+  /* Scrollbar area */
+  ::-webkit-scrollbar:vertical {
+    width: var(--scrollbar-area);
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: var(--scrollbar-area);
+  }
+
+  /* Track and thumb styling */
+  ::-webkit-scrollbar-track-piece {
+    border: var(--scrollbar-gap-size-base) solid transparent;
+    border-radius: var(--scrollbar-thumb-size-base);
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: var(--scrollbar-gap-size-base) solid transparent;
+    border-radius: var(--scrollbar-area);
+    background: var(--scrollbar-thumb-color);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    --scrollbar-thumb-color: var(--scrollbar-thumb-color-hover);
+    border: var(--scrollbar-gap-size-over) solid transparent;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    --scrollbar-thumb-color: var(--scrollbar-thumb-color-active);
+    border: var(--scrollbar-gap-size-over) solid transparent;
+  }
+}
+```
 
 ### Fluid Typography
 

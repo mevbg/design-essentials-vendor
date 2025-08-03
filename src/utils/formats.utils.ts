@@ -11,7 +11,7 @@ import {
   WrapperParams
 } from '../types/index.js';
 import { PlatformFilename, PlatformType } from '../types/platform.types.js';
-import { capitalize, toSpaceCase } from './strings.utils.js';
+import { capitalize, toCamelCase, toSpaceCase } from './strings.utils.js';
 import { tokenIsFluid } from './tokens/fluid-tokens.utils.js';
 
 // Returns an object of core tokens keys with handlers builders for each type
@@ -237,6 +237,29 @@ export const othersFormatterTemplate: FormatterTemplateFn = ({ name, category, t
         config: { noChapterTitle: true }
       })
     );
+
+    // Join the output array into a string and return it
+    return output.join('\n');
+  }
+});
+
+// This function represents a template for a format config
+// that prepares one for formatting a custom output.
+export const customFormatterTemplate: FormatterTemplateFn = ({
+  name,
+  category,
+  customOutputHandler = () => Promise.resolve()
+}) => ({
+  name: getFormatterName(category, name),
+  format: async function (formatArgs: FormatFnArguments) {
+    // Define the output array
+    const output: string[] = [];
+
+    // Add header to the output array
+    output.push(fileHeader(toSpaceCase(toCamelCase(name))));
+
+    // Handle the output
+    await customOutputHandler(output, formatArgs, { noChapterTitle: true });
 
     // Join the output array into a string and return it
     return output.join('\n');
