@@ -66,6 +66,7 @@
     "npm": ">=10.x"
   },
   "dependencies": {
+    "favicons": "^7.2.0",
     "style-dictionary": "^5.0.1"
   },
   "devDependencies": {
