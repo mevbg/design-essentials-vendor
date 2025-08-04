@@ -13,7 +13,7 @@ export const generateDevClientEssentials: () => Promise<void> = async () => {
 
   try {
     await generateDesignEssentials({
-      buildPath: path.resolve(__dirname, 'dist'),
+      buildPath: path.resolve(__dirname, './design/dist'),
       baseFontSize,
       tokens: {
         sourcePath: path.resolve(__dirname, './design/tokens/**/index.ts'),
