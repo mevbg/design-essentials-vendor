@@ -75,7 +75,7 @@ export const getDestinationFileName = (
   platformType: PlatformType,
   name: PlatformFilename,
   dir = 'tokens'
-) => `${dir ? `${dir}/` : ''}${name}.${platformType}`;
+) => `${dir ? `${dir}/` : ''}/${platformType}/${name}.${platformType}`;
 
 // Returns a formatter name
 export const getFormatterName = (category: CustomFormatterCategory, name: string) =>

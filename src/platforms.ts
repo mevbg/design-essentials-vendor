@@ -68,7 +68,7 @@ export const getPlatformConfigs = async ({
       // Prepare the platform config with the received context
       const platformConfig: PlatformConfig = {
         transformGroup: platformType,
-        buildPath: `${path.resolve(buildPath)}/${platformType}`,
+        buildPath: `${path.resolve(buildPath)}`,
         files: [
           // if allTokensFile is true, a file with all tokens should be created
           ...(allTokensFile
