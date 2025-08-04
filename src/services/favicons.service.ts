@@ -59,8 +59,8 @@ export const generateFavicons = async ({
     })
   ]);
 
-  console.log(`Favicons generated successfully in: ${resolvedOutputPath}`);
-  console.log(
+  console.info(`Favicons generated successfully in: ${resolvedOutputPath}`);
+  console.info(
     `Generated ${faviconsResult.images.length} images and ${faviconsResult.files.length} files`
   );
 };
