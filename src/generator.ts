@@ -1,19 +1,6 @@
 import path from 'path';
-import StyleDictionary from 'style-dictionary';
-import { Format } from 'style-dictionary/types';
-import {
-  DEFAULT_BASE_FONT_SIZE,
-  DEFAULT_COLOR_SCHEME,
-  DEFAULT_FLUID_SCALE_SCHEME,
-  DEFAULT_ICONOGRAPHY,
-  DEFAULT_PLATFORMS,
-  DEFAULT_PREFIX,
-  DEFAULT_ROOT_SCALE_SCHEME,
-  DEFAULT_SCROLLBAR
-} from './config.js';
-import * as formats from './formats.js';
-import { getPlatformConfigs } from './platforms.js';
-import type { DesignConfig, GeneratorConfig } from './types/index.js';
+import { generateDictionary, generateFavicons } from './services/index.js';
+import type { GeneratorConfig } from './types/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -29,70 +16,24 @@ import type { DesignConfig, GeneratorConfig } from './types/index.js';
 // - fonts: Configuration data for embedded fonts (if such)
 // - iconography: Configuration data for iconography (if such)
 // - scrollbar: Configuration data for scrollbar (if such)
-
+// - favicons: Configuration data for favicons (if such)
 export async function generateDesignEssentials({
-  buildPath,
-  tokens,
-  baseFontSize = DEFAULT_BASE_FONT_SIZE,
-  colorScheme = DEFAULT_COLOR_SCHEME,
-  rootScaleScheme = DEFAULT_ROOT_SCALE_SCHEME,
-  fluidScaleScheme = DEFAULT_FLUID_SCALE_SCHEME,
-  fonts,
-  iconography,
-  scrollbar
-}: GeneratorConfig): Promise<StyleDictionary> {
-  const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
-  const designConfig: DesignConfig = {
-    baseFontSize,
-    colorScheme,
-    rootScaleScheme,
-    fluidScaleScheme,
-    fonts:
-      fonts || process.env.FONTS_PATH
-        ? {
-            path: fonts?.path || process.env.FONTS_PATH || ''
-          }
-        : undefined,
-    iconography: iconography && {
-      ...DEFAULT_ICONOGRAPHY,
-      ...iconography
-    },
-    scrollbar: scrollbar && {
-      ...DEFAULT_SCROLLBAR,
-      ...scrollbar
-    }
-  };
+  favicons: faviconsConfig,
+  ...generalConfig
+}: GeneratorConfig): Promise<void> {
+  await Promise.all([
+    // Generate the CSS essentials, the design tokens
+    // and return the StyleDictionary instance
+    generateDictionary(generalConfig),
 
-  // All custom formats are defined in separated files
-  // based on the platform type (platforms/**/formats.ts)
-  // and are collected and exported by the formats.ts file
-  // so to be imported all at once in here,
-  // where they get registered in the StyleDictionary instance,
-  // by being gathered in a flat array and iterated over.
-  Object.values(formats)
-    .flatMap((formatterGroup) => Object.values(formatterGroup))
-    .forEach((format: Format) => {
-      StyleDictionary.registerFormat(format);
-    });
-
-  // Resolve the source path
-  const source = [path.resolve(sourcePath)];
-
-  // Get the platform configs
-  const platformConfigs = await getPlatformConfigs({
-    platforms,
-    buildPath,
-    designConfig,
-    prefix
-  });
-
-  // Define the StyleDictionary instance
-  // with the resolved source path and the platform configs
-  const dictionary = new StyleDictionary({
-    source,
-    platforms: platformConfigs
-  });
-
-  // Generate the design tokens and return the StyleDictionary instance
-  return dictionary.buildAllPlatforms();
+    // Generate favicons (if config is provided)
+    ...(faviconsConfig
+      ? [
+          generateFavicons({
+            ...faviconsConfig,
+            outputPath: faviconsConfig.outputPath || path.join(generalConfig.buildPath, 'favicons')
+          })
+        ]
+      : [])
+  ]);
 }

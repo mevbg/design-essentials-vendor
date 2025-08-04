@@ -1,4 +1,4 @@
-import { type Kebab } from './utils.types.js';
+import type { Kebab } from './utils.types.js';
 
 //
 // ------------------------------------------------------------

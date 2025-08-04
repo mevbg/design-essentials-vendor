@@ -1,5 +1,5 @@
 import { PlatformConfig } from 'style-dictionary/types';
-import { type DesignConfig } from './design.types.js';
+import type { DesignConfig } from './design.types.js';
 import { CoreTokenKebabValues } from './tokens.types.js';
 
 //

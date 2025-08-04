@@ -1,4 +1,4 @@
-import { type FormatFnArguments } from 'style-dictionary/types';
+import type { FormatFnArguments } from 'style-dictionary/types';
 import {
   CssCustomPlatformFileType,
   CustomFormatterCategory,

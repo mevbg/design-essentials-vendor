@@ -18,6 +18,7 @@ Design Essentials Vendor is not just a design token generator — it’s a compr
 - **Font Management**: Automatic font face generation and root font size configuration
 - **Iconography System**: Complete icon font system with CSS attribute selectors
 - **Scrollbar System**: Custom scrollbar styling with WebKit support
+- **Favicons Generation**: Automatic favicon generation for all platforms and devices
 
 ### Supported Platforms
 
@@ -81,6 +82,14 @@ await generateDesignEssentials({
     thumbColor: 'var(--dev-color-content-gray-weak)',
     thumbColorHover: 'var(--dev-color-content-gray-weak)',
     thumbColorActive: 'var(--dev-color-content-gray-weak)'
+  },
+  favicons: {
+    id: 'https://mev.bg',
+    sourcePath: './images/logo.svg',
+    appName: 'Client Design Essentials',
+    appShortName: 'CDE',
+    appDescription: 'Client Design Essentials',
+    version: '1.0.0'
   }
 });
 ```
@@ -120,6 +129,15 @@ type GeneratorConfig = {
     thumbColor?: string; // Thumb color
     thumbColorHover?: string; // Thumb color on hover
     thumbColorActive?: string; // Thumb color when active
+  };
+  favicons?: {
+    id: string; // Unique identifier for the app
+    sourcePath: string; // Path to source SVG/PNG image
+    outputPath?: string; // Output directory for favicons (optional)
+    appName: string; // Full application name
+    appShortName: string; // Short application name
+    appDescription: string; // Application description
+    version: string; // Application version
   };
 };
 ```
@@ -182,6 +200,37 @@ type ScrollbarConfig = {
 };
 ```
 
+#### Favicons Configuration
+
+```typescript
+type FaviconsConfig = {
+  id: string; // Unique identifier for the app
+  sourcePath: string; // Path to source SVG/PNG image
+  outputPath?: string; // Output directory for favicons (optional)
+  appName: string; // Full application name
+  appShortName: string; // Short application name
+  appDescription: string; // Application description
+  version: string; // Application version
+  // Additional favicon options from favicons package
+  developerName?: string;
+  developerURL?: string;
+  background?: string;
+  theme_color?: string;
+  display?: string;
+  orientation?: string;
+  scope?: string;
+  start_url?: string;
+  icons?: {
+    android?: boolean | object;
+    appleIcon?: boolean | object;
+    appleStartup?: boolean | object;
+    favicons?: boolean | object;
+    windows?: boolean | object;
+    yandex?: boolean | object;
+  };
+};
+```
+
 ## 🏗️ Architecture
 
 ### Core Components
@@ -191,10 +240,17 @@ type ScrollbarConfig = {
 The main entry point that orchestrates the entire generation process:
 
 ```typescript
-export async function generateDesignEssentials(config: GeneratorConfig): Promise<StyleDictionary>;
+export async function generateDesignEssentials(config: GeneratorConfig): Promise<void>;
 ```
 
-#### 2. Platform System (`src/platforms/`)
+#### 2. Services (`src/services/`)
+
+Service modules for different generation tasks:
+
+- **Style Dictionary Service** (`style-dictionary.service.ts`): Handles design token generation
+- **Favicons Service** (`favicons.service.ts`): Handles favicon generation for all platforms
+
+#### 3. Platform System (`src/platforms/`)
 
 Platform-specific configurations and formatters:
 
@@ -209,7 +265,7 @@ Platform-specific configurations and formatters:
 - **JavaScript Platform** (`src/platforms/js/`): Static values and variable references
 - **JSON Platform** (`src/platforms/json/`): Structured token data
 
-#### 3. Token Handlers (`src/handlers/`)
+#### 4. Token Handlers (`src/handlers/`)
 
 Specialized processors for different token types:
 
@@ -217,7 +273,7 @@ Specialized processors for different token types:
 - **Color Handler** (`color.handler.ts`): Color scheme and theme management
 - **Fluid Handler** (`fluid.handler.ts`): Responsive value generation
 
-#### 4. Token Types (`src/types/tokens.types.ts`)
+#### 5. Token Types (`src/types/tokens.types.ts`)
 
 Core token definitions:
 
@@ -315,9 +371,12 @@ Color tokens support light/dark schemes:
 design-essentials-vendor/
 ├── src/
 │   ├── generator.ts              # Main generator function
-│   ├── platforms.ts              # Platform configuration management
-│   ├── constants.ts              # Default configuration values
+│   ├── configs.ts                # Default configuration values
 │   ├── formats.ts                # Format registration
+│   ├── services/                 # Service modules
+│   │   ├── index.ts              # Service exports
+│   │   ├── favicons.service.ts   # Favicon generation service
+│   │   └── style-dictionary.service.ts # Style Dictionary service
 │   ├── types/                    # TypeScript type definitions
 │   │   ├── generator.types.ts    # Generator configuration types
 │   │   ├── design.types.ts       # Design-related types
@@ -380,10 +439,13 @@ client/design/
 │   ├── fonts.config.ts           # Font configuration
 │   ├── iconography.config.ts     # Iconography configuration
 │   ├── scrollbar.config.ts       # Scrollbar configuration
+│   ├── favicons.config.ts        # Favicons configuration
 │   ├── color-scheme.config.ts    # Color scheme configuration
 │   ├── fluid-scale-scheme.config.ts # Fluid scale configuration
 │   ├── root-scale-scheme.config.ts # Root scale configuration
 │   └── index.ts                  # Config exports
+├── images/                       # Source images
+│   └── logo.svg                  # Logo for favicon generation
 ├── tokens/                       # Token definitions
 │   ├── color/                    # Color tokens
 │   ├── typography/               # Typography tokens
@@ -408,6 +470,7 @@ The system now uses a modular configuration approach with separate TypeScript fi
 export * from './fonts.config.js';
 export * from './iconography.config.js';
 export * from './scrollbar.config.js';
+export * from './favicons.config.js';
 export * from './color-scheme.config.js';
 export * from './fluid-scale-scheme.config.js';
 export * from './root-scale-scheme.config.js';
@@ -418,6 +481,7 @@ export * from './root-scale-scheme.config.js';
 - `fonts.config.ts` - Font paths and settings
 - `iconography.config.ts` - Icon font family, colors, and icon mappings
 - `scrollbar.config.ts` - Scrollbar dimensions and colors
+- `favicons.config.ts` - Favicon generation configuration
 - `color-scheme.config.ts` - Light/dark theme configuration
 - `fluid-scale-scheme.config.ts` - Responsive scaling viewport ranges
 - `root-scale-scheme.config.ts` - Root font scaling configuration
@@ -524,6 +588,20 @@ dist/css/
 └── scrollbar.css                 # Scrollbar styles
 ```
 
+### Favicons Output
+
+```text
+dist/favicons/
+├── android-chrome-192x192.png    # Android Chrome icon
+├── android-chrome-512x512.png    # Android Chrome icon (large)
+├── apple-touch-icon.png          # Apple touch icon
+├── favicon-16x16.png             # Standard favicon
+├── favicon-32x32.png             # Standard favicon (large)
+├── favicon.ico                   # ICO format favicon
+├── manifest.webmanifest          # Web app manifest
+└── site.webmanifest              # Alternative manifest
+```
+
 ### SCSS Platform Output
 
 ```text
@@ -600,6 +678,36 @@ The system includes a comprehensive iconography solution that generates CSS for 
 ```html
 <span data-i="search"></span> <span data-i="close"></span>
 ```
+
+### Favicons System
+
+The system includes a comprehensive favicon generation solution that creates favicons for all platforms and devices:
+
+```typescript
+// Favicon configuration
+favicons: {
+  id: 'https://mev.bg',
+  sourcePath: './images/logo.svg',
+  appName: 'Client Design Essentials',
+  appShortName: 'CDE',
+  appDescription: 'Client Design Essentials',
+  version: '1.0.0'
+}
+```
+
+**Generated Files:**
+
+- **Android Icons**: `android-chrome-192x192.png`, `android-chrome-512x512.png`
+- **Apple Icons**: `apple-touch-icon.png`
+- **Standard Favicons**: `favicon-16x16.png`, `favicon-32x32.png`, `favicon.ico`
+- **Web App Manifest**: `manifest.webmanifest`, `site.webmanifest`
+
+**Features:**
+
+- **Multi-Platform Support**: Generates icons for Android, iOS, Windows, and web browsers
+- **Automatic Sizing**: Creates all required sizes automatically
+- **Web App Manifest**: Generates PWA manifest with proper configuration
+- **Maskable Icons**: Supports maskable icons for modern PWA features
 
 ### Scrollbar System
 

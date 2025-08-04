@@ -1,4 +1,4 @@
-import { type IconographyConfig } from '../../../src/types/design.types.js';
+import type { IconographyConfig } from '../../../src/types/design.types.js';
 
 export const iconography: IconographyConfig = {
   fontFamily: 'DevIcons', // optional (Iconography by default)

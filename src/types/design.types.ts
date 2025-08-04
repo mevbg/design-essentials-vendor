@@ -1,3 +1,6 @@
+import type { FaviconOptions } from 'favicons';
+import type { EnforceRequired } from './utils.types.js';
+
 //
 // ------------------------------------------------------------
 // COLOR SCHEME
@@ -105,6 +108,21 @@ export type ScrollbarConfig = {
 
 //
 // ------------------------------------------------------------
+// FAVICONS
+
+// For more information on the favicons configuration,
+// see the following link: https://www.npmjs.com/package/favicons
+export type FaviconsConfig = {
+  id: string;
+  sourcePath: string;
+  outputPath?: string;
+} & EnforceRequired<
+  Omit<FaviconOptions, 'path'>,
+  'appName' | 'appShortName' | 'appDescription' | 'version'
+>;
+
+//
+// ------------------------------------------------------------
 // DESIGN CONFIG
 
 // This is the object that contains the key data
@@ -120,4 +138,5 @@ export type DesignConfig = {
   fonts?: FontsConfig;
   iconography?: IconographyConfig;
   scrollbar?: ScrollbarConfig;
+  favicons?: FaviconsConfig;
 };

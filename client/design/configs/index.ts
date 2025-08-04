@@ -4,6 +4,7 @@ export * from './root-scale-scheme.config.js';
 export * from './fonts.config.js';
 export * from './iconography.config.js';
 export * from './scrollbar.config.js';
+export * from './favicons.config.js';
 
 export { BASE_FONT_SIZE as baseFontSize } from '../constants/typography.constants.js';
 

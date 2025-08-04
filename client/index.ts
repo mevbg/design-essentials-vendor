@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { type GeneratorConfig } from '../src/types/generator.types.js';
+import type { GeneratorConfig } from '../src/types/generator.types.js';
 import * as configs from './design/configs/index.js';
 
 const { baseFontSize, platforms, prefix, ...restConfigs } = configs;

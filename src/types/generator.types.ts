@@ -1,4 +1,4 @@
-import { type DesignConfig } from './design.types.js';
+import type { DesignConfig } from './design.types.js';
 import { PlatformType } from './platform.types.js';
 
 //

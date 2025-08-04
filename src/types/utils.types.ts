@@ -5,3 +5,7 @@ export type Kebab<T extends string> = T extends `${infer F}${infer R}`
     ? `${Lowercase<F>}${Kebab<R>}`
     : `${Lowercase<F>}-${Kebab<Uncapitalize<R>>}`
   : T;
+
+// This is a utility type that enforces required properties on a type.
+// It is used to ensure that certain properties are required in a type.
+export type EnforceRequired<T, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>;
