@@ -2,7 +2,7 @@ import { PlatformConfig } from 'style-dictionary/types';
 import { CoreTokenKebabValues, TokensDesignData } from './tokens.types.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // PLATFORM TYPES
 
 // This enum contains the types of platforms that are supported.
@@ -14,7 +14,7 @@ export enum PlatformType {
 }
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // PLATFORM CONTEXT
 
 // This type defines the platform context that is returned by the platform context getter.
@@ -41,7 +41,7 @@ export type PlatformContextGetter = (params: {
 }) => PlatformContext;
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FILE TYPES
 
 // This type determines the common file types for CSS & SCSS platforms
@@ -66,7 +66,7 @@ export enum JsCustomPlatformFileType {
 }
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FILE NAMES
 
 // This type contains the names of all possible output files for the CSS platform

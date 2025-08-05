@@ -1,43 +1,29 @@
-import type { FormatFnArguments } from 'style-dictionary/types';
-import {
-  CssCustomPlatformFileType,
-  CustomFormatterCategory,
-  OutputConfig
-} from '../../../types/index.js';
-import { getFileOutput } from '../../../utils/formats.utils.js';
-import { toCamelCase } from '../../../utils/strings.utils.js';
+/* =================================================== */
+/* SCROLLBAR → PARSER */
+/* =================================================== */
+
+import { ScrollbarConfig, ServiceParams } from '../../types/index.js';
+import { cssSelectorBlock } from '../../utils/formats.utils.js';
 
 // This function outputs the scrollbar styles
-export const outputScrollbar = async (
-  output: string[],
-  formatArgs: FormatFnArguments,
-  config?: OutputConfig
-): Promise<void> => {
+export const outputScrollbar = (output: string[], params: ServiceParams<ScrollbarConfig>) => {
   output.push(
-    await getFileOutput({
-      name: toCamelCase(CssCustomPlatformFileType.SCROLLBAR),
-      category: CustomFormatterCategory.CSS,
-      config,
-      parser: (output, wrapper) => {
-        const { scrollbar } = formatArgs.options.designData;
-
-        output.push(
-          wrapper({
-            name: 'html:not(.isMacOs)',
-            code: `  --scrollbar-area: ${scrollbar.areaWidth}px;
-  --scrollbar-thumb-size-base: ${scrollbar.thumbSizeBase}px;
-  --scrollbar-thumb-size-over: ${scrollbar.thumbSizeOver}px;
+    cssSelectorBlock({
+      name: 'html:not(.isMacOs)',
+      code: `  --scrollbar-area: ${params.areaWidth}px;
+  --scrollbar-thumb-size-base: ${params.thumbSizeBase}px;
+  --scrollbar-thumb-size-over: ${params.thumbSizeOver}px;
   --scrollbar-gap-size-base: calc(
     (var(--scrollbar-area) - var(--scrollbar-thumb-size-base)) / 2
   ); /* 6px */
   --scrollbar-gap-size-over: calc(
     (var(--scrollbar-area) - var(--scrollbar-thumb-size-over)) / 2
   ); /* 3px */
-  --scrollbar-background: ${scrollbar.scrollbarBackground};
-  --scrollbar-thumb-color: ${scrollbar.thumbColor};
-  --scrollbar-thumb-color-hover: ${scrollbar.thumbColorHover};
-  --scrollbar-thumb-color-active: ${scrollbar.thumbColorActive};
-  --scrollbar-thumb-min-size: ${scrollbar.thumbMinSize}px;
+  --scrollbar-background: ${params.scrollbarBackground};
+  --scrollbar-thumb-color: ${params.thumbColor};
+  --scrollbar-thumb-color-hover: ${params.thumbColorHover};
+  --scrollbar-thumb-color-active: ${params.thumbColorActive};
+  --scrollbar-thumb-min-size: ${params.thumbMinSize}px;
 
   /* Scrollbar area */
   ::-webkit-scrollbar:vertical {
@@ -117,9 +103,8 @@ export const outputScrollbar = async (
   ::-webkit-scrollbar-button {
     display: none;
   }`
-          })
-        );
-      }
-    })
+    }) + '\n'
   );
+
+  return `${output.join('\n')}\n`;
 };

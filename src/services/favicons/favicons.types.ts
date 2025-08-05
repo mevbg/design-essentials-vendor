@@ -1,9 +1,13 @@
+/* =================================================== */
+/* ICONS → TYPES */
+/* =================================================== */
+
 import type { FaviconOptions } from 'favicons';
-import type { EnforceRequired } from '../../../types/utils.types.js';
+import type { EnforceRequired } from '../../types/utils.types.js';
 
 //
-// ------------------------------------------------------------
-// FAVICONS
+// ---------------------------------------------------
+// CONFIG
 
 // For more information on the favicons configuration,
 // see the following link: https://www.npmjs.com/package/favicons

@@ -2,7 +2,8 @@ import favicons from 'favicons';
 import fs from 'fs/promises';
 import path from 'path';
 import { DEFAULT_FAVICONS_CONFIG } from '../../configs.js';
-import type { FaviconsConfig, ServiceParams } from '../../types/index.js';
+import type { ServiceParams } from '../../types/index.js';
+import type { FaviconsConfig } from './favicons.types.js';
 
 // This function generates favicons and prints them out into files
 export const faviconsService = async ({

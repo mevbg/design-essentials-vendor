@@ -1,7 +1,7 @@
 import type { PlatformType } from './platform.types.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // COLOR SCHEME
 
 // These are the only available native color schemes that can be used.
@@ -38,7 +38,7 @@ export type ColorSchemeConfig = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FLUID SCALER
 
 // The Fluid Scaler is the one that takes care of the gradual scaling of typography
@@ -55,7 +55,7 @@ export type FluidScalerConfig = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // TOKENS
 
 // This is the object that contains the key data

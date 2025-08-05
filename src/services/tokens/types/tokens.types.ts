@@ -2,7 +2,7 @@ import type { Kebab } from '../../../types/utils.types.js';
 import type { ColorSchemeConfig, FluidScalerConfig } from './config.types.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // CORE TOKENS
 
 // Core tokens are those tokens that are most often the subject of definitions

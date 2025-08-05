@@ -1,20 +1,12 @@
+/* =================================================== */
+/* FONT FACES → PARSER */
+/* =================================================== */
+
 import fs from 'fs';
 import path from 'path';
 import { FormatFnArguments } from 'style-dictionary/types';
-import {
-  CssCustomPlatformFileType,
-  CustomFormatterCategory,
-  OutputConfig
-} from '../../../types/index.js';
-import { getFileOutput, tab } from '../../../../../utils/formats.utils.js';
-import { toCamelCase, toSpaceCase } from '../../../../../utils/strings.utils.js';
-
-type FontFace = {
-  'font-family': string;
-  'font-style': string;
-  'font-weight': number;
-  src: string;
-};
+import { FontFace, FontFacesConfig, ServiceParams } from '../../types/index.js';
+import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 
 // This function scans the given fonts directory for any available typefaces
 // and returns an array of typefaces with their weights and files
@@ -77,18 +69,17 @@ function getTypefaces(dir: string): { name: string; weights: Record<string, stri
 
 // This function prepares the array
 // of all available font faces that should be in the output
-function getFontFaces(formatArgs: FormatFnArguments): FontFace[] {
-  const { fonts } = formatArgs.options.designData;
+function getFontFaces(fontsPath: string, formatArgs: FormatFnArguments): FontFace[] {
   const { fontWeight: fontWeightTokens } = formatArgs.dictionary.tokens;
 
-  // if no fonts path or font weight tokens are available at all,
+  // if no fontsPath or font weight tokens are available at all,
   // do nothing and exit
-  if (!fonts?.path || !fontWeightTokens) {
+  if (!fontsPath || !fontWeightTokens) {
     return [];
   }
 
   const fontFaces: FontFace[] = [];
-  const typefaces = getTypefaces(fonts.path);
+  const typefaces = getTypefaces(fontsPath);
   typefaces.forEach((typeface) => {
     const { name: typefaceName, weights: typefaceWeights } = typeface;
     const typefaceFontWeightTokens = Object.keys(fontWeightTokens)
@@ -118,7 +109,7 @@ function getFontFaces(formatArgs: FormatFnArguments): FontFace[] {
               'font-family': typefaceName,
               'font-style': file.includes('Italic') ? 'italic' : 'normal',
               'font-weight': fontWeight,
-              src: `url('../../../${path.join(`${fonts.path}/${typefaceName}`, file)}') format('woff2')`
+              src: `url('../../../${path.join(`${fontsPath}/${typefaceName}`, file)}') format('woff2')`
             });
           });
         }
@@ -129,34 +120,27 @@ function getFontFaces(formatArgs: FormatFnArguments): FontFace[] {
 }
 
 // This function outputs the font faces (if such)
-export const outputFontFaces = async (
+export const outputFontFaces = (
   output: string[],
-  formatArgs: FormatFnArguments,
-  config?: OutputConfig
-): Promise<void> => {
-  output.push(
-    await getFileOutput({
-      name: toSpaceCase(toCamelCase(CssCustomPlatformFileType.FONT_FACES)),
-      category: CustomFormatterCategory.CSS,
-      config,
-      parser: (output, wrapper) => {
-        // conditions:
-        // • only woff2 files, one per font weight is expected
-        // • every italic file for a given weight is expected to be named like the regular file with 'Italic' suffix
+  params: ServiceParams<FontFacesConfig>,
+  formatArgs?: FormatFnArguments
+) => {
+  // conditions:
+  // • only woff2 files, one per font weight is expected
+  // • every italic file for a given weight is expected to be named like the regular file with 'Italic' suffix
 
-        const fontFaces: FontFace[] = getFontFaces(formatArgs);
+  const fontFaces: FontFace[] = formatArgs ? getFontFaces(params.path, formatArgs) : [];
 
-        fontFaces.forEach((fontFace, index) => {
-          output.push(
-            wrapper({
-              name: `@font-face`,
-              code: Object.entries(fontFace)
-                .map(([key, value]) => `${tab()}${key}: ${value};`)
-                .join('\n')
-            }) + (index < fontFaces.length - 1 ? '\n' : '')
-          );
-        });
-      }
-    })
-  );
+  fontFaces.forEach((fontFace) => {
+    output.push(
+      cssSelectorBlock({
+        name: `@font-face`,
+        code: Object.entries(fontFace)
+          .map(([key, value]) => `${tab()}${key}: ${value};`)
+          .join('\n')
+      }) + '\n'
+    );
+  });
+
+  return `${output.join('\n')}\n`;
 };

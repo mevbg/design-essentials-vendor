@@ -1,16 +1,16 @@
 import path from 'path';
 import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
 import { toKebabCase } from '../../utils/strings.utils.js';
+import { CustomFormatterCategory } from './types/format.types.js';
 import {
   CommonPlatformFileType,
   CoreToken,
-  CustomFormatterCategory,
   PlatformContextGetter,
   PlatformFilename,
   PlatformType,
   TokensDesignData
 } from './types/index.js';
-import { getDestinationFileName, getFormatterName } from './utils/formats.utils.js';
+import { getCategoryFormatterName, getDestinationFileName } from './utils/formats.utils.js';
 
 // getPlatformConfigs is a function that is responsible
 // for preparing the configurations for the Style Dictionary platforms object.
@@ -59,7 +59,7 @@ export const getPlatformConfigs = async ({
       });
 
       // It is necessary to define the formatter category (based on the platform type),
-      // because the getFormatterName function expects CustomFormatterCategory as the first argument
+      // because the getCategoryFormatterName function expects CustomFormatterCategory as the first argument
       // and the platform type is not a valid CustomFormatterCategory.
       const formatterCategory = Object.values(CustomFormatterCategory).find(
         (category) => (category as string) === (platformType as string)
@@ -75,7 +75,7 @@ export const getPlatformConfigs = async ({
             ? [
                 {
                   destination: getDestinationFileName(platformType, CommonPlatformFileType.ALL),
-                  format: getFormatterName(formatterCategory, CommonPlatformFileType.ALL)
+                  format: getCategoryFormatterName(formatterCategory, CommonPlatformFileType.ALL)
                 }
               ]
             : []),
@@ -87,7 +87,7 @@ export const getPlatformConfigs = async ({
                   platformType,
                   toKebabCase(key) as PlatformFilename
                 ),
-                format: getFormatterName(formatterCategory, CommonPlatformFileType.CORE),
+                format: getCategoryFormatterName(formatterCategory, CommonPlatformFileType.CORE),
                 filter: (token: TransformedToken) => token.$type === key
               }))
             : []),
@@ -97,7 +97,10 @@ export const getPlatformConfigs = async ({
             ? [
                 {
                   destination: getDestinationFileName(platformType, CommonPlatformFileType.OTHERS),
-                  format: getFormatterName(formatterCategory, CommonPlatformFileType.OTHERS),
+                  format: getCategoryFormatterName(
+                    formatterCategory,
+                    CommonPlatformFileType.OTHERS
+                  ),
                   filter: (token: TransformedToken) =>
                     !Object.values(CoreToken).includes(token.$type as CoreToken)
                 }
@@ -111,7 +114,7 @@ export const getPlatformConfigs = async ({
               file as PlatformFilename,
               platformType === 'css' ? '' : undefined // keeps custom CSS files outside "tokens" directory
             ),
-            format: getFormatterName(formatterCategory, file)
+            format: getCategoryFormatterName(formatterCategory, file)
           }))
         ],
 

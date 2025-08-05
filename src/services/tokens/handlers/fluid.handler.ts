@@ -1,9 +1,10 @@
+import { tab } from '../../../utils/formats.utils.js';
 import {
   CommonHandlerParams,
   CustomFormatterCategory,
   JsCustomFormatterType
 } from '../types/format.types.js';
-import { getFileOutput, tab } from '../utils/formats.utils.js';
+import { getFileOutput } from '../utils/formats.utils.js';
 import {
   mapFluidTokenValuesToMax,
   mapFluidTokenValuesToMin,

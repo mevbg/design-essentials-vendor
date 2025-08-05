@@ -2,7 +2,7 @@ import type { ServiceCommonParams, ServicesConfig } from './services.types.js';
 import { EnforceOptional } from './utils.types.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // GENERATOR CONFIG
 
 // This is the main entry configuration object that

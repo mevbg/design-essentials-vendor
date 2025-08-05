@@ -1,10 +1,11 @@
+import { tab } from '../../../utils/formats.utils.js';
 import { capitalize } from '../../../utils/strings.utils.js';
 import {
   CommonHandlerParams,
   CustomFormatterCategory,
   JsCustomFormatterType
 } from '../types/format.types.js';
-import { getFileOutput, tab } from '../utils/formats.utils.js';
+import { getFileOutput } from '../utils/formats.utils.js';
 import { getColorScheme } from '../utils/tokens/color-tokens.utils.js';
 
 // Renders color tokens based on a given context

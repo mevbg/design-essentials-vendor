@@ -1,6 +1,7 @@
+import type StyleDictionary from 'style-dictionary';
 import type {
   FaviconsConfig,
-  FontsConfig,
+  FontFacesConfig,
   IconsConfig,
   RootScalerConfig,
   ScrollbarConfig,
@@ -8,7 +9,7 @@ import type {
 } from './index.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // SERVICE COMMON PARAMS
 
 // These are the common service parameters
@@ -20,7 +21,7 @@ export type ServiceCommonParams = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // SERVICES CONFIG
 
 // This is the object that contains the key data
@@ -31,24 +32,22 @@ export type ServiceCommonParams = {
 export type ServicesConfig = {
   tokens?: TokensConfig;
   rootScaler?: RootScalerConfig;
-  fonts?: FontsConfig;
+  fontFaces?: FontFacesConfig;
   icons?: IconsConfig;
   scrollbar?: ScrollbarConfig;
   favicons?: FaviconsConfig;
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // SERVICE PARAMS
 
-// This is the object that contains the key data
-// necessary for defining the service parameters.
-export type ServiceParams<T> = ServiceCommonParams & T;
+// TODO
+export type ServiceParams<T> = ServiceCommonParams & T & { name: string; tokensPath?: string };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // SERVICE FUNCTION
 
-// This is the object that contains the key data
-// necessary for defining the service parameters.
-export type ServiceFunction<T> = (params: ServiceParams<T>) => Promise<void>;
+// TODO
+export type ServiceFunction<T> = (params: ServiceParams<T>) => Promise<StyleDictionary>;

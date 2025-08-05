@@ -1,34 +1,20 @@
-import { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
-import {
-  CommonPlatformFileType,
-  JsCustomPlatformFileType,
-  PlatformType
-} from './platform.types.js';
+import type { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
+import { CommonPlatformFileType, JsCustomPlatformFileType } from './platform.types.js';
 import { CoreToken } from './tokens.types.js';
 
 //
-// ------------------------------------------------------------
-// OUTPUT CONFIG
-
-// This type defines the configuration for the output of the tokens.
-export type OutputConfig = {
-  noChapterTitle?: boolean;
-  prefix?: string;
-};
-
-//
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // CUSTOM FORMATTER CATEGORIES
 
 // This enum contains the categories of custom formatters.
 export enum CustomFormatterCategory {
-  CSS = PlatformType.CSS,
-  SCSS = PlatformType.SCSS,
-  JS = PlatformType.JS
+  CSS = 'css',
+  SCSS = 'scss',
+  JS = 'js'
 }
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // CUSTOM FORMATTER TYPES
 
 // This enum contains the types of custom formatters.
@@ -56,7 +42,7 @@ export type CustomFormatterType =
   | JsCustomFormatterType;
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FORMATTING TEMPLATE FUNCTIONS
 
 // This type defines the template function for the custom formatters.
@@ -64,15 +50,20 @@ export type FormatterTemplateFn = (params: {
   name: string;
   category: CustomFormatterCategory;
   type?: CustomFormatterType;
-  customOutputHandler?: (
-    output: string[],
-    formatArgs: FormatFnArguments,
-    config?: OutputConfig
-  ) => Promise<void>;
 }) => Format;
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
+// OUTPUT CONFIG
+
+// This type defines the configuration for the output of the tokens.
+export type OutputConfig = {
+  noChapterTitle?: boolean;
+  prefix?: string;
+};
+
+//
+// ---------------------------------------------------
 // HANDLERS
 
 // This type defines the resolver for the handler of the tokens.
@@ -97,7 +88,7 @@ export type CommonHandlerParams = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // OUTPUT HANDLER TYPES
 
 // Defines the parameters for the functions that wrap code blocks

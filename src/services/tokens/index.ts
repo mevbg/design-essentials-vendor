@@ -17,15 +17,6 @@ export const tokensService = async ({
   fluidScaler,
   colorScheme
 }: ServiceParams<TokensConfig>): Promise<StyleDictionary> => {
-  console.log('tokensService', {
-    buildPath,
-    prefix,
-    baseFontSize,
-    sourcePath,
-    platforms,
-    fluidScaler,
-    colorScheme
-  });
   const designData: TokensDesignData = {
     baseFontSize,
     colorScheme,

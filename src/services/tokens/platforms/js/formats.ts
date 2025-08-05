@@ -1,5 +1,6 @@
 import { Format } from 'style-dictionary/types';
-import { CustomFormatterCategory, JsCustomFormatterType } from '../../types/index.js';
+import { CustomFormatterCategory } from '../../types/format.types.js';
+import { JsCustomFormatterType } from '../../types/index.js';
 import { allFormatterTemplate } from '../../utils/formats.utils.js';
 
 // This is the list of formatters for the JS platform.

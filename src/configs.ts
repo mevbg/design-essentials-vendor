@@ -7,41 +7,63 @@ import {
   IconsConfig,
   PlatformType,
   RootScalerConfig,
-  ScrollbarConfig
+  ScrollbarConfig,
+  TokensConfig
 } from './types/index.js';
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // BASE FONT SIZE
 
 export const DEFAULT_BASE_FONT_SIZE: number = 10;
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // PREFIX
 
 export const DEFAULT_PREFIX: string = 'tk'; // "tk" stands for tokens
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
+// PLATFORMS
+
+export const DEFAULT_PLATFORMS = [
+  PlatformType.CSS,
+  PlatformType.SCSS,
+  PlatformType.JS,
+  PlatformType.JSON
+] as const;
+
+//
+// ---------------------------------------------------
 // COLOR SCHEME
 
-export const DEFAULT_COLOR_SCHEME: ColorSchemeConfig = {
+const DEFAULT_COLOR_SCHEME: ColorSchemeConfig = {
   default: ColorSchemeType.LIGHT,
   method: ColorSchemeMethod.COMBINED
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FLUID SCALER
 
-export const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
+const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
   minViewportW: 600,
   maxViewportW: 1200
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
+// TOKENS
+
+export const DEFAULT_TOKENS_CONFIG: Partial<TokensConfig> = {
+  platforms: [...DEFAULT_PLATFORMS],
+  colorScheme: DEFAULT_COLOR_SCHEME,
+  fluidScaler: DEFAULT_FLUID_SCALER_CONFIG
+};
+
+//
+// ---------------------------------------------------
 // ROOT SCALER
 
 export const DEFAULT_ROOT_SCALER_CONFIG: RootScalerConfig = {
@@ -50,7 +72,7 @@ export const DEFAULT_ROOT_SCALER_CONFIG: RootScalerConfig = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // ICONS
 
 export const DEFAULT_ICONS_CONFIG: IconsConfig = {
@@ -60,7 +82,7 @@ export const DEFAULT_ICONS_CONFIG: IconsConfig = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // SCROLLBAR
 
 export const DEFAULT_SCROLLBAR_CONFIG: ScrollbarConfig = {
@@ -75,7 +97,7 @@ export const DEFAULT_SCROLLBAR_CONFIG: ScrollbarConfig = {
 };
 
 //
-// ------------------------------------------------------------
+// ---------------------------------------------------
 // FAVICONS
 
 export const DEFAULT_FAVICONS_CONFIG: Partial<FaviconsConfig> = {
@@ -113,14 +135,3 @@ export const DEFAULT_FAVICONS_CONFIG: Partial<FaviconsConfig> = {
     /* eslint-enable @typescript-eslint/no-explicit-any */
   }
 };
-
-//
-// ------------------------------------------------------------
-// PLATFORMS
-
-export const DEFAULT_PLATFORMS = [
-  PlatformType.CSS,
-  PlatformType.SCSS,
-  PlatformType.JS,
-  PlatformType.JSON
-] as const;

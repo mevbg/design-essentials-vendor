@@ -1,5 +1,12 @@
 import path from 'path';
-import { DEFAULT_BASE_FONT_SIZE, DEFAULT_PREFIX } from './configs.js';
+import {
+  DEFAULT_BASE_FONT_SIZE,
+  DEFAULT_ICONS_CONFIG,
+  DEFAULT_PREFIX,
+  DEFAULT_ROOT_SCALER_CONFIG,
+  DEFAULT_SCROLLBAR_CONFIG,
+  DEFAULT_TOKENS_CONFIG
+} from './configs.js';
 import * as services from './services/index.js';
 import type { GeneratorConfig, ServiceFunction } from './types/index.js';
 
@@ -14,21 +21,56 @@ export async function generateDesignEssentials(config: GeneratorConfig): Promise
     buildPath,
     prefix = DEFAULT_PREFIX,
     baseFontSize = DEFAULT_BASE_FONT_SIZE,
-    services: serviceConfigs
+    services: { favicons, fontFaces, icons, rootScaler, scrollbar, tokens }
   } = config;
 
   // This resolvedServiceConfigs object is defined to provide space for logical modifications
   // in the service configurations, as it is necessary to determine the buildPath for favicons
   const resolvedServiceConfigs = {
-    ...serviceConfigs,
+    favicons: favicons
+      ? {
+          ...favicons,
+          // Resolve the output path for favicons:
+          // if no specific build path for favicons is provided,
+          // use the default build path and append the "favicons" directory to it
+          outputPath: favicons.outputPath || path.join(buildPath, 'favicons')
+        }
+      : undefined,
 
-    // Resolve the build path for favicons:
-    // if no specific build path for favicons is provided,
-    // use the default build path and append the "favicons" directory to it
-    favicons: serviceConfigs.favicons && {
-      ...serviceConfigs.favicons,
-      outputPath: serviceConfigs.favicons.outputPath || path.join(buildPath, 'favicons')
-    }
+    fontFaces:
+      fontFaces || process.env.FONTS_PATH
+        ? {
+            path: fontFaces?.path || process.env.FONTS_PATH || ''
+          }
+        : undefined,
+
+    icons: icons
+      ? {
+          ...DEFAULT_ICONS_CONFIG,
+          ...icons
+        }
+      : undefined,
+
+    rootScaler: rootScaler
+      ? {
+          ...DEFAULT_ROOT_SCALER_CONFIG,
+          ...rootScaler
+        }
+      : undefined,
+
+    scrollbar: scrollbar
+      ? {
+          ...DEFAULT_SCROLLBAR_CONFIG,
+          ...scrollbar
+        }
+      : undefined,
+
+    tokens: tokens
+      ? {
+          ...DEFAULT_TOKENS_CONFIG,
+          ...tokens
+        }
+      : undefined
   };
 
   await Promise.all(
@@ -41,14 +83,18 @@ export async function generateDesignEssentials(config: GeneratorConfig): Promise
       .map(([serviceName, service]) => {
         const name = serviceName.replace('Service', '') as keyof typeof resolvedServiceConfigs;
         const config = resolvedServiceConfigs[name];
+
         if (config) {
           return (service as ServiceFunction<typeof config>)({
+            name,
             buildPath,
             prefix,
             baseFontSize,
+            tokensPath: resolvedServiceConfigs.tokens?.sourcePath,
             ...config
           });
         }
+
         return Promise.resolve();
       })
   );

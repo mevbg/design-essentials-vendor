@@ -1,5 +1,6 @@
 import { Format } from 'style-dictionary/types';
-import { CustomFormatterCategory, FormatterTemplateFn } from '../../types/index.js';
+import { CustomFormatterCategory } from '../../types/format.types.js';
+import { FormatterTemplateFn } from '../../types/index.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,

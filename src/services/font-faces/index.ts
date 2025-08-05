@@ -1,11 +1,11 @@
 /* =================================================== */
-/* ROOT SCALER */
+/* FONT FACES */
 /* =================================================== */
 
 import type { ServiceFunction } from '../../types/index.js';
 import { cssService } from '../../utils/services.utils.js';
-import { outputRootScaler } from './root-scaler.parser.js';
-import type { RootScalerConfig } from './root-scaler.types.js';
+import { outputFontFaces } from './font-faces.parser.js';
+import type { FontFacesConfig } from './font-faces.types.js';
 
 //
 // ---------------------------------------------------
@@ -13,5 +13,5 @@ import type { RootScalerConfig } from './root-scaler.types.js';
 
 // This function generates the CSS essentials, the design tokens
 // and returns the StyleDictionary instance
-export const rootScalerService: ServiceFunction<RootScalerConfig> = (params) =>
-  cssService<RootScalerConfig>(params, outputRootScaler);
+export const fontFacesService: ServiceFunction<FontFacesConfig> = (params) =>
+  cssService<FontFacesConfig>(params, outputFontFaces);
