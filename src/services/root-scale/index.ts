@@ -4,45 +4,45 @@ import { Format } from 'style-dictionary/types';
 import {
   DEFAULT_BASE_FONT_SIZE,
   DEFAULT_COLOR_SCHEME,
-  DEFAULT_FLUID_SCALE_SCHEME,
-  DEFAULT_ICONOGRAPHY_CONFIG,
+  DEFAULT_FLUID_SCALER_CONFIG,
+  DEFAULT_ICONS_CONFIG,
   DEFAULT_PLATFORMS,
   DEFAULT_PREFIX,
-  DEFAULT_ROOT_SCALE_SCHEME,
+  DEFAULT_ROOT_SCALER_CONFIG,
   DEFAULT_SCROLLBAR_CONFIG
-} from '../configs.js';
-import * as formats from '../formats.js';
-import { getPlatformConfigs } from '../platforms.js';
-import type { DesignConfig, GeneratorConfig } from '../types/index.js';
+} from '../../configs.js';
+import * as formats from '../../formats.js';
+import { getPlatformConfigs } from '../../platforms.js';
+import type { DesignConfig, GeneratorConfig } from '../../types/index.js';
 
 // This function generates the CSS essentials, the design tokens
 // and returns the StyleDictionary instance
-export const generateDictionary = async ({
+export const generateRootScaleScheme = async ({
   buildPath,
   tokens,
   baseFontSize = DEFAULT_BASE_FONT_SIZE,
   colorScheme = DEFAULT_COLOR_SCHEME,
-  rootScaleScheme = DEFAULT_ROOT_SCALE_SCHEME,
-  fluidScaleScheme = DEFAULT_FLUID_SCALE_SCHEME,
+  rootScaler = DEFAULT_ROOT_SCALER_CONFIG,
+  fluidScaler = DEFAULT_FLUID_SCALER_CONFIG,
   fonts,
-  iconography,
+  icons,
   scrollbar
 }: GeneratorConfig): Promise<StyleDictionary> => {
   const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
   const designConfig: DesignConfig = {
     baseFontSize,
     colorScheme,
-    rootScaleScheme,
-    fluidScaleScheme,
+    rootScaler,
+    fluidScaler,
     fonts:
       fonts || process.env.FONTS_PATH
         ? {
             path: fonts?.path || process.env.FONTS_PATH || ''
           }
         : undefined,
-    iconography: iconography && {
-      ...DEFAULT_ICONOGRAPHY_CONFIG,
-      ...iconography
+    icons: icons && {
+      ...DEFAULT_ICONS_CONFIG,
+      ...icons
     },
     scrollbar: scrollbar && {
       ...DEFAULT_SCROLLBAR_CONFIG,

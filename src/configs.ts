@@ -3,9 +3,9 @@ import {
   ColorSchemeMethod,
   ColorSchemeType,
   FaviconsConfig,
-  FluidScaleSchemeConfig,
-  IconographyConfig,
-  RootScaleSchemeConfig,
+  FluidScalerConfig,
+  IconsConfig,
+  RootScalerConfig,
   ScrollbarConfig
 } from './types/design.types.js';
 import { PlatformType } from './types/platform.types.js';
@@ -33,27 +33,27 @@ export const DEFAULT_COLOR_SCHEME: ColorSchemeConfig = {
 
 //
 // ------------------------------------------------------------
-// FLUID SCALE SCHEME
+// FLUID SCALER
 
-export const DEFAULT_FLUID_SCALE_SCHEME: FluidScaleSchemeConfig = {
+export const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
   minViewportW: 600,
   maxViewportW: 1200
 };
 
 //
 // ------------------------------------------------------------
-// ROOT SCALE SCHEME
+// ROOT SCALER
 
-export const DEFAULT_ROOT_SCALE_SCHEME: RootScaleSchemeConfig = {
+export const DEFAULT_ROOT_SCALER_CONFIG: RootScalerConfig = {
   minViewportW: 300,
   maxViewportW: 2100
 };
 
 //
 // ------------------------------------------------------------
-// ICONOGRAPHY
+// ICONS
 
-export const DEFAULT_ICONOGRAPHY_CONFIG: IconographyConfig = {
+export const DEFAULT_ICONS_CONFIG: IconsConfig = {
   fontFamily: 'Iconography',
   color: 'currentColor',
   list: {}

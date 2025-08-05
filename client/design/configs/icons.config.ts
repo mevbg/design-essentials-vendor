@@ -1,6 +1,6 @@
-import type { IconographyConfig } from '../../../src/types/design.types.js';
+import type { IconsConfig } from '../../../src/types/design.types.js';
 
-export const iconography: IconographyConfig = {
+export const icons: IconsConfig = {
   fontFamily: 'DevIcons', // optional (Iconography by default)
   color: 'var(--dev-color-content-gray-weak)', // optional (currentColor by default)
   list: {

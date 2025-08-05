@@ -40,36 +40,36 @@ export type ColorSchemeConfig = {
 
 //
 // ------------------------------------------------------------
-// FLUID SCALE SCHEME
+// FLUID SCALER
 
-// The Fluid Scale Scheme is the one that takes care of the gradual scaling of typography
+// The Fluid Scaler is the one that takes care of the gradual scaling of typography
 // and other given elements, by applying dynamic calc()-based formula as a value,
 // when in between the minViewportW and maxViewportW breakpoints.
-export type FluidScaleSchemeConfig = {
-  // This is the minimum viewport width above which the fluid scale scheme is applied.
+export type FluidScalerConfig = {
+  // This is the minimum viewport width above which the fluid scaler is applied.
   // Below that breakpoint, the min given value is fixed.
   minViewportW: number;
 
-  // This is the maximum viewport width below which the fluid scale scheme is applied.
+  // This is the maximum viewport width below which the fluid scaler is applied.
   // Above that breakpoint, the max given value is fixed.
   maxViewportW: number;
 };
 
 //
 // ------------------------------------------------------------
-// ROOT SCALE SCHEME
+// ROOT SCALER
 
-// The Root Scale Scheme is the one that takes care of the entire layout scaling,
+// The Root Scaler is the one that takes care of the entire layout scaling,
 // below the minViewportW and (if in presentation mode) above the maxViewportW.
 // It sets the font-size of the root element to be relative to the viewport width,
 // which leads to a total scaling of everything based on rem/em units.
-export type RootScaleSchemeConfig = {
+export type RootScalerConfig = {
   // This is the minimum viewport width below which
-  // the root scale scheme is applied.
+  // the root scaler is applied.
   minViewportW: number;
 
   // This is the maximum viewport width above which
-  // the root scale scheme is applied. (if in presentation mode)
+  // the root scaler is applied. (if in presentation mode)
   maxViewportW: number;
 };
 
@@ -83,9 +83,9 @@ export type FontsConfig = {
 
 //
 // ------------------------------------------------------------
-// ICONOGRAPHY
+// ICONS
 
-export type IconographyConfig = {
+export type IconsConfig = {
   fontFamily?: string;
   color?: string;
   list: Record<string, string>;
@@ -132,11 +132,11 @@ export type FaviconsConfig = {
 // as part of the GeneratorConfig object.
 export type DesignConfig = {
   colorScheme?: ColorSchemeConfig;
-  fluidScaleScheme?: FluidScaleSchemeConfig;
-  rootScaleScheme?: RootScaleSchemeConfig;
+  fluidScaler?: FluidScalerConfig;
+  rootScaler?: RootScalerConfig;
   baseFontSize?: number;
   fonts?: FontsConfig;
-  iconography?: IconographyConfig;
+  icons?: IconsConfig;
   scrollbar?: ScrollbarConfig;
   favicons?: FaviconsConfig;
 };

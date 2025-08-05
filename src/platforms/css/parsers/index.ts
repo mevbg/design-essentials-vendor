@@ -1,4 +1,4 @@
 export * from './font-faces.js';
-export * from './iconography.js';
-export * from './root-font-size.js';
+export * from './icons.js';
+export * from './root-scaler.js';
 export * from './scrollbar.js';

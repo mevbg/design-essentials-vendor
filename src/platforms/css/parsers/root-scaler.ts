@@ -8,19 +8,19 @@ import { getFileOutput, tab } from '../../../utils/formats.utils.js';
 import { toCamelCase, toSpaceCase } from '../../../utils/strings.utils.js';
 
 // This function outputs the root font size definition
-export const outputRootFontSize = async (
+export const outputRootScaler = async (
   output: string[],
   formatArgs: FormatFnArguments,
   config?: OutputConfig
 ): Promise<void> => {
   output.push(
     await getFileOutput({
-      name: toSpaceCase(toCamelCase(CssCustomPlatformFileType.ROOT_FONT_SIZE)),
+      name: toSpaceCase(toCamelCase(CssCustomPlatformFileType.ROOT_SCALER)),
       category: CustomFormatterCategory.CSS,
       config,
       parser: (output, wrapper) => {
         const {
-          rootScaleScheme: { minViewportW, maxViewportW },
+          rootScaler: { minViewportW, maxViewportW },
           baseFontSize
         } = formatArgs.options.designConfig || {};
 

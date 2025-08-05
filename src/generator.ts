@@ -1,5 +1,5 @@
 import path from 'path';
-import { generateDictionary, generateFavicons } from './services/index.js';
+import { generateFavicons, generateTokens } from './services/index.js';
 import type { GeneratorConfig } from './types/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
@@ -11,10 +11,10 @@ import type { GeneratorConfig } from './types/index.js';
 //    - prefix: Prefix that will be used when creating CSS custom properties
 //    - platforms: Array of platform names (CSS, SCSS, JS, JSON) for which output is expected to be generated
 // - colorScheme: Configuration data for the color scheme
-// - rootScaleScheme: Configuration data for root scale scheme
-// - fluidScaleScheme: Configuration data for fluid scale scheme
+// - rootScaler: Configuration data for root scaler
+// - fluidScaler: Configuration data for fluid scaler
 // - fonts: Configuration data for embedded fonts (if such)
-// - iconography: Configuration data for iconography (if such)
+// - icons: Configuration data for icons (if such)
 // - scrollbar: Configuration data for scrollbar (if such)
 // - favicons: Configuration data for favicons (if such)
 export async function generateDesignEssentials({
@@ -24,7 +24,10 @@ export async function generateDesignEssentials({
   await Promise.all([
     // Generate the CSS essentials, the design tokens
     // and return the StyleDictionary instance
-    generateDictionary(generalConfig),
+    generateTokens(generalConfig),
+
+    // generateFontFacesStyles(generalConfig),
+    // generateScrollbarStyles(generalConfig),
 
     // Generate favicons (if config is provided)
     ...(faviconsConfig

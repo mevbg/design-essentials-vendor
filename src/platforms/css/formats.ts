@@ -8,8 +8,8 @@ import {
 } from '../../utils/formats.utils.js';
 import {
   outputFontFaces,
-  outputIconography,
-  outputRootFontSize,
+  outputIcons,
+  outputRootScaler,
   outputScrollbar
 } from './parsers/index.js';
 
@@ -34,15 +34,15 @@ export const cssFormatters: Format[] = [
   ...Object.entries({
     // An individual formatter for the root font size definition
     // so to have it in a separate file
-    [CssCustomPlatformFileType.ROOT_FONT_SIZE]: outputRootFontSize,
+    [CssCustomPlatformFileType.ROOT_SCALER]: outputRootScaler,
 
     // An individual formatter for the font face definitions
     // so to have them in a separate file
     [CssCustomPlatformFileType.FONT_FACES]: outputFontFaces,
 
-    // An individual formatter for the iconography definitions
+    // An individual formatter for the icons definitions
     // so to have them in a separate file
-    [CssCustomPlatformFileType.ICONOGRAPHY]: outputIconography,
+    [CssCustomPlatformFileType.ICONS]: outputIcons,
 
     // An individual formatter for the scrollbar styles
     // so to have them in a separate file

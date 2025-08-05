@@ -12,11 +12,11 @@ Design Essentials Vendor is not just a design token generator — it’s a compr
 
 - **Fluid Typography & Scaling**: Responsive typography that scales smoothly between viewport breakpoints
 - **Color Scheme Management**: Light/dark theme support with multiple implementation methods
-- **Root Scale System**: Complete layout scaling for different viewport sizes
+- **Root Scaling System**: Complete layout scaling for different viewport sizes
 - **Multi-Platform Output**: CSS, SCSS, JavaScript, and JSON formats
 - **Advanced Token Processing**: Specialized handlers for different token types
 - **Font Management**: Automatic font face generation and root font size configuration
-- **Iconography System**: Complete icon font system with CSS attribute selectors
+- **Icons System**: Complete icon font system with CSS attribute selectors
 - **Scrollbar System**: Custom scrollbar styling with WebKit support
 - **Favicons Generation**: Automatic favicon generation for all platforms and devices
 
@@ -52,18 +52,18 @@ await generateDesignEssentials({
     default: 'light',
     method: 'combined'
   },
-  fluidScaleScheme: {
+  fluidScaler: {
     minViewportW: 600,
     maxViewportW: 1200
   },
-  rootScaleScheme: {
+  rootScaler: {
     minViewportW: 300,
     maxViewportW: 2100
   },
   fonts: {
     path: './fonts'
   },
-  iconography: {
+  icons: {
     fontFamily: 'DevIcons',
     color: 'var(--dev-color-content-gray-weak)',
     list: {
@@ -110,12 +110,12 @@ type GeneratorConfig = {
   };
   baseFontSize?: number; // Base font size (default: 10)
   colorScheme?: ColorSchemeConfig; // Color scheme configuration
-  fluidScaleScheme?: FluidScaleSchemeConfig; // Fluid scaling configuration
-  rootScaleScheme?: RootScaleSchemeConfig; // Root scaling configuration,
+  fluidScaler?: FluidScalerConfig; // Fluid scaling configuration
+  rootScaler?: RootScalerConfig; // Root scaling configuration,
   fonts?: {
     path: string; // Path to font files
   };
-  iconography?: {
+  icons?: {
     fontFamily?: string; // Icon font family (default: 'Iconography')
     color?: string; // Icon color (default: 'currentColor')
     list: Record<string, string>; // Icon code mappings
@@ -157,28 +157,28 @@ type ColorSchemeConfig = {
 - `class`: Uses HTML class-based switching
 - `combined`: Uses both methods with class priority
 
-#### Fluid Scale Configuration
+#### Fluid Scaler Configuration
 
 ```typescript
-type FluidScaleSchemeConfig = {
+type FluidScalerConfig = {
   minViewportW: number; // Minimum viewport width
   maxViewportW: number; // Maximum viewport width
 };
 ```
 
-#### Root Scale Configuration
+#### Root Scaler Configuration
 
 ```typescript
-type RootScaleSchemeConfig = {
+type RootScalerConfig = {
   minViewportW: number; // Minimum viewport width
   maxViewportW: number; // Maximum viewport width
 };
 ```
 
-#### Iconography Configuration
+#### Icons Configuration
 
 ```typescript
-type IconographyConfig = {
+type IconsConfig = {
   fontFamily?: string; // Icon font family (default: 'Iconography')
   color?: string; // Icon color (default: 'currentColor')
   list: Record<string, string>; // Icon code mappings
@@ -257,9 +257,9 @@ Platform-specific configurations and formatters:
 - **CSS Platform** (`src/platforms/css/`): CSS custom properties with media queries and custom parsers
   - **Formatters** (`formats.ts`): Standard token formatters for CSS output
   - **Parsers** (`parsers/`): Specialized parsers for custom CSS generation
-    - `root-font-size.ts`: Responsive root font size generation
+    - `root-scale.ts`: Responsive root font size generation
     - `font-faces.ts`: Dynamic font face declarations
-    - `iconography.ts`: Icon font system generation
+    - `icons.ts`: Icon font system generation
     - `scrollbar.ts`: WebKit scrollbar styling
 - **SCSS Platform** (`src/platforms/scss/`): SCSS variables and mixins
 - **JavaScript Platform** (`src/platforms/js/`): Static values and variable references
@@ -370,52 +370,52 @@ Color tokens support light/dark schemes:
 ```text
 design-essentials-vendor/
 ├── src/
-│   ├── generator.ts              # Main generator function
-│   ├── configs.ts                # Default configuration values
-│   ├── formats.ts                # Format registration
-│   ├── services/                 # Service modules
-│   │   ├── index.ts              # Service exports
-│   │   ├── favicons.service.ts   # Favicon generation service
+│   ├── generator.ts                    # Main generator function
+│   ├── configs.ts                      # Default configuration values
+│   ├── formats.ts                      # Format registration
+│   ├── services/                       # Service modules
+│   │   ├── index.ts                    # Service exports
+│   │   ├── favicons.service.ts         # Favicon generation service
 │   │   └── style-dictionary.service.ts # Style Dictionary service
-│   ├── types/                    # TypeScript type definitions
-│   │   ├── generator.types.ts    # Generator configuration types
-│   │   ├── design.types.ts       # Design-related types
-│   │   ├── platform.types.ts     # Platform-specific types
-│   │   ├── tokens.types.ts       # Token type definitions
-│   │   ├── format.types.ts       # Format and handler types
-│   │   └── utils.types.ts        # Utility type definitions
-│   ├── platforms/                # Platform-specific implementations
-│   │   ├── css/                  # CSS platform
-│   │   │   ├── index.ts          # Platform configuration
-│   │   │   ├── formats.ts        # CSS formatters
-│   │   │   ├── utils.ts          # CSS utility functions
-│   │   │   └── parsers/          # CSS custom output parsers
-│   │   │       ├── index.ts      # Parser exports
-│   │   │       ├── root-font-size.ts    # Root font size parser
-│   │   │       ├── font-faces.ts        # Font faces parser
-│   │   │       ├── iconography.ts       # Iconography parser
-│   │   │       └── scrollbar.ts         # Scrollbar parser
-│   │   ├── scss/                 # SCSS platform
-│   │   ├── js/                   # JavaScript platform
-│   │   └── json/                 # JSON platform
-│   ├── handlers/                 # Token processing handlers
-│   │   ├── basic.handler.ts      # Basic token processing
-│   │   ├── color.handler.ts      # Color scheme processing
-│   │   └── fluid.handler.ts      # Fluid value processing
-│   └── utils/                    # Utility functions
-│       ├── formats.utils.ts      # Format utility functions
-│       ├── strings.utils.ts      # String manipulation utilities
-│       └── tokens/               # Token-specific utilities
+│   ├── types/                          # TypeScript type definitions
+│   │   ├── generator.types.ts          # Generator configuration types
+│   │   ├── design.types.ts             # Design-related types
+│   │   ├── platform.types.ts           # Platform-specific types
+│   │   ├── tokens.types.ts             # Token type definitions
+│   │   ├── format.types.ts             # Format and handler types
+│   │   └── utils.types.ts              # Utility type definitions
+│   ├── platforms/                      # Platform-specific implementations
+│   │   ├── css/                        # CSS platform
+│   │   │   ├── index.ts                # Platform configuration
+│   │   │   ├── formats.ts              # CSS formatters
+│   │   │   ├── utils.ts                # CSS utility functions
+│   │   │   └── parsers/                # CSS custom output parsers
+│   │   │       ├── index.ts            # Parser exports
+│   │   │       ├── root-scaler.ts      # Root scaler parser
+│   │   │       ├── font-faces.ts       # Font faces parser
+│   │   │       ├── icons.ts            # Icons parser
+│   │   │       └── scrollbar.ts        # Scrollbar parser
+│   │   ├── scss/                       # SCSS platform
+│   │   ├── js/                         # JavaScript platform
+│   │   └── json/                       # JSON platform
+│   ├── handlers/                       # Token processing handlers
+│   │   ├── basic.handler.ts            # Basic token processing
+│   │   ├── color.handler.ts            # Color scheme processing
+│   │   └── fluid.handler.ts            # Fluid value processing
+│   └── utils/                          # Utility functions
+│       ├── formats.utils.ts            # Format utility functions
+│       ├── strings.utils.ts            # String manipulation utilities
+│       └── tokens/                     # Token-specific utilities
 │           ├── color-tokens.utils.ts
 │           └── fluid-tokens.utils.ts
-├── client/                       # Client-side configuration
-│   ├── index.ts                  # Client entry point
-│   ├── constants.ts              # Client constants
-│   └── design/                   # Design system definitions
-│       ├── constants/            # Design constants
-│       ├── tokens/               # Token definitions
-│       ├── utils/                # Design utilities
-│       └── fonts/                # Font files
+├── client/                             # Client-side configuration
+│   ├── index.ts                        # Client entry point
+│   ├── constants.ts                    # Client constants
+│   └── design/                         # Design system definitions
+│       ├── constants/                  # Design constants
+│       ├── tokens/                     # Token definitions
+│       ├── utils/                      # Design utilities
+│       └── fonts/                      # Font files
 └── package.json
 ```
 
@@ -437,12 +437,12 @@ client/design/
 │   └── opacities.constants.ts    # Opacity values
 ├── configs/                      # Configuration files
 │   ├── fonts.config.ts           # Font configuration
-│   ├── iconography.config.ts     # Iconography configuration
+│   ├── icons.config.ts           # Icons configuration
 │   ├── scrollbar.config.ts       # Scrollbar configuration
 │   ├── favicons.config.ts        # Favicons configuration
 │   ├── color-scheme.config.ts    # Color scheme configuration
-│   ├── fluid-scale-scheme.config.ts # Fluid scale configuration
-│   ├── root-scale-scheme.config.ts # Root scale configuration
+│   ├── fluid-scaler.config.ts    # Fluid scaler configuration
+│   ├── root-scaler.config.ts     # Root scaler configuration
 │   └── index.ts                  # Config exports
 ├── images/                       # Source images
 │   └── logo.svg                  # Logo for favicon generation
@@ -468,23 +468,23 @@ The system now uses a modular configuration approach with separate TypeScript fi
 ```typescript
 // client/design/configs/index.ts
 export * from './fonts.config.js';
-export * from './iconography.config.js';
+export * from './icons.config.js';
 export * from './scrollbar.config.js';
 export * from './favicons.config.js';
 export * from './color-scheme.config.js';
-export * from './fluid-scale-scheme.config.js';
-export * from './root-scale-scheme.config.js';
+export * from './fluid-scaler.config.js';
+export * from './root-scaler.config.js';
 ```
 
 **Configuration Files:**
 
 - `fonts.config.ts` - Font paths and settings
-- `iconography.config.ts` - Icon font family, colors, and icon mappings
+- `icons.config.ts` - Icon font family, colors, and icon mappings
 - `scrollbar.config.ts` - Scrollbar dimensions and colors
 - `favicons.config.ts` - Favicon generation configuration
 - `color-scheme.config.ts` - Light/dark theme configuration
-- `fluid-scale-scheme.config.ts` - Responsive scaling viewport ranges
-- `root-scale-scheme.config.ts` - Root font scaling configuration
+- `fluid-scale.config.ts` - Responsive scaling viewport ranges
+- `root-scale.config.ts` - Root font scaling configuration
 
 ### CSS Platform Parsers
 
@@ -492,9 +492,9 @@ The CSS platform includes specialized parsers for generating custom output files
 
 **Parser System:**
 
-- **Root Font Size Parser** (`root-font-size.ts`) - Generates responsive root font size CSS with media queries for different viewport ranges
+- **Root Font Size Parser** (`root-scale.ts`) - Generates responsive root font size CSS with media queries for different viewport ranges
 - **Font Faces Parser** (`font-faces.ts`) - Scans font directories and generates `@font-face` declarations for all available font weights and styles
-- **Iconography Parser** (`iconography.ts`) - Generates CSS for icon font system using `data-i` attribute selectors
+- **Icons Parser** (`icons.ts`) - Generates CSS for icon font system using `data-i` attribute selectors
 - **Scrollbar Parser** (`scrollbar.ts`) - Generates comprehensive WebKit scrollbar styling with hover and active states
 
 **Parser Features:**
@@ -502,7 +502,7 @@ The CSS platform includes specialized parsers for generating custom output files
 - **Modular Architecture**: Each parser is a separate module with focused responsibility
 - **Dynamic Generation**: Font faces parser automatically scans directories for available fonts
 - **Responsive Design**: Root font size parser creates media query breakpoints for different viewport sizes
-- **Custom Styling**: Iconography and scrollbar parsers generate complete CSS systems with multiple states
+- **Custom Styling**: Icons and scrollbar parsers generate complete CSS systems with multiple states
 
 ### Token Transformation
 
@@ -582,9 +582,9 @@ dist/css/
 │   ├── icon.css                  # Icon tokens only
 │   ├── opacity.css               # Opacity tokens only
 │   └── others.css                # Other token types
-├── root-font-size.css            # Root font size configuration
+├── root-scale.css                # Root font size configuration
 ├── font-faces.css                # Font face declarations
-├── iconography.css               # Iconography definitions
+├── icons.css                     # Icons definitions
 └── scrollbar.css                 # Scrollbar styles
 ```
 
@@ -639,12 +639,12 @@ dist/json/
 
 ## 🎯 Advanced Features
 
-### Iconography System
+### Icons System
 
-The system includes a comprehensive iconography solution that generates CSS for icon fonts using attribute selectors:
+The system includes a comprehensive icons solution that generates CSS for icon fonts using attribute selectors:
 
 ```css
-/* Generated CSS for iconography */
+/* Generated CSS for icons */
 [data-i] {
   display: inline-block;
   width: 1em;
@@ -796,7 +796,7 @@ html.dark {
 }
 ```
 
-### Root Scale System
+### Root Scaling System
 
 Provides complete layout scaling for different viewport sizes:
 

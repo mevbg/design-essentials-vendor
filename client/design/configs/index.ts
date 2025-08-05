@@ -1,8 +1,8 @@
 export * from './color-scheme.config.js';
-export * from './fluid-scale-scheme.config.js';
-export * from './root-scale-scheme.config.js';
+export * from './fluid-scaler.config.js';
+export * from './root-scaler.config.js';
 export * from './fonts.config.js';
-export * from './iconography.config.js';
+export * from './icons.config.js';
 export * from './scrollbar.config.js';
 export * from './favicons.config.js';
 

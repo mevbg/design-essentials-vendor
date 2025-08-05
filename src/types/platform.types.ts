@@ -59,9 +59,9 @@ export enum CommonPlatformFileType {
 
 // This type determines the custom file types for the CSS platform
 export enum CssCustomPlatformFileType {
-  ROOT_FONT_SIZE = 'root-font-size',
+  ROOT_SCALER = 'root-scaler',
   FONT_FACES = 'font-faces',
-  ICONOGRAPHY = 'iconography',
+  ICONS = 'icons',
   SCROLLBAR = 'scrollbar'
 }
 
@@ -82,7 +82,7 @@ export enum JsCustomPlatformFileType {
 type CssPlatformFilename =
   | CommonPlatformFileType.ALL
   | CommonPlatformFileType.OTHERS
-  | CssCustomPlatformFileType.ROOT_FONT_SIZE
+  | CssCustomPlatformFileType.ROOT_SCALER
   | CoreTokenKebabValues;
 
 // This type contains the names of all possible output files for the SCSS platform

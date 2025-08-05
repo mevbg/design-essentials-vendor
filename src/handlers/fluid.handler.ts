@@ -30,8 +30,8 @@ export const fluidHandler = async ({
 
       // Separate fluid and basic tokens
       const { fluidTokens, basicTokens } = separateFluidAndBasicTokens(tokens);
-      const { fluidScaleScheme, baseFontSize } = options?.designConfig || {};
-      const { minViewportW, maxViewportW } = fluidScaleScheme;
+      const { fluidScaler, baseFontSize } = options?.designConfig || {};
+      const { minViewportW, maxViewportW } = fluidScaler;
       const separation =
         [CustomFormatterCategory.CSS, CustomFormatterCategory.SCSS].includes(category) ||
         type === JsCustomFormatterType.STATIC;
@@ -43,7 +43,7 @@ export const fluidHandler = async ({
             media: `(max-width: ${minViewportW - 1}px)`
           },
           Fluid: {
-            tokens: mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaleScheme),
+            tokens: mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaler),
             media: `(min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px)`
           },
           Max: {

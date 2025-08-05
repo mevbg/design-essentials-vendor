@@ -7,19 +7,19 @@ import {
 import { getFileOutput, tab } from '../../../utils/formats.utils.js';
 import { toCamelCase, toSpaceCase } from '../../../utils/strings.utils.js';
 
-// This function outputs the iconography definitions
-export const outputIconography = async (
+// This function outputs the icons definitions
+export const outputIcons = async (
   output: string[],
   formatArgs: FormatFnArguments,
   config?: OutputConfig
 ): Promise<void> => {
   output.push(
     await getFileOutput({
-      name: toSpaceCase(toCamelCase(CssCustomPlatformFileType.ICONOGRAPHY)),
+      name: toSpaceCase(toCamelCase(CssCustomPlatformFileType.ICONS)),
       category: CustomFormatterCategory.CSS,
       config,
       parser: (output, wrapper) => {
-        const { iconography } = formatArgs.options.designConfig;
+        const { icons } = formatArgs.options.designConfig;
         const attr = 'data-i';
 
         output.push(
@@ -29,8 +29,8 @@ export const outputIconography = async (
               display: 'inline-block',
               width: '1em',
               height: '1em',
-              color: iconography.color,
-              'font-family': iconography.fontFamily,
+              color: icons.color,
+              'font-family': icons.fontFamily,
               'font-weight': 'normal',
               'font-style': 'normal',
               'line-height': '1'
@@ -52,12 +52,12 @@ export const outputIconography = async (
           }) + '\n'
         );
 
-        Object.entries(iconography.list).forEach(([name, code], index) => {
+        Object.entries(icons.list).forEach(([name, code], index) => {
           output.push(
             wrapper({
               name: `[${attr}="${name}"]::after`,
               code: `${tab()}content: "\\${code}";`
-            }) + (index < Object.entries(iconography.list).length - 1 ? '\n' : '')
+            }) + (index < Object.entries(icons.list).length - 1 ? '\n' : '')
           );
         });
       }

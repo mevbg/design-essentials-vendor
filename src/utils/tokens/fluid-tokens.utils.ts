@@ -1,12 +1,12 @@
 import { TransformedToken } from 'style-dictionary/types';
-import type { FluidScaleSchemeConfig } from '../../types/design.types.js';
+import type { FluidScalerConfig } from '../../types/design.types.js';
 
 // Generates and returns the responsive value
 // of a given fluid token (one with min and max values)
 const getFluidTokenResponsiveValue = (
   token: TransformedToken,
   baseFontSize: number,
-  { minViewportW, maxViewportW }: FluidScaleSchemeConfig
+  { minViewportW, maxViewportW }: FluidScalerConfig
 ): string => {
   const slope =
     ((parseFloat(token.$value.max) - parseFloat(token.$value.min)) /
@@ -40,10 +40,10 @@ export const mapFluidTokenValuesToMax = (tokens: TransformedToken[]): Transforme
 export const mapFluidTokenValuesToResponsive = (
   tokens: TransformedToken[],
   baseFontSize: number,
-  fluidScaleScheme: FluidScaleSchemeConfig
+  fluidScaler: FluidScalerConfig
 ): TransformedToken[] =>
   tokens.map((token: TransformedToken) =>
-    setFluidTokenValue(token, getFluidTokenResponsiveValue(token, baseFontSize, fluidScaleScheme))
+    setFluidTokenValue(token, getFluidTokenResponsiveValue(token, baseFontSize, fluidScaler))
   );
 
 // Separates tokens into fluid and fixed tokens

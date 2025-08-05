@@ -37,7 +37,7 @@ export enum CssCustomFormatterType {
   ALL = CommonPlatformFileType.ALL,
   CORE = CommonPlatformFileType.CORE,
   OTHERS = CommonPlatformFileType.OTHERS,
-  ROOT_FONT_SIZE = CssCustomPlatformFileType.ROOT_FONT_SIZE
+  ROOT_SCALER = CssCustomPlatformFileType.ROOT_SCALER
 }
 
 export enum ScssCustomFormatterType {
