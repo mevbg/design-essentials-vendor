@@ -9,7 +9,7 @@ import StyleDictionary from 'style-dictionary';
 // } from '../../configs.js';
 // import * as formats from '../../formats.js';
 // import { getPlatformConfigs } from '../../platforms.js';
-import type { ScrollbarConfig, ServiceParams } from '../../types/services.types.js';
+import type { ScrollbarConfig, ServiceParams } from '../../types/index.js';
 
 // This function generates the CSS essentials, the design tokens
 // and returns the StyleDictionary instance
@@ -18,7 +18,7 @@ export const scrollbarService = async (
 ): Promise<StyleDictionary> => {
   console.log('scrollbarService', params);
   // const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
-  // const designConfig: DesignConfig = {
+  // const designData: TokensDesignData = {
   //   baseFontSize,
   //   colorScheme,
   //   rootScaler,
@@ -58,7 +58,7 @@ export const scrollbarService = async (
   // const platformConfigs = await getPlatformConfigs({
   //   platforms,
   //   buildPath,
-  //   designConfig,
+  //   designData,
   //   prefix
   // });
 

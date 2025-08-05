@@ -1,8 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import type { TokensConfig } from '../../../src/types/services.types.js';
-import { PlatformType } from '../../../src/types/platform.types';
-import { ColorSchemeMethod, ColorSchemeType } from '../../../src/types/design.types';
+import { TokensConfig, PlatformType, ColorSchemeMethod, ColorSchemeType  } from '../../../src/types/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

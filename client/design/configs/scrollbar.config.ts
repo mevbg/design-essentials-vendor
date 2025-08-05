@@ -1,4 +1,4 @@
-import type { ScrollbarConfig } from '../../../src/types/design.types.js';
+import type { ScrollbarConfig } from '../../../src/types/index.js';
 
 export const scrollbar: ScrollbarConfig = {
   areaWidth: 16,

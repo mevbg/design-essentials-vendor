@@ -1,4 +1,4 @@
-import type { FaviconsConfig } from '../../../src/types/design.types.js';
+import type { FaviconsConfig } from '../../../src/types/index.js';
 
 export const favicons: FaviconsConfig = {
   id: 'https://mev.bg',

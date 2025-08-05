@@ -1,4 +1,4 @@
-import type { RootScalerConfig } from '../../../src/types/design.types.js';
+import type { RootScalerConfig } from '../../../src/types/index.js';
 
 export const rootScaler: RootScalerConfig = {
   minViewportW: 300,

@@ -9,7 +9,7 @@ import StyleDictionary from 'style-dictionary';
 // } from '../../configs.js';
 // import * as formats from '../../formats.js';
 // import { getPlatformConfigs } from '../../platforms.js';
-import type { FontsConfig, ServiceParams } from '../../types/services.types.js';
+import type { FontsConfig, ServiceParams } from '../../types/index.js';
 
 // This function generates the CSS essentials, the design tokens
 // and returns the StyleDictionary instance
@@ -19,7 +19,7 @@ export const fontsService = async ({
 }: ServiceParams<FontsConfig>): Promise<StyleDictionary> => {
   console.log('fontsService', { buildPath, config });
   // const { sourcePath, prefix = DEFAULT_PREFIX, platforms = [...DEFAULT_PLATFORMS] } = tokens;
-  // const designConfig: DesignConfig = {
+  // const designData: TokensDesignData = {
   //   baseFontSize,
   //   colorScheme,
   //   rootScaler,
@@ -59,7 +59,7 @@ export const fontsService = async ({
   // const platformConfigs = await getPlatformConfigs({
   //   platforms,
   //   buildPath,
-  //   designConfig,
+  //   designData,
   //   prefix
   // });
 

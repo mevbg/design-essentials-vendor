@@ -1,4 +1,4 @@
-import type { IconsConfig } from '../../../src/types/design.types.js';
+import type { IconsConfig } from '../../../src/types/index.js';
 
 export const icons: IconsConfig = {
   fontFamily: 'DevIcons', // optional (Iconography by default)

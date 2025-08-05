@@ -5,10 +5,10 @@ import {
   FaviconsConfig,
   FluidScalerConfig,
   IconsConfig,
+  PlatformType,
   RootScalerConfig,
   ScrollbarConfig
-} from './types/design.types.js';
-import { PlatformType } from './types/platform.types.js';
+} from './types/index.js';
 
 //
 // ------------------------------------------------------------
