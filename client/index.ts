@@ -1,26 +1,17 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import type { GeneratorConfig } from '../src/types/generator.types.js';
 import * as configs from './design/configs/index.js';
 
-const { baseFontSize, platforms, prefix, ...restConfigs } = configs;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { buildPath, prefix, baseFontSize, ...services } = configs;
 
 export const generateDevClientEssentials: () => Promise<void> = async () => {
   const { generateDesignEssentials } = await import(`../src/generator?update=${Date.now()}`);
 
   try {
     await generateDesignEssentials({
-      buildPath: path.resolve(__dirname, './design/dist'),
+      buildPath,
+      prefix,
       baseFontSize,
-      tokens: {
-        sourcePath: path.resolve(__dirname, './design/tokens/**/index.ts'),
-        prefix,
-        platforms
-      },
-      ...restConfigs
+      services
     } as GeneratorConfig);
     console.info('Design essentials generated successfully!');
   } catch (err) {

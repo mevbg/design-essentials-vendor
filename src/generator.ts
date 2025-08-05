@@ -1,42 +1,55 @@
 import path from 'path';
-import { generateFavicons, generateTokens } from './services/index.js';
-import type { GeneratorConfig } from './types/index.js';
+import { DEFAULT_BASE_FONT_SIZE, DEFAULT_PREFIX } from './configs.js';
+import * as services from './services/index.js';
+import type { GeneratorConfig, ServiceFunction } from './types/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
 // - buildPath: Path to the directory where the generated output files will be created
+// - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
-// - tokens: configuration for the design tokens
-//    - sourcePath: Path to the design tokens definitions
-//    - prefix: Prefix that will be used when creating CSS custom properties
-//    - platforms: Array of platform names (CSS, SCSS, JS, JSON) for which output is expected to be generated
-// - colorScheme: Configuration data for the color scheme
-// - rootScaler: Configuration data for root scaler
-// - fluidScaler: Configuration data for fluid scaler
-// - fonts: Configuration data for embedded fonts (if such)
-// - icons: Configuration data for icons (if such)
-// - scrollbar: Configuration data for scrollbar (if such)
-// - favicons: Configuration data for favicons (if such)
-export async function generateDesignEssentials({
-  favicons: faviconsConfig,
-  ...generalConfig
-}: GeneratorConfig): Promise<void> {
-  await Promise.all([
-    // Generate the CSS essentials, the design tokens
-    // and return the StyleDictionary instance
-    generateTokens(generalConfig),
+// - services: Configuration data for the services
+export async function generateDesignEssentials(config: GeneratorConfig): Promise<void> {
+  const {
+    buildPath,
+    prefix = DEFAULT_PREFIX,
+    baseFontSize = DEFAULT_BASE_FONT_SIZE,
+    services: serviceConfigs
+  } = config;
 
-    // generateFontFacesStyles(generalConfig),
-    // generateScrollbarStyles(generalConfig),
+  // This resolvedServiceConfigs object is defined to provide space for logical modifications
+  // in the service configurations, as it is necessary to determine the buildPath for favicons
+  const resolvedServiceConfigs = {
+    ...serviceConfigs,
 
-    // Generate favicons (if config is provided)
-    ...(faviconsConfig
-      ? [
-          generateFavicons({
-            ...faviconsConfig,
-            outputPath: faviconsConfig.outputPath || path.join(generalConfig.buildPath, 'favicons')
-          })
-        ]
-      : [])
-  ]);
+    // Resolve the build path for favicons:
+    // if no specific build path for favicons is provided,
+    // use the default build path and append the "favicons" directory to it
+    favicons: serviceConfigs.favicons && {
+      ...serviceConfigs.favicons,
+      outputPath: serviceConfigs.favicons.outputPath || path.join(buildPath, 'favicons')
+    }
+  };
+
+  await Promise.all(
+    Object.entries(services)
+      .filter(([serviceName]) =>
+        Object.keys(resolvedServiceConfigs)
+          .map((configName) => `${configName}Service`)
+          .includes(serviceName)
+      )
+      .map(([serviceName, service]) => {
+        const name = serviceName.replace('Service', '') as keyof typeof resolvedServiceConfigs;
+        const config = resolvedServiceConfigs[name];
+        if (config) {
+          return (service as ServiceFunction<typeof config>)({
+            buildPath,
+            prefix,
+            baseFontSize,
+            ...config
+          });
+        }
+        return Promise.resolve();
+      })
+  );
 }

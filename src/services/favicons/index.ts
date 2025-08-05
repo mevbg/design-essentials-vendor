@@ -2,15 +2,15 @@ import favicons from 'favicons';
 import fs from 'fs/promises';
 import path from 'path';
 import { DEFAULT_FAVICONS_CONFIG } from '../../configs.js';
-import type { FaviconsConfig } from '../../types/design.types.js';
+import type { FaviconsConfig, ServiceParams } from '../../types/services.types.js';
 
 // This function generates favicons and prints them out into files
-export const generateFavicons = async ({
+export const faviconsService = async ({
   id,
   sourcePath,
   outputPath,
   ...config
-}: FaviconsConfig) => {
+}: ServiceParams<FaviconsConfig>) => {
   const resolvedOutputPath = path.resolve(outputPath || './favicons');
   const resolvedConfig = {
     path: '/', // This should be the web path, not filesystem path

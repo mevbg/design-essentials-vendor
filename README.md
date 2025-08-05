@@ -133,7 +133,7 @@ type GeneratorConfig = {
   favicons?: {
     id: string; // Unique identifier for the app
     sourcePath: string; // Path to source SVG/PNG image
-    outputPath?: string; // Output directory for favicons (optional)
+    buildPath?: string; // Output directory for favicons (optional)
     appName: string; // Full application name
     appShortName: string; // Short application name
     appDescription: string; // Application description
@@ -206,7 +206,7 @@ type ScrollbarConfig = {
 type FaviconsConfig = {
   id: string; // Unique identifier for the app
   sourcePath: string; // Path to source SVG/PNG image
-  outputPath?: string; // Output directory for favicons (optional)
+  buildPath?: string; // Output directory for favicons (optional)
   appName: string; // Full application name
   appShortName: string; // Short application name
   appDescription: string; // Application description
