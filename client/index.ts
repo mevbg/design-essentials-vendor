@@ -1,4 +1,4 @@
-import type { GeneratorConfig } from '../src/types/generator.types.js';
+import type { MainGeneratorConfig } from '../src/types/generator.types.js';
 import * as configs from './design/configs/index.js';
 
 const { buildPath, prefix, baseFontSize, ...services } = configs;
@@ -12,7 +12,7 @@ export const generateDevClientEssentials: () => Promise<void> = async () => {
       prefix,
       baseFontSize,
       services
-    } as GeneratorConfig);
+    } as MainGeneratorConfig);
     console.info('Design essentials generated successfully!');
   } catch (err) {
     console.error('Failed to generate design essentials:', err);

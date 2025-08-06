@@ -1,28 +1,44 @@
-import { ScrollbarConfig } from '../services/scrollbar/scrollbar.types.js';
-import {
-  FaviconsConfig,
-  FontFacesConfig,
-  IconsConfig,
-  RootScalerConfig,
-  TokensConfig
-} from './index.js';
-import type { ServiceCommonParams } from './services.types.js';
-import { EnforceOptional } from './utils.types.js';
+import type StyleDictionary from 'style-dictionary';
 
 //
 // ---------------------------------------------------
-// GENERATOR CONFIG
+// SERVICE COMMON PARAMS
 
-// This is the main entry configuration object that
-// this generator accepts and requires in order to generate
-// a proper output of all design essentials.
-export type GeneratorConfig = {
-  services: {
-    tokens?: Omit<TokensConfig, keyof ServiceCommonParams>;
-    rootScaler?: Omit<RootScalerConfig, 'baseFontSize' | 'prefix'>;
-    fontFaces?: FontFacesConfig;
-    icons?: IconsConfig;
-    scrollbar?: ScrollbarConfig;
-    favicons?: FaviconsConfig;
-  };
-} & EnforceOptional<ServiceCommonParams, 'prefix' | 'baseFontSize'>;
+// These are the common service parameters
+// that are shared across services.
+export type GeneratorCommonParams = {
+  buildPath: string;
+  prefix: string;
+  baseFontSize: number;
+};
+
+//
+// ---------------------------------------------------
+// SERVICE PARAMS
+
+// TODO
+export type GeneratorParams<T> = GeneratorCommonParams & T;
+
+//
+// ---------------------------------------------------
+// SERVICE FUNCTION
+
+// TODO
+export type GeneratorFn<T, Response = StyleDictionary> = (
+  params: GeneratorParams<T>
+) => Promise<Response>;
+
+//
+// ---------------------------------------------------
+// SERVICE CONFIG RESOLVER FUNCTION
+
+// TODO
+export type GeneratorConfigParserFn<T, Response = StyleDictionary> = (
+  userConfig: T,
+  commonParams: GeneratorCommonParams
+) =>
+  | {
+      config: T;
+      generator: GeneratorFn<T, Response>;
+    }
+  | undefined;

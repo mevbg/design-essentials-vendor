@@ -1,5 +1,5 @@
-import { Format, FormatFnArguments } from 'style-dictionary/types';
-import { ServiceParams } from '../types/services.types.js';
+import { Format } from 'style-dictionary/types';
+import { GeneratorParams } from '../types/generator.types.js';
 import { toCamelCase, toSpaceCase } from './strings.utils.js';
 
 // Returns a file header with a provided name
@@ -20,15 +20,11 @@ export const customFormatterTemplate = <T>({
   outputGenerator: generateOutput
 }: {
   name: string;
-  params: ServiceParams<T>;
-  outputGenerator: (
-    output: string[],
-    params: ServiceParams<T>,
-    formatArgs?: FormatFnArguments
-  ) => string;
+  params: GeneratorParams<T>;
+  outputGenerator: (output: string[], params: GeneratorParams<T>) => string;
 }): Format => ({
   name: getFormatterName(name),
-  format: (formatArgs: FormatFnArguments) => {
+  format: () => {
     // Define the output array
     const output: string[] = [];
 
@@ -36,7 +32,7 @@ export const customFormatterTemplate = <T>({
     output.push(fileHeader(toSpaceCase(toCamelCase(name))));
 
     // Handle the output
-    generateOutput(output, params, formatArgs);
+    generateOutput(output, params);
 
     // Join the output array into a string and return it
     return output.join('\n');

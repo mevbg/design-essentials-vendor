@@ -96,12 +96,12 @@ await generateDesignEssentials({
 
 ### Configuration Options
 
-#### GeneratorConfig
+#### MainGeneratorConfig
 
 The main configuration object that controls the entire generation process:
 
 ```typescript
-type GeneratorConfig = {
+type MainGeneratorConfig = {
   buildPath: string; // Output directory path
   tokens: {
     sourcePath: string; // Path to token source files
@@ -240,10 +240,10 @@ type FaviconsConfig = {
 The main entry point that orchestrates the entire generation process:
 
 ```typescript
-export async function generateDesignEssentials(config: GeneratorConfig): Promise<void>;
+export async function generateDesignEssentials(config: MainGeneratorConfig): Promise<void>;
 ```
 
-#### 2. Services (`src/services/`)
+#### 2. Services (`src/generators/`)
 
 Service modules for different generation tasks:
 
@@ -373,7 +373,7 @@ design-essentials-vendor/
 │   ├── generator.ts                    # Main generator function
 │   ├── configs.ts                      # Default configuration values
 │   ├── formats.ts                      # Format registration
-│   ├── services/                       # Service modules
+│   ├── generators/                       # Service modules
 │   │   ├── index.ts                    # Service exports
 │   │   ├── favicons.service.ts         # Favicon generation service
 │   │   └── style-dictionary.service.ts # Style Dictionary service

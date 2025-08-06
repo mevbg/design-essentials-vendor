@@ -57,6 +57,8 @@ const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
 // TOKENS
 
 export const DEFAULT_TOKENS_CONFIG: Partial<TokensConfig> = {
+  prefix: DEFAULT_PREFIX,
+  baseFontSize: DEFAULT_BASE_FONT_SIZE,
   platforms: [...DEFAULT_PLATFORMS],
   colorScheme: DEFAULT_COLOR_SCHEME,
   fluidScaler: DEFAULT_FLUID_SCALER_CONFIG
