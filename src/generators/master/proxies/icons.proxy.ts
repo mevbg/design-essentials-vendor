@@ -1,25 +1,22 @@
 /* =================================================== */
-/* ICONS → GENERATOR PROXY */
+/* ICONS → PROXY GENERATOR */
 /* =================================================== */
 
-import { GeneratorCommonParams, GeneratorProxyFn } from '../../../types/generator.types.js';
+import { GeneratorCommonParams, ProxyGeneratorFn } from '../../../types/generator.types.js';
 import { IconsGeneratorParams } from '../../../types/index.js';
 import { iconsGenerator } from '../../icons/icons.generator.js';
 
-export const iconsGeneratorProxy: GeneratorProxyFn<IconsGeneratorParams> = (
+export const iconsProxyGenerator: ProxyGeneratorFn<IconsGeneratorParams> = (
   userParams: IconsGeneratorParams,
   commonParams: GeneratorCommonParams
 ) =>
   userParams
-    ? {
-        config: {
-          ...userParams,
-          ...(userParams.buildPath
-            ? { buildPath: userParams.buildPath }
-            : commonParams.buildPath
-              ? { buildPath: commonParams.buildPath + '/css' }
-              : {})
-        },
-        generator: iconsGenerator
-      }
+    ? iconsGenerator({
+        ...userParams,
+        ...(userParams.buildPath
+          ? { buildPath: userParams.buildPath }
+          : commonParams.buildPath
+            ? { buildPath: commonParams.buildPath + '/css' }
+            : {})
+      })
     : undefined;

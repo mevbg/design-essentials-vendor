@@ -24,12 +24,7 @@ export type GeneratorFn<T, Response = StyleDictionary> = (params: T) => Promise<
 // GENERATOR CONFIG PARSER FUNCTION
 
 // TODO
-export type GeneratorProxyFn<T, Response = StyleDictionary> = (
+export type ProxyGeneratorFn<T, Response = StyleDictionary> = (
   userConfig: T,
   commonParams: GeneratorCommonParams
-) =>
-  | {
-      config: T;
-      generator: GeneratorFn<T, Response>;
-    }
-  | undefined;
+) => Promise<Response> | undefined;

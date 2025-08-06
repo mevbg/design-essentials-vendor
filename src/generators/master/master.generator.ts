@@ -2,9 +2,9 @@
 /* MASTER → GENERATOR */
 /* =================================================== */
 
-import type { GeneratorProxyFn } from '../../types/index.js';
+import type { ProxyGeneratorFn } from '../../types/index.js';
 import type { MasterGeneratorParams } from './master.types.js';
-import * as generatorProxies from './proxies/index.js';
+import * as proxyGenerators from './proxies/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -12,7 +12,7 @@ import * as generatorProxies from './proxies/index.js';
 // - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
 // - generators: Configuration data for the generators
-export async function generateDesignEssentials(params: MasterGeneratorParams): Promise<void> {
+export async function masterGenerator(params: MasterGeneratorParams): Promise<void> {
   const { buildPath, prefix, baseFontSize, generators } = params;
 
   if (!generators || !Object.keys(generators).length) {
@@ -23,27 +23,19 @@ export async function generateDesignEssentials(params: MasterGeneratorParams): P
     Object.entries(generators)
       .filter(([, generatorValue]) => !!generatorValue)
       .map(([name, config]) => {
-        const generatorProxy = (
-          generatorProxies as Record<string, GeneratorProxyFn<unknown, unknown>>
-        )[`${name}GeneratorProxy`];
+        const proxyGenerator = (
+          proxyGenerators as Record<string, ProxyGeneratorFn<unknown, unknown>>
+        )[`${name}ProxyGenerator`];
 
-        if (!generatorProxy) {
+        if (!proxyGenerator) {
           throw new Error(`Generator config parser for ${name} not found`);
         }
 
-        const parsedGenerator = generatorProxy(config, {
+        return proxyGenerator(config, {
           buildPath,
           prefix,
           baseFontSize
         });
-
-        if (!parsedGenerator) {
-          throw new Error(`Generator config parser for ${name} not found`);
-        }
-
-        const { config: generatorConfig, generator } = parsedGenerator;
-
-        return generator(generatorConfig as unknown);
       })
   );
 }
