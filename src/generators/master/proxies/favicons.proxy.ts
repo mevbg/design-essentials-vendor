@@ -15,7 +15,11 @@ export const faviconsGeneratorProxy: GeneratorProxyFn<FaviconsGeneratorParams, F
     ? {
         config: {
           ...userParams,
-          buildPath: userParams.buildPath || commonParams.buildPath
+          ...(userParams.buildPath
+            ? { buildPath: userParams.buildPath }
+            : commonParams.buildPath
+              ? { buildPath: commonParams.buildPath + '/favicons' }
+              : {})
         },
         generator: faviconsGenerator
       }

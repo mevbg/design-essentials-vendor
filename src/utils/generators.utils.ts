@@ -9,10 +9,11 @@ export const cssGenerator = <GeneratorParams>(
   params: GeneratorParams,
   outputGenerator: (output: string[], config: GeneratorParams) => string
 ) => {
+  const defaultParams = defaults[`${name}GeneratorDefaultParams` as keyof typeof defaults];
   const config = {
-    ...defaults[`${name}GeneratorDefaultParams` as keyof typeof defaults],
+    ...defaultParams,
     ...params
-  };
+  } as Required<GeneratorParams & { buildPath: string }>;
 
   StyleDictionary.registerFormat(
     customFormatterTemplate<GeneratorParams>({
@@ -32,7 +33,7 @@ export const cssGenerator = <GeneratorParams>(
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: config.buildPath + '/css',
+        buildPath: config.buildPath,
         files: [
           {
             destination: `${toKebabCase(name)}.css`,

@@ -1,8 +1,10 @@
-import { mainGeneratorDefaultParams } from '../../defaults.js';
-import * as generatorProxies from './proxies/index.js';
+/* =================================================== */
+/* MASTER → GENERATOR */
+/* =================================================== */
 
 import type { GeneratorProxyFn } from '../../types/index.js';
-import type { MainGeneratorParams } from './main.types.js';
+import type { MasterGeneratorParams } from './master.types.js';
+import * as generatorProxies from './proxies/index.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -10,28 +12,26 @@ import type { MainGeneratorParams } from './main.types.js';
 // - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
 // - generators: Configuration data for the generators
-export async function generateDesignEssentials(params: MainGeneratorParams = {}): Promise<void> {
+export async function generateDesignEssentials(params: MasterGeneratorParams): Promise<void> {
   const { buildPath, prefix, baseFontSize, generators } = params;
 
-  const selectedGenerators = generators || mainGeneratorDefaultParams.generators;
-
-  if (!selectedGenerators || !Object.keys(selectedGenerators).length) {
+  if (!generators || !Object.keys(generators).length) {
     return Promise.reject(new Error('No generators selected.'));
   }
 
   await Promise.all(
-    Object.entries(selectedGenerators)
+    Object.entries(generators)
       .filter(([, generatorValue]) => !!generatorValue)
       .map(([name, config]) => {
-        const generatorGeneratorProxy = (
+        const generatorProxy = (
           generatorProxies as Record<string, GeneratorProxyFn<unknown, unknown>>
         )[`${name}GeneratorProxy`];
 
-        if (!generatorGeneratorProxy) {
+        if (!generatorProxy) {
           throw new Error(`Generator config parser for ${name} not found`);
         }
 
-        const parsedGenerator = generatorGeneratorProxy(config, {
+        const parsedGenerator = generatorProxy(config, {
           buildPath,
           prefix,
           baseFontSize

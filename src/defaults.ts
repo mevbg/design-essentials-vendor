@@ -9,7 +9,7 @@ import {
   FluidScalerParams,
   FontFacesGeneratorParams,
   IconsGeneratorParams,
-  MainGeneratorParams,
+  MasterGeneratorParams,
   PlatformType,
   RootScalerGeneratorParams,
   ScrollbarGeneratorParams,
@@ -65,7 +65,7 @@ export const tokensGeneratorDefaultParams: TokensGeneratorParams = {
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
   colorScheme: DEFAULT_COLOR_SCHEME_PARAMS,
   fluidScaler: DEFAULT_FLUID_SCALER_PARAMS,
-  buildPath: DEFAULT_BUILD_PATH + '/tokens'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
@@ -77,7 +77,7 @@ export const rootScalerGeneratorDefaultParams: RootScalerGeneratorParams = {
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   minViewportW: 300,
   maxViewportW: 2100,
-  buildPath: DEFAULT_BUILD_PATH + '/css'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
@@ -88,7 +88,7 @@ export const iconsGeneratorDefaultParams: IconsGeneratorParams = {
   fontFamily: 'Iconography',
   color: 'currentColor',
   list: {},
-  buildPath: DEFAULT_BUILD_PATH + '/css'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
@@ -96,7 +96,7 @@ export const iconsGeneratorDefaultParams: IconsGeneratorParams = {
 // FONT FACES
 
 export const fontFacesGeneratorDefaultParams: Partial<FontFacesGeneratorParams> = {
-  buildPath: DEFAULT_BUILD_PATH + '/css'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
@@ -112,7 +112,7 @@ export const scrollbarGeneratorDefaultParams: ScrollbarGeneratorParams = {
   thumbColor: '#ccc',
   thumbColorHover: '#ccc',
   thumbColorActive: '#999',
-  buildPath: DEFAULT_BUILD_PATH + '/css'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
@@ -153,14 +153,14 @@ export const faviconsGeneratorDefaultParams: Partial<FaviconsGeneratorParams> = 
     yandex: { offset: 10 } as any // Create Yandex browser icon. `boolean` or `{ offset, background }` or an array of sources
     /* eslint-enable @typescript-eslint/no-explicit-any */
   },
-  buildPath: DEFAULT_BUILD_PATH + '/favicons'
+  buildPath: DEFAULT_BUILD_PATH
 };
 
 //
 // ---------------------------------------------------
-// MAIN GENERATOR
+// MASTER GENERATOR
 
-export const mainGeneratorDefaultParams: MainGeneratorParams = {
+export const masterGeneratorDefaultParams: MasterGeneratorParams = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   generators: {

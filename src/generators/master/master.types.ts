@@ -1,3 +1,7 @@
+/* =================================================== */
+/* MASTER → TYPES */
+/* =================================================== */
+
 import {
   FaviconsGeneratorParams,
   FontFacesGeneratorParams,
@@ -15,8 +19,8 @@ import {
 // This is the main entry configuration object that
 // this generator accepts and requires in order to generate
 // a proper output of all design essentials.
-export type MainGeneratorParams = {
-  generators?: {
+export type MasterGeneratorParams = {
+  generators: {
     tokens?: TokensGeneratorParams;
     rootScaler?: RootScalerGeneratorParams;
     fontFaces?: FontFacesGeneratorParams;

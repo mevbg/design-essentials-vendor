@@ -1,4 +1,4 @@
-import type { MainGeneratorParams } from '../src/generators/main/main.types.js';
+import { MasterGeneratorParams } from '../src/types/index.js';
 import * as configs from './design/configs/index.js';
 
 const { buildPath, prefix, baseFontSize, ...generators } = configs;
@@ -10,12 +10,12 @@ export const generateDevClientEssentials: () => Promise<void> = async () => {
     await generateDesignEssentials({
       buildPath,
       prefix,
-      baseFontSize
-      // generators
-    } as MainGeneratorParams);
+      baseFontSize,
+      generators
+    } as MasterGeneratorParams);
     console.info('Design essentials generated successfully!');
   } catch (err) {
     console.info('Failed to generate design essentials:', err.message);
-    // throw err;
+    throw err;
   }
 };

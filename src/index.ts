@@ -1,5 +1,5 @@
-// Main generator
-export { generateDesignEssentials } from './generators/main/main.generator.js';
+// Master generator
+export { generateDesignEssentials } from './generators/master/master.generator.js';
 
 // Generators
 export { faviconsGenerator as generateFavicons } from './generators/favicons/favicons.generator.js';

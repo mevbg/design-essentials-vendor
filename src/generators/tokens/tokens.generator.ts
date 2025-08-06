@@ -5,20 +5,18 @@
 import path from 'path';
 import StyleDictionary from 'style-dictionary';
 import { Format } from 'style-dictionary/types';
+import { tokensGeneratorDefaultParams } from '../../defaults.js';
 import type { TokensDesignData, TokensGeneratorParams } from '../../types/index.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
 
 // This function generates the design tokens
-export const tokensGenerator = async ({
-  buildPath,
-  prefix,
-  baseFontSize,
-  sourcePath,
-  platforms,
-  fluidScaler,
-  colorScheme
-}: TokensGeneratorParams): Promise<StyleDictionary> => {
+export const tokensGenerator = async (params: TokensGeneratorParams): Promise<StyleDictionary> => {
+  const { buildPath, prefix, baseFontSize, sourcePath, platforms, fluidScaler, colorScheme } = {
+    ...tokensGeneratorDefaultParams,
+    ...params
+  } as Required<TokensGeneratorParams>;
+
   const designData: TokensDesignData = {
     baseFontSize,
     colorScheme,

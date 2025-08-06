@@ -9,7 +9,8 @@ import { cssGenerator } from '../../utils/generators.utils.js';
 // This function outputs the root font size definition
 export const rootScalerGenerator = (params: RootScalerGeneratorParams) =>
   cssGenerator<RootScalerGeneratorParams>('rootScaler', params, (output, config) => {
-    const { minViewportW, maxViewportW, baseFontSize } = config;
+    const { minViewportW, maxViewportW, baseFontSize } =
+      config as Required<RootScalerGeneratorParams>;
     const prefix = config.prefix ? `${config.prefix}-` : '';
 
     const variants = [

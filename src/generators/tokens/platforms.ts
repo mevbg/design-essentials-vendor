@@ -108,12 +108,9 @@ export const getPlatformConfigs = async ({
             : []),
 
           // if customFiles is provided, a file for each one of them should be created
+          // Note to myself: JS files are customFiles
           ...customFiles.map((file) => ({
-            destination: getDestinationFileName(
-              platformType,
-              file as PlatformFilename,
-              platformType === 'css' ? '' : undefined // keeps custom CSS files outside "tokens" directory
-            ),
+            destination: getDestinationFileName(platformType, file as PlatformFilename),
             format: getCategoryFormatterName(formatterCategory, file)
           }))
         ],

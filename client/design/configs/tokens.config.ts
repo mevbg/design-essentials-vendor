@@ -5,7 +5,7 @@ import { TokensGeneratorParams, PlatformType, ColorSchemeMethod, ColorSchemeType
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const tokens: TokensGeneratorParams = { 
+export const tokens: TokensGeneratorParams = {
   sourcePath: path.resolve(__dirname, '../tokens/**/index.ts'),
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
   fluidScaler: {

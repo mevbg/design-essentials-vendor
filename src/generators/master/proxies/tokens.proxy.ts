@@ -14,9 +14,17 @@ export const tokensGeneratorProxy: GeneratorProxyFn<TokensGeneratorParams> = (
     ? {
         config: {
           ...userParams,
-          buildPath: userParams.buildPath || commonParams.buildPath,
-          prefix: userParams.prefix || commonParams.prefix,
-          baseFontSize: userParams.baseFontSize || commonParams.baseFontSize
+          ...(userParams.buildPath
+            ? { buildPath: userParams.buildPath }
+            : commonParams.buildPath
+              ? { buildPath: commonParams.buildPath + '/tokens' }
+              : {}),
+          ...(userParams.prefix || commonParams.prefix
+            ? { prefix: userParams.prefix || commonParams.prefix }
+            : {}),
+          ...(userParams.baseFontSize || commonParams.baseFontSize
+            ? { baseFontSize: userParams.baseFontSize || commonParams.baseFontSize }
+            : {})
         },
         generator: tokensGenerator
       }

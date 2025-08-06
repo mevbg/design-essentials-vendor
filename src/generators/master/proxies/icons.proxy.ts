@@ -14,7 +14,11 @@ export const iconsGeneratorProxy: GeneratorProxyFn<IconsGeneratorParams> = (
     ? {
         config: {
           ...userParams,
-          buildPath: userParams.buildPath || commonParams.buildPath
+          ...(userParams.buildPath
+            ? { buildPath: userParams.buildPath }
+            : commonParams.buildPath
+              ? { buildPath: commonParams.buildPath + '/css' }
+              : {})
         },
         generator: iconsGenerator
       }

@@ -17,11 +17,8 @@ import {
 import { tokenIsFluid } from './fluid-tokens.utils.js';
 
 // Returns a destination file name
-export const getDestinationFileName = (
-  platformType: PlatformType,
-  name: PlatformFilename,
-  dir = 'tokens'
-) => `${dir ? `${dir}/` : ''}/${platformType}/${name}.${platformType}`;
+export const getDestinationFileName = (platformType: PlatformType, name: PlatformFilename) =>
+  `${platformType}/${name}.${platformType}`;
 
 // Returns a formatter name
 export const getCategoryFormatterName = (category: CustomFormatterCategory, name: string) =>

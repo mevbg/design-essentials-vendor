@@ -11,21 +11,22 @@ import type { FaviconsGeneratorParams } from './favicons.types.js';
 // This function generates favicons and prints them out into files
 export const faviconsGenerator = async ({ id, sourcePath, ...params }: FaviconsGeneratorParams) => {
   const config = {
-    path: '/', // This should be the web path, not filesystem path
     ...faviconsGeneratorDefaultParams,
     ...params,
     manifestMaskable: params.manifestMaskable || sourcePath
-  };
+  } as Required<FaviconsGeneratorParams>;
+  const resolvedBuildPath = path.resolve(
+    config.buildPath || (faviconsGeneratorDefaultParams.buildPath as string)
+  );
 
   // Create output directory if it doesn't exist
-  await fs.mkdir(config.buildPath, { recursive: true });
+  await fs.mkdir(resolvedBuildPath, { recursive: true });
 
   const faviconsResult = await favicons(sourcePath, config);
-
   await Promise.all([
     // Write image files
     ...faviconsResult.images.map(async (image) => {
-      await fs.writeFile(path.join(config.buildPath, image.name), image.contents);
+      await fs.writeFile(path.join(resolvedBuildPath, image.name), image.contents);
     }),
 
     // Write manifest and other files
@@ -53,11 +54,11 @@ export const faviconsGenerator = async ({ id, sourcePath, ...params }: FaviconsG
         }
       }
 
-      await fs.writeFile(path.join(config.buildPath, file.name), fileContents);
+      await fs.writeFile(path.join(resolvedBuildPath, file.name), fileContents);
     })
   ]);
 
-  console.info(`Favicons generated successfully in: ${config.buildPath}`);
+  console.info(`Favicons generated successfully in: ${resolvedBuildPath}`);
   console.info(
     `Generated ${faviconsResult.images.length} images and ${faviconsResult.files.length} files`
   );
