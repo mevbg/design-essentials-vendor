@@ -2,10 +2,21 @@
 /* MASTER → GENERATOR */
 /* =================================================== */
 
-import type { ProxyGeneratorFn } from '../../types/index.js';
-import { proxyGenerator as proxyGeneratorFn } from './master.proxy.js';
+import { GeneratorCommonParams } from '../../types/generator.types.js';
+import * as generators from '../index.js';
 import type { MasterGeneratorParams } from './master.types.js';
-import * as proxyGenerators from './proxies/index.js';
+
+const generatorConfigs: Record<
+  string,
+  { commonParams: Array<keyof GeneratorCommonParams>; dir: string }
+> = {
+  favicons: { commonParams: ['buildPath'], dir: 'favicons' },
+  fontFaces: { commonParams: ['buildPath'], dir: 'css' },
+  icons: { commonParams: ['buildPath'], dir: 'css' },
+  scrollbar: { commonParams: ['buildPath'], dir: 'css' },
+  rootScaler: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
+  tokens: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'tokens' }
+};
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -14,31 +25,49 @@ import * as proxyGenerators from './proxies/index.js';
 // - baseFontSize: Base font size for the design system
 // - generators: Configuration data for the generators
 export async function masterGenerator(masterParams: MasterGeneratorParams): Promise<void> {
-  const { buildPath, prefix, baseFontSize, generators } = masterParams;
-
-  if (!generators || !Object.keys(generators).length) {
+  if (!masterParams.generators || !Object.keys(masterParams.generators).length) {
     return Promise.reject(new Error('No generators selected.'));
   }
 
   await Promise.all(
-    Object.entries(generators)
+    Object.entries(masterParams.generators)
       .filter(([, generatorValue]) => !!generatorValue)
-      .map(([name, generatorParams]) => {
-        const proxyGenerator = (
-          proxyGenerators as Record<string, ProxyGeneratorFn<unknown, unknown>>
-        )[`${name}ProxyGenerator`];
+      .map(([name]) => {
+        const { generators: generatorParams, ...commonParams } = masterParams;
+        const userParams = generatorParams[name as keyof typeof masterParams.generators];
+        const generator = generators[`${name}Generator` as keyof typeof generators];
 
-        proxyGeneratorFn(name, masterParams);
+        const resolvedParams = {
+          ...userParams,
+          ...(userParams?.buildPath
+            ? { buildPath: userParams.buildPath }
+            : commonParams?.buildPath
+              ? { buildPath: commonParams.buildPath + `/${generatorConfigs[name].dir}` }
+              : {}),
+          ...(generatorConfigs[name].commonParams.includes('prefix')
+            ? (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
+              commonParams?.prefix
+              ? {
+                  prefix:
+                    (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
+                    commonParams?.prefix
+                }
+              : {}
+            : {}),
+          ...(generatorConfigs[name].commonParams.includes('baseFontSize')
+            ? (userParams && 'baseFontSize' in userParams ? userParams.baseFontSize : undefined) ||
+              commonParams?.baseFontSize
+              ? {
+                  baseFontSize:
+                    (userParams && 'baseFontSize' in userParams
+                      ? userParams.baseFontSize
+                      : undefined) || commonParams?.baseFontSize
+                }
+              : {}
+            : {})
+        };
 
-        if (!proxyGenerator) {
-          throw new Error(`Generator config parser for ${name} not found`);
-        }
-
-        return proxyGenerator(generatorParams, {
-          buildPath,
-          prefix,
-          baseFontSize
-        });
+        return (generator as (params: typeof resolvedParams) => unknown)(resolvedParams);
       })
   );
 }
