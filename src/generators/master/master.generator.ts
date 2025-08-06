@@ -3,6 +3,7 @@
 /* =================================================== */
 
 import type { ProxyGeneratorFn } from '../../types/index.js';
+import { proxyGenerator as proxyGeneratorFn } from './master.proxy.js';
 import type { MasterGeneratorParams } from './master.types.js';
 import * as proxyGenerators from './proxies/index.js';
 
@@ -12,8 +13,8 @@ import * as proxyGenerators from './proxies/index.js';
 // - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
 // - generators: Configuration data for the generators
-export async function masterGenerator(params: MasterGeneratorParams): Promise<void> {
-  const { buildPath, prefix, baseFontSize, generators } = params;
+export async function masterGenerator(masterParams: MasterGeneratorParams): Promise<void> {
+  const { buildPath, prefix, baseFontSize, generators } = masterParams;
 
   if (!generators || !Object.keys(generators).length) {
     return Promise.reject(new Error('No generators selected.'));
@@ -22,16 +23,18 @@ export async function masterGenerator(params: MasterGeneratorParams): Promise<vo
   await Promise.all(
     Object.entries(generators)
       .filter(([, generatorValue]) => !!generatorValue)
-      .map(([name, config]) => {
+      .map(([name, generatorParams]) => {
         const proxyGenerator = (
           proxyGenerators as Record<string, ProxyGeneratorFn<unknown, unknown>>
         )[`${name}ProxyGenerator`];
+
+        proxyGeneratorFn(name, masterParams);
 
         if (!proxyGenerator) {
           throw new Error(`Generator config parser for ${name} not found`);
         }
 
-        return proxyGenerator(config, {
+        return proxyGenerator(generatorParams, {
           buildPath,
           prefix,
           baseFontSize
