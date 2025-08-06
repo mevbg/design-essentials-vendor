@@ -28,7 +28,7 @@ export enum ColorSchemeMethod {
 
 // This is the object that contains the key data
 // necessary for defining the color scheme.
-export type ColorSchemeConfig = {
+export type ColorSchemeParams = {
   // This property determines the default color scheme to be used initially
   // when no other logic is applied.
   default?: ColorSchemeType;
@@ -45,7 +45,7 @@ export type ColorSchemeConfig = {
 // The Fluid Scaler is the one that takes care of the gradual scaling of typography
 // and other given elements, by applying dynamic calc()-based formula as a value,
 // when in between the minViewportW and maxViewportW breakpoints.
-export type FluidScalerConfig = {
+export type FluidScalerParams = {
   // This is the minimum viewport width above which the fluid scaler is applied.
   // Below that breakpoint, the min given value is fixed.
   minViewportW: number;
@@ -61,9 +61,9 @@ export type FluidScalerConfig = {
 
 // This is the object that contains the key data
 // necessary for defining the tokens.
-export type TokensConfig = {
-  sourcePath: string;
-  platforms: PlatformType[];
-  colorScheme: ColorSchemeConfig;
-  fluidScaler: FluidScalerConfig;
+export type TokensGeneratorParams = {
+  sourcePath?: string;
+  platforms?: PlatformType[];
+  colorScheme?: ColorSchemeParams;
+  fluidScaler?: FluidScalerParams;
 } & GeneratorCommonParams;

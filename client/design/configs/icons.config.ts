@@ -1,6 +1,6 @@
-import type { IconsConfig } from '../../../src/types/index.js';
+import type { IconsGeneratorParams } from '../../../src/types/index.js';
 
-export const icons: IconsConfig = {
+export const icons: IconsGeneratorParams = {
   fontFamily: 'DevIcons', // optional (Iconography by default)
   color: 'var(--dev-color-content-gray-weak)', // optional (currentColor by default)
   list: {

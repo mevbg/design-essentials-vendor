@@ -1,6 +1,6 @@
-import type { ScrollbarConfig } from '../../../src/types/index.js';
+import type { ScrollbarGeneratorParams } from '../../../src/types/index.js';
 
-export const scrollbar: ScrollbarConfig = {
+export const scrollbar: ScrollbarGeneratorParams = {
   areaWidth: 16,
   thumbSizeBase: 4,
   thumbSizeOver: 10,

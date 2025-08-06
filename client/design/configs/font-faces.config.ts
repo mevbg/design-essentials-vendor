@@ -1,6 +1,6 @@
-import type { FontFacesConfig } from '../../../src/types/index.js';
+import type { FontFacesGeneratorParams } from '../../../src/types/index.js';
 
-export const fontFaces: FontFacesConfig = {
+export const fontFaces: FontFacesGeneratorParams = {
   path: 'client/fonts',
   fonts: {
     Gotham: {

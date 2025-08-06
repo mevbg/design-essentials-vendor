@@ -2,36 +2,30 @@
 /* SCROLLBAR → GENERATOR */
 /* =================================================== */
 
-import { DEFAULT_SCROLLBAR_CONFIG } from '../../defaults.js';
-import { GeneratorParams, ScrollbarConfig } from '../../types/index.js';
+import { ScrollbarGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock } from '../../utils/formats.utils.js';
-import { cssService } from '../../utils/services.utils.js';
+import { cssGenerator } from '../../utils/generators.utils.js';
 
 // This function outputs the scrollbar styles
-export const scrollbarGenerator = (params: GeneratorParams<ScrollbarConfig>) => {
-  const resolvedParams = {
-    ...DEFAULT_SCROLLBAR_CONFIG,
-    ...params
-  };
-
-  return cssService<ScrollbarConfig>('scrollbar', resolvedParams, (output) => {
+export const scrollbarGenerator = (params: ScrollbarGeneratorParams) =>
+  cssGenerator<ScrollbarGeneratorParams>('scrollbar', params, (output, config) => {
     output.push(
       cssSelectorBlock({
         name: 'html:not(.isMacOs)',
-        code: `  --scrollbar-area: ${resolvedParams.areaWidth}px;
-  --scrollbar-thumb-size-base: ${resolvedParams.thumbSizeBase}px;
-  --scrollbar-thumb-size-over: ${resolvedParams.thumbSizeOver}px;
+        code: `  --scrollbar-area: ${config.areaWidth}px;
+  --scrollbar-thumb-size-base: ${config.thumbSizeBase}px;
+  --scrollbar-thumb-size-over: ${config.thumbSizeOver}px;
   --scrollbar-gap-size-base: calc(
     (var(--scrollbar-area) - var(--scrollbar-thumb-size-base)) / 2
   ); /* 6px */
   --scrollbar-gap-size-over: calc(
     (var(--scrollbar-area) - var(--scrollbar-thumb-size-over)) / 2
   ); /* 3px */
-  --scrollbar-background: ${resolvedParams.scrollbarBackground};
-  --scrollbar-thumb-color: ${resolvedParams.thumbColor};
-  --scrollbar-thumb-color-hover: ${resolvedParams.thumbColorHover};
-  --scrollbar-thumb-color-active: ${resolvedParams.thumbColorActive};
-  --scrollbar-thumb-min-size: ${resolvedParams.thumbMinSize}px;
+  --scrollbar-background: ${config.scrollbarBackground};
+  --scrollbar-thumb-color: ${config.thumbColor};
+  --scrollbar-thumb-color-hover: ${config.thumbColorHover};
+  --scrollbar-thumb-color-active: ${config.thumbColorActive};
+  --scrollbar-thumb-min-size: ${config.thumbMinSize}px;
 
   /* Scrollbar area */
   ::-webkit-scrollbar:vertical {
@@ -116,4 +110,3 @@ export const scrollbarGenerator = (params: GeneratorParams<ScrollbarConfig>) => 
 
     return `${output.join('\n')}\n`;
   });
-};

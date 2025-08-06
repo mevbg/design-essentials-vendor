@@ -2,20 +2,14 @@
 /* ICONS → GENERATOR */
 /* =================================================== */
 
-import { DEFAULT_ICONS_CONFIG } from '../../defaults.js';
-import { GeneratorParams, IconsConfig } from '../../types/index.js';
+import { IconsGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
-import { cssService } from '../../utils/services.utils.js';
+import { cssGenerator } from '../../utils/generators.utils.js';
 
 // This function outputs the icons definitions
-export const iconsGenerator = (params: GeneratorParams<IconsConfig>) => {
-  const resolvedParams = {
-    ...DEFAULT_ICONS_CONFIG,
-    ...params
-  };
-
-  return cssService<IconsConfig>('icons', resolvedParams, (output) => {
-    const { fontFamily, color, list } = resolvedParams;
+export const iconsGenerator = (params: IconsGeneratorParams) =>
+  cssGenerator<IconsGeneratorParams>('icons', params, (output, config) => {
+    const { fontFamily, color, list } = config;
     const attr = 'data-i';
 
     output.push(
@@ -59,4 +53,3 @@ export const iconsGenerator = (params: GeneratorParams<IconsConfig>) => {
 
     return `${output.join('\n')}\n`;
   });
-};

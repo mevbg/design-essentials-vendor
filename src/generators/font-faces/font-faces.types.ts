@@ -6,9 +6,10 @@
 // ---------------------------------------------------
 // CONFIG
 
-export type FontFacesConfig = {
+export type FontFacesGeneratorParams = {
   path: string;
   fonts: Record<string, Record<string, number>>;
+  buildPath?: string;
 };
 
 //

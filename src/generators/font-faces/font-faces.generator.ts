@@ -4,9 +4,9 @@
 
 import fs from 'fs';
 import path from 'path';
-import { FontFace, FontFacesConfig, GeneratorParams } from '../../types/index.js';
+import { FontFace, FontFacesGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
-import { cssService } from '../../utils/services.utils.js';
+import { cssGenerator } from '../../utils/generators.utils.js';
 
 // This function scans the given fonts directory for any available typefaces
 // and returns an array of typefaces with their weights and files
@@ -69,7 +69,7 @@ function getTypefaces(dir: string): { name: string; weights: Record<string, stri
 
 // This function prepares the array
 // of all available font faces that should be in the output
-function getFontFaces({ fonts, path: fontsPath }: GeneratorParams<FontFacesConfig>): FontFace[] {
+function getFontFaces({ fonts, path: fontsPath }: FontFacesGeneratorParams): FontFace[] {
   const fontFaces: FontFace[] = [];
   const typefaces = getTypefaces(fontsPath);
   typefaces.forEach(({ name: typefaceName, weights: typefaceWeights }) => {
@@ -116,8 +116,8 @@ function getFontFaces({ fonts, path: fontsPath }: GeneratorParams<FontFacesConfi
 }
 
 // This function outputs the font faces
-export const fontFacesGenerator = (params: GeneratorParams<FontFacesConfig>) =>
-  cssService<FontFacesConfig>('fontFaces', params, (output) => {
+export const fontFacesGenerator = (params: FontFacesGeneratorParams) =>
+  cssGenerator<FontFacesGeneratorParams>('fontFaces', params, (output, config) => {
     // conditions:
     // • only woff2 files, one per font weight is expected
     // • every italic file for a given weight is expected
@@ -127,7 +127,7 @@ export const fontFacesGenerator = (params: GeneratorParams<FontFacesConfig>) =>
     //   meaning that if the file name is 'Gotham-XLight.woff2'
     //   then the font weight should be named 'XLight
 
-    const fontFaces: FontFace[] = getFontFaces(params);
+    const fontFaces: FontFace[] = getFontFaces(config);
 
     fontFaces.forEach((fontFace) => {
       output.push(

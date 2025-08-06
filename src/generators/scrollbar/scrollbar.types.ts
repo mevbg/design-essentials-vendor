@@ -6,7 +6,7 @@
 // ---------------------------------------------------
 // CONFIG
 
-export type ScrollbarConfig = {
+export type ScrollbarGeneratorParams = {
   areaWidth?: number;
   thumbSizeBase?: number;
   thumbSizeOver?: number;
@@ -15,4 +15,5 @@ export type ScrollbarConfig = {
   thumbColor?: string;
   thumbColorHover?: string;
   thumbColorActive?: string;
+  buildPath?: string;
 };

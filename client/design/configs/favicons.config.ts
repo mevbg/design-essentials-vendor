@@ -1,6 +1,6 @@
-import type { FaviconsConfig } from '../../../src/types/index.js';
+import type { FaviconsGeneratorParams } from '../../../src/types/index.js';
 
-export const favicons: FaviconsConfig = {
+export const favicons: FaviconsGeneratorParams = {
   id: 'https://mev.bg',
   sourcePath: 'client/images/logo.svg',
   appName: 'Client Design Essentials',

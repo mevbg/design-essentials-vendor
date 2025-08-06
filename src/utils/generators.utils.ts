@@ -1,18 +1,23 @@
 import StyleDictionary from 'style-dictionary';
 
-import { GeneratorParams } from '../types/generator.types.js';
+import * as defaults from '../defaults.js';
 import { customFormatterTemplate, getFormatterName } from './formats.utils.js';
 import { toKebabCase } from './strings.utils.js';
 
-export const cssService = <T>(
+export const cssGenerator = <GeneratorParams>(
   name: string,
-  params: GeneratorParams<T>,
-  outputGenerator: (output: string[]) => string
+  params: GeneratorParams,
+  outputGenerator: (output: string[], config: GeneratorParams) => string
 ) => {
+  const config = {
+    ...defaults[`${name}GeneratorDefaultParams` as keyof typeof defaults],
+    ...params
+  };
+
   StyleDictionary.registerFormat(
-    customFormatterTemplate<T>({
+    customFormatterTemplate<GeneratorParams>({
       name,
-      params,
+      config,
       outputGenerator
     })
   );
@@ -27,7 +32,7 @@ export const cssService = <T>(
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: params.buildPath + '/css',
+        buildPath: config.buildPath + '/css',
         files: [
           {
             destination: `${toKebabCase(name)}.css`,

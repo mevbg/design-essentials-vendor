@@ -1,46 +1,49 @@
-import { DEFAULT_TOKENS_CONFIG } from '../../defaults.js';
-import * as serviceConfigParsers from './configs/index.js';
+import { mainGeneratorDefaultParams } from '../../defaults.js';
+import * as generatorProxies from './proxies/index.js';
 
-import type { GeneratorConfigParserFn, GeneratorParams } from '../../types/index.js';
-import type { MainGeneratorConfig } from './main.types.js';
+import type { GeneratorProxyFn } from '../../types/index.js';
+import type { MainGeneratorParams } from './main.types.js';
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
 // - buildPath: Path to the directory where the generated output files will be created
 // - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
-// - services: Configuration data for the services
-export async function generateDesignEssentials(config: MainGeneratorConfig): Promise<void> {
-  const { buildPath, prefix, baseFontSize, services } = {
-    ...DEFAULT_TOKENS_CONFIG,
-    ...config
-  } as Required<MainGeneratorConfig>;
+// - generators: Configuration data for the generators
+export async function generateDesignEssentials(params: MainGeneratorParams = {}): Promise<void> {
+  const { buildPath, prefix, baseFontSize, generators } = params;
+
+  const selectedGenerators = generators || mainGeneratorDefaultParams.generators;
+
+  if (!selectedGenerators || !Object.keys(selectedGenerators).length) {
+    return Promise.reject(new Error('No generators selected.'));
+  }
 
   await Promise.all(
-    Object.entries(services)
-      .filter(([, serviceValue]) => !!serviceValue)
+    Object.entries(selectedGenerators)
+      .filter(([, generatorValue]) => !!generatorValue)
       .map(([name, config]) => {
-        const serviceConfigParser = (
-          serviceConfigParsers as Record<string, GeneratorConfigParserFn<unknown, unknown>>
-        )[`${name}ConfigParser`];
+        const generatorGeneratorProxy = (
+          generatorProxies as Record<string, GeneratorProxyFn<unknown, unknown>>
+        )[`${name}GeneratorProxy`];
 
-        if (!serviceConfigParser) {
-          throw new Error(`Service config parser for ${name} not found`);
+        if (!generatorGeneratorProxy) {
+          throw new Error(`Generator config parser for ${name} not found`);
         }
 
-        const parsedService = serviceConfigParser(config, {
+        const parsedGenerator = generatorGeneratorProxy(config, {
           buildPath,
           prefix,
           baseFontSize
         });
 
-        if (!parsedService) {
-          throw new Error(`Service config parser for ${name} not found`);
+        if (!parsedGenerator) {
+          throw new Error(`Generator config parser for ${name} not found`);
         }
 
-        const { config: serviceConfig, generator } = parsedService;
+        const { config: generatorConfig, generator } = parsedGenerator;
 
-        return generator(serviceConfig as GeneratorParams<unknown>);
+        return generator(generatorConfig as unknown);
       })
   );
 }

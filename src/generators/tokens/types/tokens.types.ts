@@ -1,5 +1,5 @@
 import type { Kebab } from '../../../types/utils.types.js';
-import type { ColorSchemeConfig, FluidScalerConfig } from './config.types.js';
+import type { ColorSchemeParams, FluidScalerParams } from './config.types.js';
 
 //
 // ---------------------------------------------------
@@ -59,6 +59,6 @@ export type CoreTokenKebabValues = `${Kebab<CoreToken>}`;
 // for specific token handlers.
 export type TokensDesignData = {
   baseFontSize?: number;
-  colorScheme?: ColorSchemeConfig;
-  fluidScaler?: FluidScalerConfig;
+  colorScheme?: ColorSchemeParams;
+  fluidScaler?: FluidScalerParams;
 };

@@ -5,34 +5,27 @@
 import favicons from 'favicons';
 import fs from 'fs/promises';
 import path from 'path';
-import { DEFAULT_FAVICONS_CONFIG } from '../../defaults.js';
-import type { GeneratorParams } from '../../types/index.js';
-import type { FaviconsConfig } from './favicons.types.js';
+import { faviconsGeneratorDefaultParams } from '../../defaults.js';
+import type { FaviconsGeneratorParams } from './favicons.types.js';
 
 // This function generates favicons and prints them out into files
-export const faviconsGenerator = async ({
-  id,
-  sourcePath,
-  outputPath,
-  ...config
-}: GeneratorParams<FaviconsConfig>) => {
-  const resolvedOutputPath = path.resolve(outputPath || './favicons');
-  const resolvedConfig = {
+export const faviconsGenerator = async ({ id, sourcePath, ...params }: FaviconsGeneratorParams) => {
+  const config = {
     path: '/', // This should be the web path, not filesystem path
-    ...DEFAULT_FAVICONS_CONFIG,
-    ...config,
-    manifestMaskable: config.manifestMaskable || sourcePath
+    ...faviconsGeneratorDefaultParams,
+    ...params,
+    manifestMaskable: params.manifestMaskable || sourcePath
   };
 
   // Create output directory if it doesn't exist
-  await fs.mkdir(resolvedOutputPath, { recursive: true });
+  await fs.mkdir(config.buildPath, { recursive: true });
 
-  const faviconsResult = await favicons(sourcePath, resolvedConfig);
+  const faviconsResult = await favicons(sourcePath, config);
 
   await Promise.all([
     // Write image files
     ...faviconsResult.images.map(async (image) => {
-      await fs.writeFile(path.join(resolvedOutputPath, image.name), image.contents);
+      await fs.writeFile(path.join(config.buildPath, image.name), image.contents);
     }),
 
     // Write manifest and other files
@@ -42,7 +35,7 @@ export const faviconsGenerator = async ({
       // Add "id" property to manifest.webmanifest if it's a JSON file
       if (file.name === 'manifest.webmanifest') {
         try {
-          const { developerName: developer_name, developerURL: developer_url } = resolvedConfig;
+          const { developerName: developer_name, developerURL: developer_url } = config;
           const manifest = JSON.parse(file.contents);
           const updatedManifest = {
             id,
@@ -60,11 +53,11 @@ export const faviconsGenerator = async ({
         }
       }
 
-      await fs.writeFile(path.join(resolvedOutputPath, file.name), fileContents);
+      await fs.writeFile(path.join(config.buildPath, file.name), fileContents);
     })
   ]);
 
-  console.info(`Favicons generated successfully in: ${resolvedOutputPath}`);
+  console.info(`Favicons generated successfully in: ${config.buildPath}`);
   console.info(
     `Generated ${faviconsResult.images.length} images and ${faviconsResult.files.length} files`
   );

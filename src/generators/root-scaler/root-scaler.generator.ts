@@ -2,21 +2,15 @@
 /* ROOT SCALER → GENERATOR */
 /* =================================================== */
 
-import { DEFAULT_ROOT_SCALER_CONFIG } from '../../defaults.js';
-import { GeneratorParams, RootScalerConfig } from '../../types/index.js';
+import { RootScalerGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
-import { cssService } from '../../utils/services.utils.js';
+import { cssGenerator } from '../../utils/generators.utils.js';
 
 // This function outputs the root font size definition
-export const rootScalerGenerator = (params: GeneratorParams<RootScalerConfig>) => {
-  const resolvedParams = {
-    ...DEFAULT_ROOT_SCALER_CONFIG,
-    ...params
-  };
-
-  return cssService<RootScalerConfig>('rootScaler', resolvedParams, (output) => {
-    const { minViewportW, maxViewportW, baseFontSize } = resolvedParams;
-    const prefix = resolvedParams.prefix ? `${resolvedParams.prefix}-` : '';
+export const rootScalerGenerator = (params: RootScalerGeneratorParams) =>
+  cssGenerator<RootScalerGeneratorParams>('rootScaler', params, (output, config) => {
+    const { minViewportW, maxViewportW, baseFontSize } = config;
+    const prefix = config.prefix ? `${config.prefix}-` : '';
 
     const variants = [
       // from 0 up to min breakpoint
@@ -65,4 +59,3 @@ export const rootScalerGenerator = (params: GeneratorParams<RootScalerConfig>) =
 
     return `${output.join('\n')}\n`;
   });
-};

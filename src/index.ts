@@ -1,7 +1,7 @@
 // Main generator
 export { generateDesignEssentials } from './generators/main/main.generator.js';
 
-// Services
+// Generators
 export { faviconsGenerator as generateFavicons } from './generators/favicons/favicons.generator.js';
 export { fontFacesGenerator as generateFontFaces } from './generators/font-faces/font-faces.generator.js';
 export { iconsGenerator as generateIcons } from './generators/icons/icons.generator.js';

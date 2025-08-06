@@ -2,38 +2,29 @@ import type StyleDictionary from 'style-dictionary';
 
 //
 // ---------------------------------------------------
-// SERVICE COMMON PARAMS
+// GENERATOR COMMON PARAMS
 
-// These are the common service parameters
-// that are shared across services.
+// These are the common generator parameters
+// that are shared across generators.
 export type GeneratorCommonParams = {
-  buildPath: string;
-  prefix: string;
-  baseFontSize: number;
+  buildPath?: string;
+  prefix?: string;
+  baseFontSize?: number;
 };
 
 //
 // ---------------------------------------------------
-// SERVICE PARAMS
+// GENERATOR FUNCTION
 
 // TODO
-export type GeneratorParams<T> = GeneratorCommonParams & T;
+export type GeneratorFn<T, Response = StyleDictionary> = (params: T) => Promise<Response>;
 
 //
 // ---------------------------------------------------
-// SERVICE FUNCTION
+// GENERATOR CONFIG PARSER FUNCTION
 
 // TODO
-export type GeneratorFn<T, Response = StyleDictionary> = (
-  params: GeneratorParams<T>
-) => Promise<Response>;
-
-//
-// ---------------------------------------------------
-// SERVICE CONFIG RESOLVER FUNCTION
-
-// TODO
-export type GeneratorConfigParserFn<T, Response = StyleDictionary> = (
+export type GeneratorProxyFn<T, Response = StyleDictionary> = (
   userConfig: T,
   commonParams: GeneratorCommonParams
 ) =>

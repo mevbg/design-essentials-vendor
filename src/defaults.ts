@@ -1,44 +1,47 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import {
-  ColorSchemeConfig,
   ColorSchemeMethod,
+  ColorSchemeParams,
   ColorSchemeType,
-  FaviconsConfig,
-  FluidScalerConfig,
-  IconsConfig,
+  FaviconsGeneratorParams,
+  FluidScalerParams,
+  FontFacesGeneratorParams,
+  IconsGeneratorParams,
+  MainGeneratorParams,
   PlatformType,
-  RootScalerConfig,
-  ScrollbarConfig,
-  TokensConfig
+  RootScalerGeneratorParams,
+  ScrollbarGeneratorParams,
+  TokensGeneratorParams
 } from './types/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+//
+// ---------------------------------------------------
+// BUILD PATH
+
+const DEFAULT_BUILD_PATH: string = path.resolve(__dirname, '../dist');
 
 //
 // ---------------------------------------------------
 // BASE FONT SIZE
 
-export const DEFAULT_BASE_FONT_SIZE: number = 10;
+const DEFAULT_BASE_FONT_SIZE: number = 10;
 
 //
 // ---------------------------------------------------
 // PREFIX
 
-export const DEFAULT_PREFIX: string = 'tk'; // "tk" stands for tokens
-
-//
-// ---------------------------------------------------
-// PLATFORMS
-
-export const DEFAULT_PLATFORMS = [
-  PlatformType.CSS,
-  PlatformType.SCSS,
-  PlatformType.JS,
-  PlatformType.JSON
-] as const;
+const DEFAULT_PREFIX: string = 'tk'; // "tk" stands for tokens
 
 //
 // ---------------------------------------------------
 // COLOR SCHEME
 
-const DEFAULT_COLOR_SCHEME: ColorSchemeConfig = {
+const DEFAULT_COLOR_SCHEME_PARAMS: ColorSchemeParams = {
   default: ColorSchemeType.LIGHT,
   method: ColorSchemeMethod.COMBINED
 };
@@ -47,7 +50,7 @@ const DEFAULT_COLOR_SCHEME: ColorSchemeConfig = {
 // ---------------------------------------------------
 // FLUID SCALER
 
-const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
+const DEFAULT_FLUID_SCALER_PARAMS: FluidScalerParams = {
   minViewportW: 600,
   maxViewportW: 1200
 };
@@ -56,40 +59,51 @@ const DEFAULT_FLUID_SCALER_CONFIG: FluidScalerConfig = {
 // ---------------------------------------------------
 // TOKENS
 
-export const DEFAULT_TOKENS_CONFIG: Partial<TokensConfig> = {
+export const tokensGeneratorDefaultParams: TokensGeneratorParams = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
-  platforms: [...DEFAULT_PLATFORMS],
-  colorScheme: DEFAULT_COLOR_SCHEME,
-  fluidScaler: DEFAULT_FLUID_SCALER_CONFIG
+  platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
+  colorScheme: DEFAULT_COLOR_SCHEME_PARAMS,
+  fluidScaler: DEFAULT_FLUID_SCALER_PARAMS,
+  buildPath: DEFAULT_BUILD_PATH + '/tokens'
 };
 
 //
 // ---------------------------------------------------
 // ROOT SCALER
 
-export const DEFAULT_ROOT_SCALER_CONFIG: RootScalerConfig = {
+export const rootScalerGeneratorDefaultParams: RootScalerGeneratorParams = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   minViewportW: 300,
-  maxViewportW: 2100
+  maxViewportW: 2100,
+  buildPath: DEFAULT_BUILD_PATH + '/css'
 };
 
 //
 // ---------------------------------------------------
 // ICONS
 
-export const DEFAULT_ICONS_CONFIG: IconsConfig = {
+export const iconsGeneratorDefaultParams: IconsGeneratorParams = {
   fontFamily: 'Iconography',
   color: 'currentColor',
-  list: {}
+  list: {},
+  buildPath: DEFAULT_BUILD_PATH + '/css'
+};
+
+//
+// ---------------------------------------------------
+// FONT FACES
+
+export const fontFacesGeneratorDefaultParams: Partial<FontFacesGeneratorParams> = {
+  buildPath: DEFAULT_BUILD_PATH + '/css'
 };
 
 //
 // ---------------------------------------------------
 // SCROLLBAR
 
-export const DEFAULT_SCROLLBAR_CONFIG: ScrollbarConfig = {
+export const scrollbarGeneratorDefaultParams: ScrollbarGeneratorParams = {
   areaWidth: 16,
   thumbSizeBase: 4,
   thumbSizeOver: 10,
@@ -97,14 +111,15 @@ export const DEFAULT_SCROLLBAR_CONFIG: ScrollbarConfig = {
   scrollbarBackground: 'transparent',
   thumbColor: '#ccc',
   thumbColorHover: '#ccc',
-  thumbColorActive: '#999'
+  thumbColorActive: '#999',
+  buildPath: DEFAULT_BUILD_PATH + '/css'
 };
 
 //
 // ---------------------------------------------------
 // FAVICONS
 
-export const DEFAULT_FAVICONS_CONFIG: Partial<FaviconsConfig> = {
+export const faviconsGeneratorDefaultParams: Partial<FaviconsGeneratorParams> = {
   developerName: 'Martin Metodiev', // Your (or your developer's) name. `string`
   developerURL: 'https://mev.bg', // Your (or your developer's) URL. `string`
   dir: 'auto', // Primary text direction for name, short_name, and description
@@ -137,5 +152,24 @@ export const DEFAULT_FAVICONS_CONFIG: Partial<FaviconsConfig> = {
     windows: { offset: 10 } as any, // Create Windows 8 tile icons. `boolean` or `{ offset, background }` or an array of sources
     yandex: { offset: 10 } as any // Create Yandex browser icon. `boolean` or `{ offset, background }` or an array of sources
     /* eslint-enable @typescript-eslint/no-explicit-any */
-  }
+  },
+  buildPath: DEFAULT_BUILD_PATH + '/favicons'
+};
+
+//
+// ---------------------------------------------------
+// MAIN GENERATOR
+
+export const mainGeneratorDefaultParams: MainGeneratorParams = {
+  prefix: DEFAULT_PREFIX,
+  baseFontSize: DEFAULT_BASE_FONT_SIZE,
+  generators: {
+    tokens: tokensGeneratorDefaultParams,
+    rootScaler: rootScalerGeneratorDefaultParams,
+    icons: iconsGeneratorDefaultParams,
+    fontFaces: fontFacesGeneratorDefaultParams as FontFacesGeneratorParams,
+    scrollbar: scrollbarGeneratorDefaultParams,
+    favicons: faviconsGeneratorDefaultParams as FaviconsGeneratorParams
+  },
+  buildPath: DEFAULT_BUILD_PATH
 };

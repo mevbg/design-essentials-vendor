@@ -5,7 +5,7 @@
 import path from 'path';
 import StyleDictionary from 'style-dictionary';
 import { Format } from 'style-dictionary/types';
-import type { GeneratorParams, TokensConfig, TokensDesignData } from '../../types/index.js';
+import type { TokensDesignData, TokensGeneratorParams } from '../../types/index.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
 
@@ -18,7 +18,7 @@ export const tokensGenerator = async ({
   platforms,
   fluidScaler,
   colorScheme
-}: GeneratorParams<TokensConfig>): Promise<StyleDictionary> => {
+}: TokensGeneratorParams): Promise<StyleDictionary> => {
   const designData: TokensDesignData = {
     baseFontSize,
     colorScheme,

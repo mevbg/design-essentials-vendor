@@ -6,8 +6,9 @@
 // ---------------------------------------------------
 // CONFIG
 
-export type IconsConfig = {
+export type IconsGeneratorParams = {
   fontFamily?: string;
   color?: string;
   list: Record<string, string>;
+  buildPath?: string;
 };

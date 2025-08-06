@@ -1,6 +1,6 @@
-import type { RootScalerConfig } from '../../../src/types/index.js';
+import type { RootScalerGeneratorParams } from '../../../src/types/index.js';
 
-export const rootScaler: RootScalerConfig = {
+export const rootScaler: RootScalerGeneratorParams = {
   minViewportW: 300,
   maxViewportW: 2100
 };

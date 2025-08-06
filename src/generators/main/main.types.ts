@@ -1,28 +1,27 @@
-import type { GeneratorCommonParams } from '../../types/generator.types.js';
 import {
-  FaviconsConfig,
-  FontFacesConfig,
-  IconsConfig,
-  RootScalerConfig,
-  ScrollbarConfig,
-  TokensConfig
+  FaviconsGeneratorParams,
+  FontFacesGeneratorParams,
+  GeneratorCommonParams,
+  IconsGeneratorParams,
+  RootScalerGeneratorParams,
+  ScrollbarGeneratorParams,
+  TokensGeneratorParams
 } from '../../types/index.js';
-import { EnforceOptional } from '../../types/utils.types.js';
 
 //
 // ---------------------------------------------------
-// GENERATOR CONFIG
+// GENERATOR PARAMS
 
 // This is the main entry configuration object that
 // this generator accepts and requires in order to generate
 // a proper output of all design essentials.
-export type MainGeneratorConfig = {
-  services: {
-    tokens?: Omit<TokensConfig, keyof GeneratorCommonParams>;
-    rootScaler?: Omit<RootScalerConfig, 'baseFontSize' | 'prefix'>;
-    fontFaces?: FontFacesConfig;
-    icons?: IconsConfig;
-    scrollbar?: ScrollbarConfig;
-    favicons?: FaviconsConfig;
+export type MainGeneratorParams = {
+  generators?: {
+    tokens?: TokensGeneratorParams;
+    rootScaler?: RootScalerGeneratorParams;
+    fontFaces?: FontFacesGeneratorParams;
+    icons?: IconsGeneratorParams;
+    scrollbar?: ScrollbarGeneratorParams;
+    favicons?: FaviconsGeneratorParams;
   };
-} & EnforceOptional<GeneratorCommonParams, 'prefix' | 'baseFontSize'>;
+} & GeneratorCommonParams;

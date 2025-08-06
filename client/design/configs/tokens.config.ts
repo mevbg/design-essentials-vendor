@@ -1,11 +1,11 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { TokensConfig, PlatformType, ColorSchemeMethod, ColorSchemeType  } from '../../../src/types/index.js';
+import { TokensGeneratorParams, PlatformType, ColorSchemeMethod, ColorSchemeType  } from '../../../src/types/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const tokens: TokensConfig = { 
+export const tokens: TokensGeneratorParams = { 
   sourcePath: path.resolve(__dirname, '../tokens/**/index.ts'),
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
   fluidScaler: {

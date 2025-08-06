@@ -96,12 +96,12 @@ await generateDesignEssentials({
 
 ### Configuration Options
 
-#### MainGeneratorConfig
+#### MainGeneratorParams
 
 The main configuration object that controls the entire generation process:
 
 ```typescript
-type MainGeneratorConfig = {
+type MainGeneratorParams = {
   buildPath: string; // Output directory path
   tokens: {
     sourcePath: string; // Path to token source files
@@ -109,9 +109,9 @@ type MainGeneratorConfig = {
     platforms?: PlatformType[]; // Output platforms
   };
   baseFontSize?: number; // Base font size (default: 10)
-  colorScheme?: ColorSchemeConfig; // Color scheme configuration
-  fluidScaler?: FluidScalerConfig; // Fluid scaling configuration
-  rootScaler?: RootScalerConfig; // Root scaling configuration,
+  colorScheme?: ColorSchemeParams; // Color scheme configuration
+  fluidScaler?: FluidScalerParams; // Fluid scaling configuration
+  rootScaler?: RootScalerGeneratorParams; // Root scaling configuration,
   fonts?: {
     path: string; // Path to font files
   };
@@ -145,7 +145,7 @@ type MainGeneratorConfig = {
 #### Color Scheme Configuration
 
 ```typescript
-type ColorSchemeConfig = {
+type ColorSchemeParams = {
   default?: ColorSchemeType; // 'light' | 'dark'
   method?: ColorSchemeMethod; // 'media' | 'class' | 'combined'
 };
@@ -160,7 +160,7 @@ type ColorSchemeConfig = {
 #### Fluid Scaler Configuration
 
 ```typescript
-type FluidScalerConfig = {
+type FluidScalerParams = {
   minViewportW: number; // Minimum viewport width
   maxViewportW: number; // Maximum viewport width
 };
@@ -169,7 +169,7 @@ type FluidScalerConfig = {
 #### Root Scaler Configuration
 
 ```typescript
-type RootScalerConfig = {
+type RootScalerGeneratorParams = {
   minViewportW: number; // Minimum viewport width
   maxViewportW: number; // Maximum viewport width
 };
@@ -178,7 +178,7 @@ type RootScalerConfig = {
 #### Icons Configuration
 
 ```typescript
-type IconsConfig = {
+type IconsGeneratorParams = {
   fontFamily?: string; // Icon font family (default: 'Iconography')
   color?: string; // Icon color (default: 'currentColor')
   list: Record<string, string>; // Icon code mappings
@@ -188,7 +188,7 @@ type IconsConfig = {
 #### Scrollbar Configuration
 
 ```typescript
-type ScrollbarConfig = {
+type ScrollbarGeneratorParams = {
   areaWidth?: number; // Scrollbar area width
   thumbSizeBase?: number; // Base thumb size
   thumbSizeOver?: number; // Thumb size on hover
@@ -203,7 +203,7 @@ type ScrollbarConfig = {
 #### Favicons Configuration
 
 ```typescript
-type FaviconsConfig = {
+type FaviconsGeneratorParams = {
   id: string; // Unique identifier for the app
   sourcePath: string; // Path to source SVG/PNG image
   buildPath?: string; // Output directory for favicons (optional)
@@ -240,7 +240,7 @@ type FaviconsConfig = {
 The main entry point that orchestrates the entire generation process:
 
 ```typescript
-export async function generateDesignEssentials(config: MainGeneratorConfig): Promise<void>;
+export async function generateDesignEssentials(config: MainGeneratorParams): Promise<void>;
 ```
 
 #### 2. Services (`src/generators/`)
