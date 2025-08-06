@@ -7,8 +7,9 @@ import { customFormatterTemplate, getFormatterName } from './formats.utils.js';
 import { toKebabCase } from './strings.utils.js';
 
 export const cssService = <T>(
+  name: string,
   params: ServiceParams<T>,
-  customOutputParser: (
+  outputGenerator: (
     output: string[],
     params: ServiceParams<T>,
     formatArgs?: FormatFnArguments
@@ -16,15 +17,15 @@ export const cssService = <T>(
 ) => {
   StyleDictionary.registerFormat(
     customFormatterTemplate<T>({
-      name: params.name,
-      customOutputParser,
+      name,
+      outputGenerator,
       params
     })
   );
 
   // Define the StyleDictionary instance
   const dictionary = new StyleDictionary({
-    ...(params.name === 'fontFaces' && params.tokensPath
+    ...(name === 'fontFaces' && params.tokensPath
       ? {
           source: [path.resolve(params.tokensPath)]
         }
@@ -41,8 +42,8 @@ export const cssService = <T>(
         buildPath: params.buildPath + '/css',
         files: [
           {
-            destination: `${toKebabCase(params.name)}.css`,
-            format: getFormatterName(params.name)
+            destination: `${toKebabCase(name)}.css`,
+            format: getFormatterName(name)
           }
         ]
       }

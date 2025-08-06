@@ -1,3 +1,4 @@
+import type { ServiceCommonParams } from '../../../types/services.types.js';
 import type { PlatformType } from './platform.types.js';
 
 //
@@ -62,7 +63,7 @@ export type FluidScalerConfig = {
 // necessary for defining the tokens.
 export type TokensConfig = {
   sourcePath: string;
-  platforms?: PlatformType[];
-  colorScheme?: ColorSchemeConfig;
-  fluidScaler?: FluidScalerConfig;
-};
+  platforms: PlatformType[];
+  colorScheme: ColorSchemeConfig;
+  fluidScaler: FluidScalerConfig;
+} & ServiceCommonParams;

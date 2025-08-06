@@ -17,11 +17,11 @@ export const getFormatterName = (name: string) => `mev/${name}`;
 export const customFormatterTemplate = <T>({
   name,
   params,
-  customOutputParser
+  outputGenerator: generateOutput
 }: {
   name: string;
   params: ServiceParams<T>;
-  customOutputParser: (
+  outputGenerator: (
     output: string[],
     params: ServiceParams<T>,
     formatArgs?: FormatFnArguments
@@ -36,7 +36,7 @@ export const customFormatterTemplate = <T>({
     output.push(fileHeader(toSpaceCase(toCamelCase(name))));
 
     // Handle the output
-    customOutputParser(output, params, formatArgs);
+    generateOutput(output, params, formatArgs);
 
     // Join the output array into a string and return it
     return output.join('\n');

@@ -4,7 +4,7 @@ import * as configs from './design/configs/index.js';
 const { buildPath, prefix, baseFontSize, ...services } = configs;
 
 export const generateDevClientEssentials: () => Promise<void> = async () => {
-  const { generateDesignEssentials } = await import(`../src/generator?update=${Date.now()}`);
+  const { generateDesignEssentials } = await import(`../src/index?update=${Date.now()}`);
 
   try {
     await generateDesignEssentials({

@@ -67,6 +67,8 @@ export const DEFAULT_TOKENS_CONFIG: Partial<TokensConfig> = {
 // ROOT SCALER
 
 export const DEFAULT_ROOT_SCALER_CONFIG: RootScalerConfig = {
+  prefix: DEFAULT_PREFIX,
+  baseFontSize: DEFAULT_BASE_FONT_SIZE,
   minViewportW: 300,
   maxViewportW: 2100
 };

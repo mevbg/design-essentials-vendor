@@ -1,16 +1,18 @@
 /* =================================================== */
-/* SCROLLBAR → PARSER */
+/* SCROLLBAR → GENERATOR */
 /* =================================================== */
 
 import { ScrollbarConfig, ServiceParams } from '../../types/index.js';
 import { cssSelectorBlock } from '../../utils/formats.utils.js';
+import { cssService } from '../../utils/services.utils.js';
 
 // This function outputs the scrollbar styles
-export const outputScrollbar = (output: string[], params: ServiceParams<ScrollbarConfig>) => {
-  output.push(
-    cssSelectorBlock({
-      name: 'html:not(.isMacOs)',
-      code: `  --scrollbar-area: ${params.areaWidth}px;
+export const scrollbarGenerator = (params: ServiceParams<ScrollbarConfig>) =>
+  cssService<ScrollbarConfig>('scrollbar', params, (output, params) => {
+    output.push(
+      cssSelectorBlock({
+        name: 'html:not(.isMacOs)',
+        code: `  --scrollbar-area: ${params.areaWidth}px;
   --scrollbar-thumb-size-base: ${params.thumbSizeBase}px;
   --scrollbar-thumb-size-over: ${params.thumbSizeOver}px;
   --scrollbar-gap-size-base: calc(
@@ -103,8 +105,8 @@ export const outputScrollbar = (output: string[], params: ServiceParams<Scrollba
   ::-webkit-scrollbar-button {
     display: none;
   }`
-    }) + '\n'
-  );
+      }) + '\n'
+    );
 
-  return `${output.join('\n')}\n`;
-};
+    return `${output.join('\n')}\n`;
+  });

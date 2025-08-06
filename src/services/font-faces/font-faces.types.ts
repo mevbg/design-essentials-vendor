@@ -8,6 +8,7 @@
 
 export type FontFacesConfig = {
   path: string;
+  fonts: Record<string, Record<string, number>>;
 };
 
 //

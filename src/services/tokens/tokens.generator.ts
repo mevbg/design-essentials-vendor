@@ -1,19 +1,21 @@
+/* =================================================== */
+/* TOKENS → GENERATOR */
+/* =================================================== */
+
 import path from 'path';
 import StyleDictionary from 'style-dictionary';
 import { Format } from 'style-dictionary/types';
-import { DEFAULT_PLATFORMS } from '../../configs.js';
 import type { ServiceParams, TokensConfig, TokensDesignData } from '../../types/index.js';
 import * as formats from './formats.js';
 import { getPlatformConfigs } from './platforms.js';
 
-// This function generates the CSS essentials, the design tokens
-// and returns the StyleDictionary instance
-export const tokensService = async ({
+// This function generates the design tokens
+export const tokensGenerator = async ({
   buildPath,
   prefix,
   baseFontSize,
   sourcePath,
-  platforms = [...DEFAULT_PLATFORMS],
+  platforms,
   fluidScaler,
   colorScheme
 }: ServiceParams<TokensConfig>): Promise<StyleDictionary> => {

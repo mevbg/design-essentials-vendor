@@ -11,6 +11,14 @@
 // It sets the font-size of the root element to be relative to the viewport width,
 // which leads to a total scaling of everything based on rem/em units.
 export type RootScalerConfig = {
+  // This is the prefix for the CSS custom properties.
+  // It is used to avoid conflicts with other CSS custom properties.
+  prefix: string;
+
+  // This is the base font size for the design system.
+  // It is used to calculate the rem/em units.
+  baseFontSize: number;
+
   // This is the minimum viewport width below which
   // the root scaler is applied.
   minViewportW: number;
