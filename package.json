@@ -66,6 +66,7 @@
     "npm": ">=10.x"
   },
   "dependencies": {
+    "@mevbg/wm": "^1.0.6",
     "favicons": "^7.2.0",
     "style-dictionary": "^5.0.1"
   },
