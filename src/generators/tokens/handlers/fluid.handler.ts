@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → HANDLERS → FLUID */
+/* =================================================== */
+
 import { tab } from '../../../utils/formats.utils.js';
 import {
   CommonHandlerParams,
@@ -11,6 +15,10 @@ import {
   separateFluidAndBasicTokens
 } from '../utils/fluid-tokens.utils.js';
 import { getFileOutput } from '../utils/formats.utils.js';
+
+//
+// ---------------------------------------------------
+// HANDLER FUNCTION
 
 // Renders fluid tokens based on a given context
 export const fluidHandler = async ({

@@ -1,15 +1,20 @@
-import type { GeneratorCommonParams } from '../../../types/generator.types.js';
-import type { PlatformType } from './platform.types.js';
+/* =================================================== */
+/* TOKENS → TYPES → COLOR SCHEME */
+/* =================================================== */
 
 //
 // ---------------------------------------------------
-// COLOR SCHEME
+// COLOR SCHEME TYPE
 
 // These are the only available native color schemes that can be used.
 export enum ColorSchemeType {
   LIGHT = 'light',
   DARK = 'dark'
 }
+
+//
+// ---------------------------------------------------
+// COLOR SCHEME METHOD
 
 // These are the methods that can be used to define the color scheme behavior.
 export enum ColorSchemeMethod {
@@ -26,6 +31,10 @@ export enum ColorSchemeMethod {
   COMBINED = 'combined'
 }
 
+//
+// ---------------------------------------------------
+// COLOR SCHEME PARAMS
+
 // This is the object that contains the key data
 // necessary for defining the color scheme.
 export type ColorSchemeParams = {
@@ -37,33 +46,3 @@ export type ColorSchemeParams = {
   // for defining the color scheme behavior.
   method?: ColorSchemeMethod;
 };
-
-//
-// ---------------------------------------------------
-// FLUID SCALER
-
-// The Fluid Scaler is the one that takes care of the gradual scaling of typography
-// and other given elements, by applying dynamic calc()-based formula as a value,
-// when in between the minViewportW and maxViewportW breakpoints.
-export type FluidScalerParams = {
-  // This is the minimum viewport width above which the fluid scaler is applied.
-  // Below that breakpoint, the min given value is fixed.
-  minViewportW: number;
-
-  // This is the maximum viewport width below which the fluid scaler is applied.
-  // Above that breakpoint, the max given value is fixed.
-  maxViewportW: number;
-};
-
-//
-// ---------------------------------------------------
-// TOKENS
-
-// This is the object that contains the key data
-// necessary for defining the tokens.
-export type TokensGeneratorParams = {
-  sourcePath?: string;
-  platforms?: PlatformType[];
-  colorScheme?: ColorSchemeParams;
-  fluidScaler?: FluidScalerParams;
-} & GeneratorCommonParams;

@@ -1,6 +1,9 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → JS → FORMATS */
+/* =================================================== */
+
 import { Format } from 'style-dictionary/types';
-import { CustomFormatterCategory } from '../../types/format.types.js';
-import { JsCustomFormatterType } from '../../types/index.js';
+import { CustomFormatterCategory, JsCustomFormatterType } from '../../tokens.types.js';
 import { allFormatterTemplate } from '../../utils/formats.utils.js';
 
 // This is the list of formatters for the JS platform.

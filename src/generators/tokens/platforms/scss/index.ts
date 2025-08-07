@@ -1,4 +1,8 @@
-import { PlatformContextGetter } from '../../types/index.js';
+/* =================================================== */
+/* TOKENS → PLATFORMS → SCSS */
+/* =================================================== */
+
+import type { PlatformContextGetter } from '../../tokens.types.js';
 
 // This is the platform context getter for the SCSS platform.
 // It returns the platform context that brings the following info:

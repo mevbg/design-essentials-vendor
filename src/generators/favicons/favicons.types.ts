@@ -7,9 +7,9 @@ import type { EnforceRequired } from '../../types/utils.types.js';
 
 //
 // ---------------------------------------------------
-// CONFIG
+// GENERATOR PARAMS
 
-// For more information on the favicons configuration,
+// For more information on the "favicons" configuration,
 // see the following link: https://www.npmjs.com/package/favicons
 export type FaviconsGeneratorParams = {
   id: string;

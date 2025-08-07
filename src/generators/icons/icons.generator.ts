@@ -6,6 +6,10 @@ import { IconsGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 
+//
+// ---------------------------------------------------
+// GENERATOR FUNCTION
+
 // This function outputs the icons definitions
 export const iconsGenerator = (params: IconsGeneratorParams) =>
   cssGenerator<IconsGeneratorParams>('icons', params, (output, config) => {

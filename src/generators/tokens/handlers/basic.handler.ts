@@ -1,8 +1,16 @@
+/* =================================================== */
+/* TOKENS → HANDLERS → BASIC */
+/* =================================================== */
+
 import type { TransformedToken } from 'style-dictionary/types';
 import { tab } from '../../../utils/formats.utils.js';
 import { toSpaceCase } from '../../../utils/strings.utils.js';
 import { CommonHandlerParams, CustomFormatterCategory } from '../types/format.types.js';
 import { getFileOutput } from '../utils/formats.utils.js';
+
+//
+// ---------------------------------------------------
+// HANDLER FUNCTION
 
 // Renders basic tokens based on a given context
 export const basicHandler = ({

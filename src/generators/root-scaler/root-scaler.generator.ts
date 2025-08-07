@@ -5,6 +5,9 @@
 import { RootScalerGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
+//
+// ---------------------------------------------------
+// GENERATOR FUNCTION
 
 // This function outputs the root font size definition
 export const rootScalerGenerator = (params: RootScalerGeneratorParams) =>

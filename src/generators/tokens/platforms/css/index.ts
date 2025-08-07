@@ -1,4 +1,8 @@
-import { PlatformContextGetter } from '../../types/index.js';
+/* =================================================== */
+/* TOKENS → PLATFORMS → CSS */
+/* =================================================== */
+
+import type { PlatformContextGetter } from '../../tokens.types.js';
 
 // This is the platform context getter for the CSS platform.
 // It returns the platform context that brings the following info:

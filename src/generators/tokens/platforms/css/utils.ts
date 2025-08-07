@@ -1,5 +1,13 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → CSS → UTILS */
+/* =================================================== */
+
 import { cssSelectorBlock } from '../../../../utils/formats.utils.js';
-import type { DefinerParams, WrapperParams } from '../../types/index.js';
+import type { DefinerParams, WrapperParams } from '../../tokens.types.js';
+
+//
+// ---------------------------------------------------
+// OUTPUT FUNCTIONS
 
 // This function wraps a code block in a given CSS selector.
 export const wrapper = ({ name = ':root', code, indent = '' }: WrapperParams): string =>

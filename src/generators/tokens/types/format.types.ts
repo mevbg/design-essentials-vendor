@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → TYPES → FORMATS */
+/* =================================================== */
+
 import type { Format, FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { CommonPlatformFileType, JsCustomPlatformFileType } from './platform.types.js';
 import { CoreToken } from './tokens.types.js';

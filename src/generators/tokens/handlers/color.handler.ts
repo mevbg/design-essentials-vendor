@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → HANDLERS → COLOR */
+/* =================================================== */
+
 import { tab } from '../../../utils/formats.utils.js';
 import { capitalize } from '../../../utils/strings.utils.js';
 import {
@@ -7,6 +11,10 @@ import {
 } from '../types/format.types.js';
 import { getColorScheme } from '../utils/color-tokens.utils.js';
 import { getFileOutput } from '../utils/formats.utils.js';
+
+//
+// ---------------------------------------------------
+// HANDLER FUNCTION
 
 // Renders color tokens based on a given context
 export const colorHandler = async ({

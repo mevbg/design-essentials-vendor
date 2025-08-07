@@ -1,8 +1,12 @@
+/* =================================================== */
+/* DESIGN ESSENTIALS VENDOR */
+/* =================================================== */
+
 export {
   // Master generator
   masterGenerator as generateDesignEssentials,
 
-  // Generators
+  // Individual generators
   faviconsGenerator as generateFavicons,
   fontFacesGenerator as generateFontFaces,
   iconsGenerator as generateIcons,

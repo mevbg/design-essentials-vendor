@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → CSS → FORMATS */
+/* =================================================== */
+
 import { Format } from 'style-dictionary/types';
 import { CustomFormatterCategory } from '../../types/format.types.js';
 import {

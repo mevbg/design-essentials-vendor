@@ -1,7 +1,10 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS */
+/* =================================================== */
+
 import path from 'path';
 import { PlatformConfig, TransformedToken } from 'style-dictionary/types';
-import { toKebabCase } from '../../utils/strings.utils.js';
-import { CustomFormatterCategory } from './types/format.types.js';
+import { toKebabCase } from '../../../utils/strings.utils.js';
 import {
   CommonPlatformFileType,
   CoreToken,
@@ -9,8 +12,9 @@ import {
   PlatformFilename,
   PlatformType,
   TokensDesignData
-} from './types/index.js';
-import { getCategoryFormatterName, getDestinationFileName } from './utils/formats.utils.js';
+} from '../tokens.types.js';
+import { CustomFormatterCategory } from '../types/format.types.js';
+import { getCategoryFormatterName, getDestinationFileName } from '../utils/formats.utils.js';
 
 // getPlatformConfigs is a function that is responsible
 // for preparing the configurations for the Style Dictionary platforms object.
@@ -30,7 +34,7 @@ export const getPlatformConfigs = async ({
 }): Promise<Partial<Record<PlatformType, PlatformConfig>>> => {
   // Dynamically import the platform context getters for each given platform type
   const platformContextImports: Promise<Record<PlatformType, PlatformContextGetter>>[] =
-    platforms.map((platformType) => import(`./platforms/${platformType}/index.js`));
+    platforms.map((platformType) => import(`./${platformType}/index.js`));
   const platformContextGetters = await Promise.all(platformContextImports);
 
   // Return "platforms" object with the configs,

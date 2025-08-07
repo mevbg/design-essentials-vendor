@@ -1,5 +1,9 @@
+/* =================================================== */
+/* TOKENS → TYPES → TOKENS */
+/* =================================================== */
+
 import type { Kebab } from '../../../types/utils.types.js';
-import type { ColorSchemeParams, FluidScalerParams } from './config.types.js';
+import type { ColorSchemeParams, FluidScalerParams } from '../tokens.types.js';
 
 //
 // ---------------------------------------------------

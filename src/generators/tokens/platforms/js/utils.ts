@@ -1,10 +1,18 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → JS → UTILS */
+/* =================================================== */
+
 import {
   capitalize,
   spaceCaseToCamelCase,
   toCamelCase,
   toKebabCase
 } from '../../../../utils/strings.utils.js';
-import { DefinerParams, JsCustomFormatterType, WrapperParams } from '../../types/index.js';
+import { DefinerParams, JsCustomFormatterType, WrapperParams } from '../../tokens.types.js';
+
+//
+// ---------------------------------------------------
+// OUTPUT FUNCTIONS
 
 // This function wraps a code block in a JS object.
 // It could be a nested object or a root object, defined as a const.

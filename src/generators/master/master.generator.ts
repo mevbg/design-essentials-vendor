@@ -6,7 +6,11 @@ import { GeneratorCommonParams } from '../../types/generator.types.js';
 import * as generators from '../index.js';
 import type { MasterGeneratorParams } from './master.types.js';
 
-const generatorConfigs: Record<
+//
+// ---------------------------------------------------
+// PROXY CONFIG
+
+const proxyConfig: Record<
   string,
   { commonParams: Array<keyof GeneratorCommonParams>; dir: string }
 > = {
@@ -17,6 +21,10 @@ const generatorConfigs: Record<
   rootScaler: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
   tokens: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'tokens' }
 };
+
+//
+// ---------------------------------------------------
+// GENERATOR FUNCTION
 
 // This is the main exposed function that initializes the design essentials generation process.
 // It takes all configuration parameters:
@@ -42,9 +50,9 @@ export async function masterGenerator(masterParams: MasterGeneratorParams): Prom
           ...(userParams?.buildPath
             ? { buildPath: userParams.buildPath }
             : commonParams?.buildPath
-              ? { buildPath: commonParams.buildPath + `/${generatorConfigs[name].dir}` }
+              ? { buildPath: commonParams.buildPath + `/${proxyConfig[name].dir}` }
               : {}),
-          ...(generatorConfigs[name].commonParams.includes('prefix')
+          ...(proxyConfig[name].commonParams.includes('prefix')
             ? (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
               commonParams?.prefix
               ? {
@@ -54,7 +62,7 @@ export async function masterGenerator(masterParams: MasterGeneratorParams): Prom
                 }
               : {}
             : {}),
-          ...(generatorConfigs[name].commonParams.includes('baseFontSize')
+          ...(proxyConfig[name].commonParams.includes('baseFontSize')
             ? (userParams && 'baseFontSize' in userParams ? userParams.baseFontSize : undefined) ||
               commonParams?.baseFontSize
               ? {

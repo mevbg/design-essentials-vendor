@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → TYPES → PLATFORMS */
+/* =================================================== */
+
 import { PlatformConfig } from 'style-dictionary/types';
 import { CoreTokenKebabValues, TokensDesignData } from './tokens.types.js';
 

@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → JSON */
+/* =================================================== */
+
 import {
   CommonPlatformFileType,
   PlatformContextGetter,

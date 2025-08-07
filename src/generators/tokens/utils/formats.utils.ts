@@ -1,8 +1,11 @@
+/* =================================================== */
+/* TOKENS → UTILS → FORMATS */
+/* =================================================== */
+
 import { FormatFnArguments, TransformedToken } from 'style-dictionary/types';
 import { fileHeader, getFormatterName } from '../../../utils/formats.utils.js';
 import { capitalize, toSpaceCase } from '../../../utils/strings.utils.js';
 import * as handlers from '../handlers/index.js';
-import { CustomFormatterCategory } from '../types/format.types.js';
 import {
   CoreToken,
   CoreTokensHandlerResolvers,
@@ -13,7 +16,8 @@ import {
   PlatformFilename,
   PlatformType,
   WrapperParams
-} from '../types/index.js';
+} from '../tokens.types.js';
+import { CustomFormatterCategory } from '../types/format.types.js';
 import { tokenIsFluid } from './fluid-tokens.utils.js';
 
 // Returns a destination file name

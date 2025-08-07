@@ -4,7 +4,7 @@
 
 //
 // ---------------------------------------------------
-// CONFIG
+// GENERATOR PARAMS
 
 // The Root Scaler is the one that takes care of the entire layout scaling,
 // below the minViewportW and (if in presentation mode) above the maxViewportW.

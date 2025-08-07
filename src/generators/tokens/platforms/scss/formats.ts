@@ -1,6 +1,9 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → SCSS → FORMATS */
+/* =================================================== */
+
 import { Format } from 'style-dictionary/types';
-import { CustomFormatterCategory } from '../../types/format.types.js';
-import { FormatterTemplateFn } from '../../types/index.js';
+import { CustomFormatterCategory, FormatterTemplateFn } from '../../tokens.types.js';
 import {
   allFormatterTemplate,
   coreFormatterTemplate,

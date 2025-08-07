@@ -8,6 +8,10 @@ import { FontFace, FontFacesGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 
+//
+// ---------------------------------------------------
+// HELPER FUNCTIONS
+
 // This function scans the given fonts directory for any available typefaces
 // and returns an array of typefaces with their weights and files
 function getTypefaces(dir: string): { name: string; weights: Record<string, string[]> }[] {
@@ -114,6 +118,10 @@ function getFontFaces({ fonts, path: fontsPath }: FontFacesGeneratorParams): Fon
 
   return fontFaces || [];
 }
+
+//
+// ---------------------------------------------------
+// GENERATOR FUNCTION
 
 // This function outputs the font faces
 export const fontFacesGenerator = (params: FontFacesGeneratorParams) =>

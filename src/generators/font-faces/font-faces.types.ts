@@ -4,7 +4,7 @@
 
 //
 // ---------------------------------------------------
-// CONFIG
+// GENERATOR PARAMS
 
 export type FontFacesGeneratorParams = {
   path: string;

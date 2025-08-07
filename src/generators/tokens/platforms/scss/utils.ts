@@ -1,5 +1,13 @@
+/* =================================================== */
+/* TOKENS → PLATFORMS → SCSS → UTILS */
+/* =================================================== */
+
 import { toKebabCase } from '../../../../utils/strings.utils.js';
-import { DefinerParams, WrapperParams } from '../../types/index.js';
+import { DefinerParams, WrapperParams } from '../../tokens.types.js';
+
+//
+// ---------------------------------------------------
+// OUTPUT FUNCTIONS
 
 // This function wraps a code block in a Sass map.
 // It may be a nested map or a root map, defined as a Sass variable.

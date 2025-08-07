@@ -1,5 +1,13 @@
+/* =================================================== */
+/* TOKENS → UTILS → FLUID TOKENS */
+/* =================================================== */
+
 import type { TransformedToken } from 'style-dictionary/types';
-import type { FluidScalerParams } from '../types/index.js';
+import type { FluidScalerParams } from '../tokens.types.js';
+
+//
+// ---------------------------------------------------
+// HELPER FUNCTIONS
 
 // Generates and returns the responsive value
 // of a given fluid token (one with min and max values)

@@ -1,4 +1,8 @@
-import { JsCustomPlatformFileType, PlatformContextGetter } from '../../types/index.js';
+/* =================================================== */
+/* TOKENS → PLATFORMS → JS */
+/* =================================================== */
+
+import { JsCustomPlatformFileType, PlatformContextGetter } from '../../tokens.types.js';
 
 // This is the platform context getter for the JS platform.
 // It returns the platform context that brings the following info:

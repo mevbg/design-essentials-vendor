@@ -6,9 +6,13 @@ import path from 'path';
 import StyleDictionary from 'style-dictionary';
 import { Format } from 'style-dictionary/types';
 import { tokensGeneratorDefaultParams } from '../../defaults.js';
-import type { TokensDesignData, TokensGeneratorParams } from '../../types/index.js';
-import * as formats from './formats.js';
-import { getPlatformConfigs } from './platforms.js';
+import * as formats from './platforms/formats.js';
+import { getPlatformConfigs } from './platforms/index.js';
+import type { TokensDesignData, TokensGeneratorParams } from './tokens.types.js';
+
+//
+// ---------------------------------------------------
+// GENERATOR FUNCTION
 
 // This function generates the design tokens
 export const tokensGenerator = async (params: TokensGeneratorParams): Promise<StyleDictionary> => {

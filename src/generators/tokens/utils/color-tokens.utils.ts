@@ -1,3 +1,7 @@
+/* =================================================== */
+/* TOKENS → UTILS → COLOR TOKENS */
+/* =================================================== */
+
 import type { TransformedToken } from 'style-dictionary/types';
 import { capitalize } from '../../../utils/strings.utils.js';
 
