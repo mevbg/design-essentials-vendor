@@ -10,9 +10,9 @@ export {
   faviconsGenerator as generateFavicons,
   fontFacesGenerator as generateFontFaces,
   iconsGenerator as generateIcons,
-  rootScalerGenerator as generateRootScaler,
   scrollbarGenerator as generateScrollbar,
-  tokensGenerator as generateTokens
+  tokensGenerator as generateTokens,
+  viewportScalerGenerator as generateViewportScaler
 } from './generators/index.js';
 
 // Types

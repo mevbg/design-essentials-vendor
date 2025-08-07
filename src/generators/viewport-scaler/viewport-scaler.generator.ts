@@ -1,8 +1,8 @@
 /* =================================================== */
-/* ROOT SCALER → GENERATOR */
+/* VIEWPORT SCALER → GENERATOR */
 /* =================================================== */
 
-import { GeneratorFn, RootScalerGeneratorParams } from '../../types/index.js';
+import { GeneratorFn, ViewportScalerGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 //
@@ -10,10 +10,10 @@ import { cssGenerator } from '../../utils/generators.utils.js';
 // GENERATOR FUNCTION
 
 // This function outputs the root font size definition
-export const rootScalerGenerator: GeneratorFn<RootScalerGeneratorParams> = (params) =>
-  cssGenerator<RootScalerGeneratorParams>('rootScaler', params, (output, config) => {
+export const viewportScalerGenerator: GeneratorFn<ViewportScalerGeneratorParams> = (params) =>
+  cssGenerator<ViewportScalerGeneratorParams>('viewportScaler', params, (output, config) => {
     const { minViewportW, maxViewportW, baseFontSize } =
-      config as Required<RootScalerGeneratorParams>;
+      config as Required<ViewportScalerGeneratorParams>;
     const prefix = config.prefix ? `${config.prefix}-` : '';
 
     const variants = [

@@ -13,10 +13,10 @@ import {
   IconsGeneratorParams,
   MasterGeneratorParams,
   PlatformType,
-  RootScalerGeneratorParams,
   ScrollbarGeneratorParams,
   TokensGeneratorParams,
-  UtopiaSchemeParams
+  UtopiaSchemeParams,
+  ViewportScalerGeneratorParams
 } from './types/index.js';
 
 //
@@ -70,9 +70,9 @@ export const tokensGeneratorDefaultParams: TokensGeneratorParams = {
 
 //
 // ---------------------------------------------------
-// ROOT SCALER
+// VIEWPORT SCALER
 
-export const rootScalerGeneratorDefaultParams: RootScalerGeneratorParams = {
+export const viewportScalerGeneratorDefaultParams: ViewportScalerGeneratorParams = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   minViewportW: 300,
@@ -167,9 +167,9 @@ export const masterGeneratorDefaultParams: MasterGeneratorParams = {
     tokens: Object.fromEntries(
       Object.entries(tokensGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
     ) as TokensGeneratorParams,
-    rootScaler: Object.fromEntries(
-      Object.entries(rootScalerGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
-    ) as RootScalerGeneratorParams,
+    viewportScaler: Object.fromEntries(
+      Object.entries(viewportScalerGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as ViewportScalerGeneratorParams,
     icons: Object.fromEntries(
       Object.entries(iconsGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
     ) as IconsGeneratorParams,

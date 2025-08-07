@@ -24,7 +24,7 @@ const proxyConfig: Record<
   fontFaces: { masterCoreParams: ['buildPath'], dir: 'css' },
   icons: { masterCoreParams: ['buildPath'], dir: 'css' },
   scrollbar: { masterCoreParams: ['buildPath'], dir: 'css' },
-  rootScaler: { masterCoreParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
+  viewportScaler: { masterCoreParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
   tokens: { masterCoreParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'tokens' }
 };
 

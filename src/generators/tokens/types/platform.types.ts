@@ -34,7 +34,7 @@ export type PlatformContext = {
   tokenTypeFiles?: boolean;
 
   // determines if the platform needs any other files,
-  // such as root font size, etc.
+  // that are named differently than the core list
   customFiles?: string[];
 };
 

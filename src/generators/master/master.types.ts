@@ -6,9 +6,9 @@ import {
   FaviconsGeneratorParams,
   FontFacesGeneratorParams,
   IconsGeneratorParams,
-  RootScalerGeneratorParams,
   ScrollbarGeneratorParams,
-  TokensGeneratorParams
+  TokensGeneratorParams,
+  ViewportScalerGeneratorParams
 } from '../../types/index.js';
 
 //
@@ -21,7 +21,7 @@ export type MasterGeneratorParams = {
   baseFontSize?: number;
   generators: {
     tokens?: TokensGeneratorParams;
-    rootScaler?: RootScalerGeneratorParams;
+    viewportScaler?: ViewportScalerGeneratorParams;
     fontFaces?: FontFacesGeneratorParams;
     icons?: IconsGeneratorParams;
     scrollbar?: ScrollbarGeneratorParams;
