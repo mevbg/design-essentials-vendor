@@ -9,14 +9,14 @@ import {
   ColorSchemeParams,
   ColorSchemeType,
   FaviconsGeneratorParams,
-  FluidScalerParams,
   FontFacesGeneratorParams,
   IconsGeneratorParams,
   MasterGeneratorParams,
   PlatformType,
   RootScalerGeneratorParams,
   ScrollbarGeneratorParams,
-  TokensGeneratorParams
+  TokensGeneratorParams,
+  UtopiaSchemeParams
 } from './types/index.js';
 
 //
@@ -48,9 +48,9 @@ const DEFAULT_COLOR_SCHEME_PARAMS: ColorSchemeParams = {
 
 //
 // ---------------------------------------------------
-// FLUID SCALER
+// UTOPIA SCHEME
 
-const DEFAULT_FLUID_SCALER_PARAMS: FluidScalerParams = {
+const DEFAULT_UTOPIA_SCHEME_PARAMS: UtopiaSchemeParams = {
   minViewportW: 600,
   maxViewportW: 1200
 };
@@ -64,7 +64,7 @@ export const tokensGeneratorDefaultParams: TokensGeneratorParams = {
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
   colorScheme: DEFAULT_COLOR_SCHEME_PARAMS,
-  fluidScaler: DEFAULT_FLUID_SCALER_PARAMS,
+  utopiaScheme: DEFAULT_UTOPIA_SCHEME_PARAMS,
   buildPath: DEFAULT_BUILD_PATH
 };
 

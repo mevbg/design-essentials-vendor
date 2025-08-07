@@ -17,7 +17,7 @@ import type { TokensDesignData, TokensGeneratorParams } from './tokens.types.js'
 
 // This function generates the design tokens
 export const tokensGenerator: GeneratorFn<TokensGeneratorParams> = async (params) => {
-  const { buildPath, prefix, baseFontSize, sourcePath, platforms, fluidScaler, colorScheme } = {
+  const { buildPath, prefix, baseFontSize, sourcePath, platforms, utopiaScheme, colorScheme } = {
     ...tokensGeneratorDefaultParams,
     ...params
   } as Required<TokensGeneratorParams>;
@@ -25,7 +25,7 @@ export const tokensGenerator: GeneratorFn<TokensGeneratorParams> = async (params
   const designData: TokensDesignData = {
     baseFontSize,
     colorScheme,
-    fluidScaler
+    utopiaScheme
   };
 
   // All custom formats are defined in separated files

@@ -1,5 +1,5 @@
 /* =================================================== */
-/* TOKENS → HANDLERS → FLUID */
+/* TOKENS → HANDLERS → UTOPIA */
 /* =================================================== */
 
 import { tab } from '../../../utils/formats.utils.js';
@@ -8,20 +8,20 @@ import {
   CustomFormatterCategory,
   JsCustomFormatterType
 } from '../types/format.types.js';
-import {
-  mapFluidTokenValuesToMax,
-  mapFluidTokenValuesToMin,
-  mapFluidTokenValuesToResponsive,
-  separateFluidAndBasicTokens
-} from '../utils/fluid-tokens.utils.js';
 import { getFileOutput } from '../utils/formats.utils.js';
+import {
+  mapUtopiaTokenValuesToMax,
+  mapUtopiaTokenValuesToMin,
+  mapUtopiaTokenValuesToResponsive,
+  separateUtopiaAndBasicTokens
+} from '../utils/utopia-tokens.utils.js';
 
 //
 // ---------------------------------------------------
 // HANDLER FUNCTION
 
-// Renders fluid tokens based on a given context
-export const fluidHandler = async ({
+// Renders Utopia tokens based on a given context
+export const utopiaHandler = async ({
   name,
   category,
   type,
@@ -37,10 +37,10 @@ export const fluidHandler = async ({
       // Get the options from the format arguments
       const { options } = formatArgs;
 
-      // Separate fluid and basic tokens
-      const { fluidTokens, basicTokens } = separateFluidAndBasicTokens(tokens);
-      const { fluidScaler, baseFontSize } = options?.designData || {};
-      const { minViewportW, maxViewportW } = fluidScaler;
+      // Separate Utopia and basic tokens
+      const { utopiaTokens, basicTokens } = separateUtopiaAndBasicTokens(tokens);
+      const { utopiaScheme, baseFontSize } = options?.designData || {};
+      const { minViewportW, maxViewportW } = utopiaScheme;
       const separation =
         [CustomFormatterCategory.CSS, CustomFormatterCategory.SCSS].includes(category) ||
         type === JsCustomFormatterType.STATIC;
@@ -48,15 +48,15 @@ export const fluidHandler = async ({
       if (separation) {
         const tokens = {
           Min: {
-            tokens: mapFluidTokenValuesToMin(fluidTokens),
+            tokens: mapUtopiaTokenValuesToMin(utopiaTokens),
             media: `(max-width: ${minViewportW - 1}px)`
           },
-          Fluid: {
-            tokens: mapFluidTokenValuesToResponsive(fluidTokens, baseFontSize, fluidScaler),
+          Utopia: {
+            tokens: mapUtopiaTokenValuesToResponsive(utopiaTokens, baseFontSize, utopiaScheme),
             media: `(min-width: ${minViewportW}px) and (max-width: ${maxViewportW}px)`
           },
           Max: {
-            tokens: mapFluidTokenValuesToMax(fluidTokens),
+            tokens: mapUtopiaTokenValuesToMax(utopiaTokens),
             media: `(min-width: ${maxViewportW + 1}px)`
           }
         };

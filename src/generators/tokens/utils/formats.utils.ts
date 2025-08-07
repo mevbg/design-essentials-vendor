@@ -18,7 +18,7 @@ import {
   WrapperParams
 } from '../tokens.types.js';
 import { CustomFormatterCategory } from '../types/format.types.js';
-import { tokenIsFluid } from './fluid-tokens.utils.js';
+import { isUtopiaToken } from './utopia-tokens.utils.js';
 
 // Returns a destination file name
 export const getDestinationFileName = (platformType: PlatformType, name: PlatformFilename) =>
@@ -80,8 +80,8 @@ export const getCoreTokensHandlerResolvers = ({
           case tokens.length && tokens[0].$type === 'color':
             handlerType = 'color';
             break;
-          case tokens.some(tokenIsFluid):
-            handlerType = 'fluid';
+          case tokens.some(isUtopiaToken):
+            handlerType = 'utopia';
             break;
           default:
             handlerType = 'basic';

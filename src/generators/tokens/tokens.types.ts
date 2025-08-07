@@ -3,8 +3,8 @@
 /* =================================================== */
 
 import type { ColorSchemeParams } from './types/color-scheme.types.js';
-import type { FluidScalerParams } from './types/fluid-scaler.types.js';
 import type { PlatformType } from './types/platform.types.js';
+import type { UtopiaSchemeParams } from './types/utopia-scheme.types.js';
 
 //
 // ---------------------------------------------------
@@ -18,7 +18,7 @@ export type TokensGeneratorParams = {
   prefix?: string;
   baseFontSize?: number;
   colorScheme?: ColorSchemeParams;
-  fluidScaler?: FluidScalerParams;
+  utopiaScheme?: UtopiaSchemeParams;
   buildPath?: string;
 };
 
@@ -27,7 +27,7 @@ export type TokensGeneratorParams = {
 // EXPORT TYPES
 
 export * from './types/color-scheme.types.js';
-export * from './types/fluid-scaler.types.js';
 export * from './types/format.types.js';
 export * from './types/platform.types.js';
 export * from './types/tokens.types.js';
+export * from './types/utopia-scheme.types.js';

@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 export const tokens: TokensGeneratorParams = {
   sourcePath: path.resolve(__dirname, '../tokens/**/index.ts'),
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],
-  fluidScaler: {
+  utopiaScheme: {
     minViewportW: 600,
     maxViewportW: 1200
   },

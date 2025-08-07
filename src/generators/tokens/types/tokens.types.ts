@@ -3,7 +3,7 @@
 /* =================================================== */
 
 import type { Kebab } from '../../../types/utils.types.js';
-import type { ColorSchemeParams, FluidScalerParams } from '../tokens.types.js';
+import type { ColorSchemeParams, UtopiaSchemeParams } from '../tokens.types.js';
 
 //
 // ---------------------------------------------------
@@ -64,5 +64,5 @@ export type CoreTokenKebabValues = `${Kebab<CoreToken>}`;
 export type TokensDesignData = {
   baseFontSize?: number;
   colorScheme?: ColorSchemeParams;
-  fluidScaler?: FluidScalerParams;
+  utopiaScheme?: UtopiaSchemeParams;
 };
