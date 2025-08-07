@@ -3,7 +3,6 @@
 /* =================================================== */
 
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 import {
   ColorSchemeMethod,
@@ -20,14 +19,11 @@ import {
   TokensGeneratorParams
 } from './types/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 //
 // ---------------------------------------------------
 // BUILD PATH
 
-const DEFAULT_BUILD_PATH: string = path.resolve(__dirname, '../dist');
+const DEFAULT_BUILD_PATH: string = path.resolve(path.join(process.cwd(), 'dist'));
 
 //
 // ---------------------------------------------------
@@ -39,7 +35,7 @@ const DEFAULT_BASE_FONT_SIZE: number = 10;
 // ---------------------------------------------------
 // PREFIX
 
-const DEFAULT_PREFIX: string = 'tk'; // "tk" stands for tokens
+const DEFAULT_PREFIX: string = 'ds'; // "ds" stands for "Design System"
 
 //
 // ---------------------------------------------------
@@ -168,12 +164,24 @@ export const masterGeneratorDefaultParams: MasterGeneratorParams = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   generators: {
-    tokens: tokensGeneratorDefaultParams,
-    rootScaler: rootScalerGeneratorDefaultParams,
-    icons: iconsGeneratorDefaultParams,
-    fontFaces: fontFacesGeneratorDefaultParams as FontFacesGeneratorParams,
-    scrollbar: scrollbarGeneratorDefaultParams,
-    favicons: faviconsGeneratorDefaultParams as FaviconsGeneratorParams
+    tokens: Object.fromEntries(
+      Object.entries(tokensGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as TokensGeneratorParams,
+    rootScaler: Object.fromEntries(
+      Object.entries(rootScalerGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as RootScalerGeneratorParams,
+    icons: Object.fromEntries(
+      Object.entries(iconsGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as IconsGeneratorParams,
+    fontFaces: Object.fromEntries(
+      Object.entries(fontFacesGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as FontFacesGeneratorParams,
+    scrollbar: Object.fromEntries(
+      Object.entries(scrollbarGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as ScrollbarGeneratorParams,
+    favicons: Object.fromEntries(
+      Object.entries(faviconsGeneratorDefaultParams).filter(([key]) => key !== 'buildPath')
+    ) as FaviconsGeneratorParams
   },
   buildPath: DEFAULT_BUILD_PATH
 };

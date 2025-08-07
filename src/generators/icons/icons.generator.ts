@@ -2,7 +2,7 @@
 /* ICONS → GENERATOR */
 /* =================================================== */
 
-import { IconsGeneratorParams } from '../../types/index.js';
+import { GeneratorFn, IconsGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 
@@ -11,7 +11,7 @@ import { cssGenerator } from '../../utils/generators.utils.js';
 // GENERATOR FUNCTION
 
 // This function outputs the icons definitions
-export const iconsGenerator = (params: IconsGeneratorParams) =>
+export const iconsGenerator: GeneratorFn<IconsGeneratorParams> = (params) =>
   cssGenerator<IconsGeneratorParams>('icons', params, (output, config) => {
     const { fontFamily, color, list } = config;
     const attr = 'data-i';

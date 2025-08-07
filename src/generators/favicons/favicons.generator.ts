@@ -2,10 +2,11 @@
 /* FAVICONS → GENERATOR */
 /* =================================================== */
 
-import favicons from 'favicons';
+import favicons, { FaviconResponse } from 'favicons';
 import fs from 'fs/promises';
 import path from 'path';
 import { faviconsGeneratorDefaultParams } from '../../defaults.js';
+import { GeneratorFn } from '../../types/index.js';
 import type { FaviconsGeneratorParams } from './favicons.types.js';
 
 //
@@ -13,7 +14,11 @@ import type { FaviconsGeneratorParams } from './favicons.types.js';
 // GENERATOR FUNCTION
 
 // This function generates favicons and prints them out into files
-export const faviconsGenerator = async ({ id, sourcePath, ...params }: FaviconsGeneratorParams) => {
+export const faviconsGenerator: GeneratorFn<FaviconsGeneratorParams, FaviconResponse> = async ({
+  id,
+  sourcePath,
+  ...params
+}) => {
   const config = {
     ...faviconsGeneratorDefaultParams,
     ...params,

@@ -2,7 +2,8 @@
 /* MASTER → GENERATOR */
 /* =================================================== */
 
-import { GeneratorCommonParams } from '../../types/generator.types.js';
+import { masterGeneratorDefaultParams } from '../../defaults.js';
+import { GeneratorFn } from '../../types/index.js';
 import * as generators from '../index.js';
 import type { MasterGeneratorParams } from './master.types.js';
 
@@ -12,14 +13,19 @@ import type { MasterGeneratorParams } from './master.types.js';
 
 const proxyConfig: Record<
   string,
-  { commonParams: Array<keyof GeneratorCommonParams>; dir: string }
+  {
+    masterCoreParams: Array<
+      keyof Pick<MasterGeneratorParams, 'buildPath' | 'prefix' | 'baseFontSize'>
+    >;
+    dir: string;
+  }
 > = {
-  favicons: { commonParams: ['buildPath'], dir: 'favicons' },
-  fontFaces: { commonParams: ['buildPath'], dir: 'css' },
-  icons: { commonParams: ['buildPath'], dir: 'css' },
-  scrollbar: { commonParams: ['buildPath'], dir: 'css' },
-  rootScaler: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
-  tokens: { commonParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'tokens' }
+  favicons: { masterCoreParams: ['buildPath'], dir: 'favicons' },
+  fontFaces: { masterCoreParams: ['buildPath'], dir: 'css' },
+  icons: { masterCoreParams: ['buildPath'], dir: 'css' },
+  scrollbar: { masterCoreParams: ['buildPath'], dir: 'css' },
+  rootScaler: { masterCoreParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'css' },
+  tokens: { masterCoreParams: ['buildPath', 'prefix', 'baseFontSize'], dir: 'tokens' }
 };
 
 //
@@ -32,7 +38,7 @@ const proxyConfig: Record<
 // - prefix: Prefix that will be used when creating CSS custom properties
 // - baseFontSize: Base font size for the design system
 // - generators: Configuration data for the generators
-export async function masterGenerator(masterParams: MasterGeneratorParams): Promise<void> {
+export const masterGenerator: GeneratorFn<MasterGeneratorParams, void> = async (masterParams) => {
   if (!masterParams.generators || !Object.keys(masterParams.generators).length) {
     return Promise.reject(new Error('No generators selected.'));
   }
@@ -41,41 +47,48 @@ export async function masterGenerator(masterParams: MasterGeneratorParams): Prom
     Object.entries(masterParams.generators)
       .filter(([, generatorValue]) => !!generatorValue)
       .map(([name]) => {
-        const { generators: generatorParams, ...commonParams } = masterParams;
+        const { generators: generatorParams, ...masterCoreParams } = masterParams;
         const userParams = generatorParams[name as keyof typeof masterParams.generators];
         const generator = generators[`${name}Generator` as keyof typeof generators];
 
         const resolvedParams = {
+          ...masterGeneratorDefaultParams,
           ...userParams,
           ...(userParams?.buildPath
             ? { buildPath: userParams.buildPath }
-            : commonParams?.buildPath
-              ? { buildPath: commonParams.buildPath + `/${proxyConfig[name].dir}` }
-              : {}),
-          ...(proxyConfig[name].commonParams.includes('prefix')
+            : masterCoreParams?.buildPath
+              ? { buildPath: masterCoreParams.buildPath + `/${proxyConfig[name].dir}` }
+              : {
+                  buildPath: masterGeneratorDefaultParams.buildPath + `/${proxyConfig[name].dir}`
+                }),
+          ...(proxyConfig[name].masterCoreParams.includes('prefix')
             ? (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
-              commonParams?.prefix
+              masterCoreParams?.prefix
               ? {
                   prefix:
                     (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
-                    commonParams?.prefix
+                    masterCoreParams?.prefix
                 }
-              : {}
+              : {
+                  prefix: masterGeneratorDefaultParams.prefix
+                }
             : {}),
-          ...(proxyConfig[name].commonParams.includes('baseFontSize')
+          ...(proxyConfig[name].masterCoreParams.includes('baseFontSize')
             ? (userParams && 'baseFontSize' in userParams ? userParams.baseFontSize : undefined) ||
-              commonParams?.baseFontSize
+              masterCoreParams?.baseFontSize
               ? {
                   baseFontSize:
                     (userParams && 'baseFontSize' in userParams
                       ? userParams.baseFontSize
-                      : undefined) || commonParams?.baseFontSize
+                      : undefined) || masterCoreParams?.baseFontSize
                 }
-              : {}
+              : {
+                  baseFontSize: masterGeneratorDefaultParams.baseFontSize
+                }
             : {})
         };
 
         return (generator as (params: typeof resolvedParams) => unknown)(resolvedParams);
       })
   );
-}
+};

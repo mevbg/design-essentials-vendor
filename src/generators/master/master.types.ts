@@ -5,7 +5,6 @@
 import {
   FaviconsGeneratorParams,
   FontFacesGeneratorParams,
-  GeneratorCommonParams,
   IconsGeneratorParams,
   RootScalerGeneratorParams,
   ScrollbarGeneratorParams,
@@ -16,10 +15,10 @@ import {
 // ---------------------------------------------------
 // GENERATOR PARAMS
 
-// This is the main entry configuration object that
-// this generator accepts and requires in order to generate
-// a proper output of all design essentials.
 export type MasterGeneratorParams = {
+  buildPath?: string;
+  prefix?: string;
+  baseFontSize?: number;
   generators: {
     tokens?: TokensGeneratorParams;
     rootScaler?: RootScalerGeneratorParams;
@@ -28,4 +27,4 @@ export type MasterGeneratorParams = {
     scrollbar?: ScrollbarGeneratorParams;
     favicons?: FaviconsGeneratorParams;
   };
-} & GeneratorCommonParams;
+};

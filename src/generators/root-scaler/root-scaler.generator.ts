@@ -2,7 +2,7 @@
 /* ROOT SCALER → GENERATOR */
 /* =================================================== */
 
-import { RootScalerGeneratorParams } from '../../types/index.js';
+import { GeneratorFn, RootScalerGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 //
@@ -10,7 +10,7 @@ import { cssGenerator } from '../../utils/generators.utils.js';
 // GENERATOR FUNCTION
 
 // This function outputs the root font size definition
-export const rootScalerGenerator = (params: RootScalerGeneratorParams) =>
+export const rootScalerGenerator: GeneratorFn<RootScalerGeneratorParams> = (params) =>
   cssGenerator<RootScalerGeneratorParams>('rootScaler', params, (output, config) => {
     const { minViewportW, maxViewportW, baseFontSize } =
       config as Required<RootScalerGeneratorParams>;

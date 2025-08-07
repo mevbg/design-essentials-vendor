@@ -1,7 +1,7 @@
 import type { FontFacesGeneratorParams } from '../../../src/types/index.js';
 
 export const fontFaces: FontFacesGeneratorParams = {
-  path: 'client/fonts',
+  sourcePath: 'client/fonts',
   fonts: {
     Gotham: {
       XLight: 200,

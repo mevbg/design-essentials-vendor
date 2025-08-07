@@ -2,7 +2,7 @@
 /* SCROLLBAR → GENERATOR */
 /* =================================================== */
 
-import { ScrollbarGeneratorParams } from '../../types/index.js';
+import { GeneratorFn, ScrollbarGeneratorParams } from '../../types/index.js';
 import { cssSelectorBlock } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 //
@@ -10,7 +10,7 @@ import { cssGenerator } from '../../utils/generators.utils.js';
 // GENERATOR FUNCTION
 
 // This function outputs the scrollbar styles
-export const scrollbarGenerator = (params: ScrollbarGeneratorParams) =>
+export const scrollbarGenerator: GeneratorFn<ScrollbarGeneratorParams> = (params) =>
   cssGenerator<ScrollbarGeneratorParams>('scrollbar', params, (output, config) => {
     output.push(
       cssSelectorBlock({

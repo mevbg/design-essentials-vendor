@@ -4,7 +4,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { FontFace, FontFacesGeneratorParams } from '../../types/index.js';
+import { FontFace, FontFacesGeneratorParams, GeneratorFn } from '../../types/index.js';
 import { cssSelectorBlock, tab } from '../../utils/formats.utils.js';
 import { cssGenerator } from '../../utils/generators.utils.js';
 
@@ -73,9 +73,9 @@ function getTypefaces(dir: string): { name: string; weights: Record<string, stri
 
 // This function prepares the array
 // of all available font faces that should be in the output
-function getFontFaces({ fonts, path: fontsPath }: FontFacesGeneratorParams): FontFace[] {
+function getFontFaces({ fonts, sourcePath }: FontFacesGeneratorParams): FontFace[] {
   const fontFaces: FontFace[] = [];
-  const typefaces = getTypefaces(fontsPath);
+  const typefaces = getTypefaces(sourcePath);
   typefaces.forEach(({ name: typefaceName, weights: typefaceWeights }) => {
     const typefaceFontWeightTokens = Object.keys(fonts)
       .map((typefaceName) => typefaceName.toLowerCase())
@@ -109,7 +109,7 @@ function getFontFaces({ fonts, path: fontsPath }: FontFacesGeneratorParams): Fon
               'font-family': typefaceName,
               'font-style': file.includes('Italic') ? 'italic' : 'normal',
               'font-weight': fontWeight,
-              src: `url('../../../${path.join(`${fontsPath}/${typefaceName}`, file)}') format('woff2')`
+              src: `url('../../../${path.join(`${sourcePath}/${typefaceName}`, file)}') format('woff2')`
             });
           });
         }
@@ -124,7 +124,7 @@ function getFontFaces({ fonts, path: fontsPath }: FontFacesGeneratorParams): Fon
 // GENERATOR FUNCTION
 
 // This function outputs the font faces
-export const fontFacesGenerator = (params: FontFacesGeneratorParams) =>
+export const fontFacesGenerator: GeneratorFn<FontFacesGeneratorParams> = (params) =>
   cssGenerator<FontFacesGeneratorParams>('fontFaces', params, (output, config) => {
     // conditions:
     // • only woff2 files, one per font weight is expected

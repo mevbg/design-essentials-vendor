@@ -7,7 +7,7 @@
 // GENERATOR PARAMS
 
 export type FontFacesGeneratorParams = {
-  path: string;
+  sourcePath: string;
   fonts: Record<string, Record<string, number>>;
   buildPath?: string;
 };

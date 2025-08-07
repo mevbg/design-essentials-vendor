@@ -2,7 +2,6 @@
 /* TOKENS → TYPES */
 /* =================================================== */
 
-import type { GeneratorCommonParams } from '../../types/generator.types.js';
 import type { ColorSchemeParams } from './types/color-scheme.types.js';
 import type { FluidScalerParams } from './types/fluid-scaler.types.js';
 import type { PlatformType } from './types/platform.types.js';
@@ -16,9 +15,12 @@ import type { PlatformType } from './types/platform.types.js';
 export type TokensGeneratorParams = {
   sourcePath?: string;
   platforms?: PlatformType[];
+  prefix?: string;
+  baseFontSize?: number;
   colorScheme?: ColorSchemeParams;
   fluidScaler?: FluidScalerParams;
-} & GeneratorCommonParams;
+  buildPath?: string;
+};
 
 //
 // ---------------------------------------------------
