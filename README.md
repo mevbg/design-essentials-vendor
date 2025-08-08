@@ -379,11 +379,10 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 - **Type**: `PlatformType[]` _(optional)_
 - **Default**: `['css', 'scss', 'js', 'json']`
 - **Description**: This array specifies which output platforms should be generated. Available options are:
-
-- `'css'` - Generates CSS files with CSS Custom Properties
-- `'scss'` - Generates SCSS files with SCSS variables
-- `'js'` - Generates JavaScript files with static values and CSS custom properties
-- `'json'` - Generates JSON files with all tokens
+  - `'css'` - Generates CSS files with CSS Custom Properties
+  - `'scss'` - Generates SCSS files with SCSS variables
+  - `'js'` - Generates JavaScript files with static values and CSS custom properties
+  - `'json'` - Generates JSON files with all tokens
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`prefix`**
@@ -404,21 +403,19 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 - **Type**: `ColorSchemeParams` _(optional)_
 - **Default**: `{ default: 'light', method: 'combined' }`
 - **Description**: This object configures color scheme behavior. It contains:
-
-- `default` - The default color scheme (`'light'` or `'dark'`)
-- `method` - The method for applying color schemes:
-  - `'media'` - Uses `prefers-color-scheme` media query
-  - `'class'` - Uses CSS classes on the root element
-  - `'combined'` - Uses both methods with class priority
+  - `default` - The default color scheme (`'light'` or `'dark'`)
+  - `method` - The method for applying color schemes:
+    - `'media'` - Uses `prefers-color-scheme` media query
+    - `'class'` - Uses CSS classes on the root element
+    - `'combined'` - Uses both methods with class priority
 
 ##### **`utopiaScheme`**
 
 - **Type**: `UtopiaSchemeParams` _(optional)_
 - **Default**: `{ minViewportW: 600, maxViewportW: 1200 }`
 - **Description**: This object configures Utopia fluid typography scaling. It contains:
-
-- `minViewportW` - Minimum viewport width for scaling _(in pixels)_
-- `maxViewportW` - Maximum viewport width for scaling _(in pixels)_
+  - `minViewportW` - Minimum viewport width for scaling _(in pixels)_
+  - `maxViewportW` - Maximum viewport width for scaling _(in pixels)_
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
