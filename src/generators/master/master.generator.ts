@@ -61,6 +61,7 @@ export const masterGenerator: GeneratorFn<MasterGeneratorParams, void> = async (
               : {
                   buildPath: masterGeneratorDefaultParams.buildPath + `/${proxyConfig[name].dir}`
                 }),
+
           ...(proxyConfig[name].masterCoreParams.includes('prefix')
             ? (userParams && 'prefix' in userParams ? userParams.prefix : undefined) ||
               masterCoreParams?.prefix
@@ -73,6 +74,7 @@ export const masterGenerator: GeneratorFn<MasterGeneratorParams, void> = async (
                   prefix: masterGeneratorDefaultParams.prefix
                 }
             : {}),
+
           ...(proxyConfig[name].masterCoreParams.includes('baseFontSize')
             ? (userParams && 'baseFontSize' in userParams ? userParams.baseFontSize : undefined) ||
               masterCoreParams?.baseFontSize
