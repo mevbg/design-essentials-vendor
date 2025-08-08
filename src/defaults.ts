@@ -59,7 +59,7 @@ const DEFAULT_UTOPIA_SCHEME_PARAMS: UtopiaSchemeParams = {
 // ---------------------------------------------------
 // TOKENS
 
-export const tokensGeneratorDefaultParams: TokensGeneratorParams = {
+export const tokensGeneratorDefaultParams: Partial<TokensGeneratorParams> = {
   prefix: DEFAULT_PREFIX,
   baseFontSize: DEFAULT_BASE_FONT_SIZE,
   platforms: [PlatformType.CSS, PlatformType.SCSS, PlatformType.JS, PlatformType.JSON],

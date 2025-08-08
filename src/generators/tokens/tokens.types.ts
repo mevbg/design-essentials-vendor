@@ -13,7 +13,7 @@ import type { UtopiaSchemeParams } from './types/utopia-scheme.types.js';
 // This is the object that contains the key data
 // necessary for defining the tokens.
 export type TokensGeneratorParams = {
-  sourcePath?: string;
+  sourcePath: string;
   platforms?: PlatformType[];
   prefix?: string;
   baseFontSize?: number;
