@@ -254,27 +254,27 @@ Of all four parameters, only the `generators` object is **required**, as it must
 
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated output should be placed. If no path is provided, a `dist` directory will be created at the root of the project from which the process is executed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated output should be placed. If no path is provided, a `dist` directory will be created at the root of the project from which the process is executed.
 
 ##### **`prefix`**
 
-**Type**: `string` _(optional)_
-**Default**: `'ds'` _(stands for "Design System")_
-**Description**: This prefix is used exclusively by Style Dictionary when generating CSS Custom Properties.
+- **Type**: `string` _(optional)_
+- **Default**: `'ds'` _(stands for "Design System")_
+- **Description**: This prefix is used exclusively by Style Dictionary when generating CSS Custom Properties.
 It is primarily utilized by the Viewport Scaler Generator and Tokens Generator, as both produce CSS output containing custom properties whose names are structured using this prefix.
 
 ##### **`baseFontSize`**
 
-**Type**: `number` _(optional)_
-**Default**: `10`
-**Description**: This value defines the base font size of the web document, from which all relative `rem` units are derived. It also serves as the foundation for the CSS formulas that are integral to both Scaling Layout logic and Content Scaling logic. More details about these two strategies can be found further down in this documentation.
+- **Type**: `number` _(optional)_
+- **Default**: `10`
+- **Description**: This value defines the base font size of the web document, from which all relative `rem` units are derived. It also serves as the foundation for the CSS formulas that are integral to both Scaling Layout logic and Content Scaling logic. More details about these two strategies can be found further down in this documentation.
 
 ##### **`generators`**
 
-**Type**: `object` **_(required)_**
-**Description**: This object accepts optional properties corresponding to the available feature-based generators. Each property represents a configuration object that contains the necessary parameters for the respective feature. Only the generators with a configuration object provided will produce output. If an empty object `{}` is passed to `generators`, no output will be generated at all. Some generators require mandatory configuration fields, and their usage depends on providing those parameters. Others have default values for all parameters, in which case passing an empty object `{}` is sufficient to trigger production. Detailed information about the required and optional parameters for each generator is provided further down in this documentation.
+- **Type**: `object` **_(required)_**
+- **Description**: This object accepts optional properties corresponding to the available feature-based generators. Each property represents a configuration object that contains the necessary parameters for the respective feature. Only the generators with a configuration object provided will produce output. If an empty object `{}` is passed to `generators`, no output will be generated at all. Some generators require mandatory configuration fields, and their usage depends on providing those parameters. Others have default values for all parameters, in which case passing an empty object `{}` is sufficient to trigger production. Detailed information about the required and optional parameters for each generator is provided further down in this documentation.
 
 #### Usage of Master Generator
 
@@ -371,14 +371,14 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 
 ##### **`sourcePath`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the path to the directory or glob pattern where the design token source files are located. These files should contain the raw design tokens that will be processed and transformed into the specified output formats.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the path to the directory or glob pattern where the design token source files are located. These files should contain the raw design tokens that will be processed and transformed into the specified output formats.
 
 ##### **`platforms`**
 
-**Type**: `PlatformType[]` _(optional)_
-**Default**: `['css', 'scss', 'js', 'json']`
-**Description**: This array specifies which output platforms should be generated. Available options are:
+- **Type**: `PlatformType[]` _(optional)_
+- **Default**: `['css', 'scss', 'js', 'json']`
+- **Description**: This array specifies which output platforms should be generated. Available options are:
 
 - `'css'` - Generates CSS files with CSS Custom Properties
 - `'scss'` - Generates SCSS files with SCSS variables
@@ -388,22 +388,22 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`prefix`**
 
-**Type**: `string` _(optional)_
-**Default**: `'ds'` _(stands for "Design System")_
-**Description**: This prefix is used by Style Dictionary when generating CSS Custom Properties and other prefixed outputs. It helps namespace the generated tokens to avoid conflicts.
+- **Type**: `string` _(optional)_
+- **Default**: `'ds'` _(stands for "Design System")_
+- **Description**: This prefix is used by Style Dictionary when generating CSS Custom Properties and other prefixed outputs. It helps namespace the generated tokens to avoid conflicts.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`baseFontSize`**
 
-**Type**: `number` _(optional)_
-**Default**: `10`
-**Description**: This value defines the base font size used for calculating relative units and fluid typography scaling. It serves as the foundation for Utopia scheme calculations.
+- **Type**: `number` _(optional)_
+- **Default**: `10`
+- **Description**: This value defines the base font size used for calculating relative units and fluid typography scaling. It serves as the foundation for Utopia scheme calculations.
 
 ##### **`colorScheme`**
 
-**Type**: `ColorSchemeParams` _(optional)_
-**Default**: `{ default: 'light', method: 'combined' }`
-**Description**: This object configures color scheme behavior. It contains:
+- **Type**: `ColorSchemeParams` _(optional)_
+- **Default**: `{ default: 'light', method: 'combined' }`
+- **Description**: This object configures color scheme behavior. It contains:
 
 - `default` - The default color scheme (`'light'` or `'dark'`)
 - `method` - The method for applying color schemes:
@@ -413,9 +413,9 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 
 ##### **`utopiaScheme`**
 
-**Type**: `UtopiaSchemeParams` _(optional)_
-**Default**: `{ minViewportW: 600, maxViewportW: 1200 }`
-**Description**: This object configures Utopia fluid typography scaling. It contains:
+- **Type**: `UtopiaSchemeParams` _(optional)_
+- **Default**: `{ minViewportW: 600, maxViewportW: 1200 }`
+- **Description**: This object configures Utopia fluid typography scaling. It contains:
 
 - `minViewportW` - Minimum viewport width for scaling _(in pixels)_
 - `maxViewportW` - Maximum viewport width for scaling _(in pixels)_
@@ -423,9 +423,9 @@ Of all parameters, only `sourcePath` is **required** as it specifies where the d
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated output files should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated output files should be placed.
 
 #### Usage of Tokens Generator
 
@@ -522,35 +522,35 @@ All parameters are **optional** and have sensible defaults. Here are more detail
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`prefix`**
 
-**Type**: `string` _(optional)_
-**Default**: `'ds'` _(stands for "Design System")_
-**Description**: This prefix is used for the CSS custom property name to avoid conflicts with other custom properties. The generated property will be named `--{prefix}-root-font-size`.
+- **Type**: `string` _(optional)_
+- **Default**: `'ds'` _(stands for "Design System")_
+- **Description**: This prefix is used for the CSS custom property name to avoid conflicts with other custom properties. The generated property will be named `--{prefix}-root-font-size`.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`baseFontSize`**
 
-**Type**: `number` _(optional)_
-**Default**: `10`
-**Description**: This value defines the base font size used for calculating the scaling formula. It serves as the foundation for all viewport-based calculations.
+- **Type**: `number` _(optional)_
+- **Default**: `10`
+- **Description**: This value defines the base font size used for calculating the scaling formula. It serves as the foundation for all viewport-based calculations.
 
 ##### **`minViewportW`**
 
-**Type**: `number` _(optional)_
-**Default**: `300`
-**Description**: This is the minimum viewport width _(in pixels)_ below which the viewport scaler is applied. Below this breakpoint, the root font size scales proportionally with the viewport width.
+- **Type**: `number` _(optional)_
+- **Default**: `300`
+- **Description**: This is the minimum viewport width _(in pixels)_ below which the viewport scaler is applied. Below this breakpoint, the root font size scales proportionally with the viewport width.
 
 ##### **`maxViewportW`**
 
-**Type**: `number` _(optional)_
-**Default**: `2100`
-**Description**: This is the maximum viewport width _(in pixels)_ above which the viewport scaler is applied in presentation mode. Above this breakpoint, the root font size scales proportionally with the viewport width when the `html.presentation-mode` class is present.
+- **Type**: `number` _(optional)_
+- **Default**: `2100`
+- **Description**: This is the maximum viewport width _(in pixels)_ above which the viewport scaler is applied in presentation mode. Above this breakpoint, the root font size scales proportionally with the viewport width when the `html.presentation-mode` class is present.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated CSS file should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated CSS file should be placed.
 
 #### Usage of Viewport Scaler Generator
 
@@ -621,58 +621,58 @@ All parameters are **optional** and have sensible defaults. Here are more detail
 
 ##### **`areaWidth`**
 
-**Type**: `number` _(optional)_
-**Default**: `16`
-**Description**: This value defines the total width _(in pixels)_ of the scrollbar area for vertical scrollbars and the height for horizontal scrollbars.
+- **Type**: `number` _(optional)_
+- **Default**: `16`
+- **Description**: This value defines the total width _(in pixels)_ of the scrollbar area for vertical scrollbars and the height for horizontal scrollbars.
 
 ##### **`thumbSizeBase`**
 
-**Type**: `number` _(optional)_
-**Default**: `4`
-**Description**: This value defines the base width _(in pixels)_ of the scrollbar thumb in its normal state.
+- **Type**: `number` _(optional)_
+- **Default**: `4`
+- **Description**: This value defines the base width _(in pixels)_ of the scrollbar thumb in its normal state.
 
 ##### **`thumbSizeOver`**
 
-**Type**: `number` _(optional)_
-**Default**: `10`
-**Description**: This value defines the width _(in pixels)_ of the scrollbar thumb when hovered or active, providing visual feedback to users.
+- **Type**: `number` _(optional)_
+- **Default**: `10`
+- **Description**: This value defines the width _(in pixels)_ of the scrollbar thumb when hovered or active, providing visual feedback to users.
 
 ##### **`thumbMinSize`**
 
-**Type**: `number` _(optional)_
-**Default**: `80`
-**Description**: This value defines the minimum size _(in pixels)_ that the scrollbar thumb can have, ensuring it remains usable even on very long content.
+- **Type**: `number` _(optional)_
+- **Default**: `80`
+- **Description**: This value defines the minimum size _(in pixels)_ that the scrollbar thumb can have, ensuring it remains usable even on very long content.
 
 ##### **`scrollbarBackground`**
 
-**Type**: `string` _(optional)_
-**Default**: `'transparent'`
-**Description**: This value defines the background color of the scrollbar track area. Can be any valid CSS color value.
+- **Type**: `string` _(optional)_
+- **Default**: `'transparent'`
+- **Description**: This value defines the background color of the scrollbar track area. Can be any valid CSS color value.
 
 ##### **`thumbColor`**
 
-**Type**: `string` _(optional)_
-**Default**: `'#ccc'`
-**Description**: This value defines the color of the scrollbar thumb in its normal state. Can be any valid CSS color value.
+- **Type**: `string` _(optional)_
+- **Default**: `'#ccc'`
+- **Description**: This value defines the color of the scrollbar thumb in its normal state. Can be any valid CSS color value.
 
 ##### **`thumbColorHover`**
 
-**Type**: `string` _(optional)_
-**Default**: `'#ccc'`
-**Description**: This value defines the color of the scrollbar thumb when hovered. Can be any valid CSS color value.
+- **Type**: `string` _(optional)_
+- **Default**: `'#ccc'`
+- **Description**: This value defines the color of the scrollbar thumb when hovered. Can be any valid CSS color value.
 
 ##### **`thumbColorActive`**
 
-**Type**: `string` _(optional)_
-**Default**: `'#999'`
-**Description**: This value defines the color of the scrollbar thumb when active (being dragged). Can be any valid CSS color value.
+- **Type**: `string` _(optional)_
+- **Default**: `'#999'`
+- **Description**: This value defines the color of the scrollbar thumb when active (being dragged). Can be any valid CSS color value.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated CSS file should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated CSS file should be placed.
 
 #### Usage of Scrollbar Generator
 
@@ -746,17 +746,16 @@ Two parameters are **required** and one is optional. Here are more details:
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`sourcePath`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the path to the directory containing font files. The generator expects a specific directory structure where each font family has its own subdirectory containing the font files.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the path to the directory containing font files. The generator expects a specific directory structure where each font family has its own subdirectory containing the font files.
 
 ##### **`fonts`**
 
-**Type**: `Record<string, Record<string, number>>` **_(required)_**
-**Description**: This object maps font family names to their weight configurations. The structure is:
-
-- **Outer key**: Font family name _(must match the directory name)_
-- **Inner key**: Weight name _(must match the filename pattern)_
-- **Value**: CSS font-weight number _(e.g., 400 for normal, 700 for bold)_
+- **Type**: `Record<string, Record<string, number>>` **_(required)_**
+- **Description**: This object maps font family names to their weight configurations. The structure is:
+  - **Outer key**: Font family name _(must match the directory name)_
+  - **Inner key**: Weight name _(must match the filename pattern)_
+  - **Value**: CSS font-weight number _(e.g., 400 for normal, 700 for bold)_
 
 Example:
 
@@ -772,9 +771,9 @@ Example:
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated CSS file should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated CSS file should be placed.
 
 #### Usage of Fonts Faces Generator
 
@@ -858,11 +857,10 @@ One parameter is **required** and three are optional. Here are more details:
 
 ##### **`list`**
 
-**Type**: `Record<string, string>` **_(required)_**
-**Description**: This object maps icon names to their Unicode character codes. The structure is:
-
-- **Key**: Icon name (used in the HTML `data-i` attribute)
-- **Value**: Unicode character code (without the `\u` prefix)
+- **Type**: `Record<string, string>` **_(required)_**
+- **Description**: This object maps icon names to their Unicode character codes. The structure is:
+  - **Key**: Icon name (used in the HTML `data-i` attribute)
+  - **Value**: Unicode character code (without the `\u` prefix)
 
 Example:
 
@@ -877,22 +875,22 @@ Example:
 
 ##### **`fontFamily`**
 
-**Type**: `string` _(optional)_
-**Default**: `'Iconography'`
-**Description**: This value defines the font family that will be used for displaying the icons. It should match the font family name of your icon font (e.g., Font Awesome, Material Icons, or a custom icon font).
+- **Type**: `string` _(optional)_
+- **Default**: `'Iconography'`
+- **Description**: This value defines the font family that will be used for displaying the icons. It should match the font family name of your icon font (e.g., Font Awesome, Material Icons, or a custom icon font).
 
 ##### **`color`**
 
-**Type**: `string` _(optional)_
-**Default**: `'currentColor'`
-**Description**: This value defines the default color for all icons. Using `currentColor` allows icons to inherit the text color from their parent element, making them flexible and themeable.
+- **Type**: `string` _(optional)_
+- **Default**: `'currentColor'`
+- **Description**: This value defines the default color for all icons. Using `currentColor` allows icons to inherit the text color from their parent element, making them flexible and themeable.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated CSS file should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated CSS file should be placed.
 
 #### Usage of Icons Generator
 
@@ -997,71 +995,71 @@ Six parameters are **required** and the rest are optional. Here are more details
 
 ##### **`id`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the unique identifier for the web application. It is used in the generated manifest file and helps identify the app across different platforms.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the unique identifier for the web application. It is used in the generated manifest file and helps identify the app across different platforms.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`sourcePath`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the path to the source image file that will be used to generate all favicon variants. The image should be high quality (at least 1024x1024 pixels) and square.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the path to the source image file that will be used to generate all favicon variants. The image should be high quality (at least 1024x1024 pixels) and square.
 
 ##### **`appName`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the full name of the web application as it will appear in app stores and device home screens.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the full name of the web application as it will appear in app stores and device home screens.
 
 ##### **`appShortName`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the short name of the web application, typically used when space is limited _(e.g., on home screens)_.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the short name of the web application, typically used when space is limited _(e.g., on home screens)_.
 
 ##### **`appDescription`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field provides a brief description of the web application for app stores and device listings.
+- **Type**: `string` **_(required)_**
+- **Description**: This field provides a brief description of the web application for app stores and device listings.
 
 ##### **`version`**
 
-**Type**: `string` **_(required)_**
-**Description**: This field specifies the version number of the web application _(e.g., "1.0.0")_.
+- **Type**: `string` **_(required)_**
+- **Description**: This field specifies the version number of the web application _(e.g., "1.0.0")_.
 
 ##### **`developerName`**
 
-**Type**: `string` _(optional)_
-**Default**: `'Martin Metodiev'`
-**Description**: This field specifies the name of the developer or organization that created the web application.
+- **Type**: `string` _(optional)_
+- **Default**: `'Martin Metodiev'`
+- **Description**: This field specifies the name of the developer or organization that created the web application.
 
 ##### **`developerURL`**
 
-**Type**: `string` _(optional)_
-**Default**: `'https://mev.bg'`
-**Description**: This field specifies the URL of the developer or organization website.
+- **Type**: `string` _(optional)_
+- **Default**: `'https://mev.bg'`
+- **Description**: This field specifies the URL of the developer or organization website.
 
 ##### **`background`**
 
-**Type**: `string` _(optional)_
-**Default**: `'#fff'`
-**Description**: This field specifies the background color for flattened icons and splash screens.
+- **Type**: `string` _(optional)_
+- **Default**: `'#fff'`
+- **Description**: This field specifies the background color for flattened icons and splash screens.
 
 ##### **`theme_color`**
 
-**Type**: `string` _(optional)_
-**Default**: `'#fff'`
-**Description**: This field specifies the theme color used in browser UI elements and Android task switcher.
+- **Type**: `string` _(optional)_
+- **Default**: `'#fff'`
+- **Description**: This field specifies the theme color used in browser UI elements and Android task switcher.
 
 ##### **`display`**
 
-**Type**: `string` _(optional)_
-**Default**: `'standalone'`
-**Description**: This field specifies the preferred display mode for the web application. Options include: `'fullscreen'`, `'standalone'`, `'minimal-ui'`, or `'browser'`.
+- **Type**: `string` _(optional)_
+- **Default**: `'standalone'`
+- **Description**: This field specifies the preferred display mode for the web application. Options include: `'fullscreen'`, `'standalone'`, `'minimal-ui'`, or `'browser'`.
 
 <!-- markdownlint-disable-next-line MD024 -->
 ##### **`buildPath`**
 
-**Type**: `string` _(optional)_
-**Default**: `'dist'`
-**Description**: This field specifies the path to the directory where the generated favicon files should be placed.
+- **Type**: `string` _(optional)_
+- **Default**: `'dist'`
+- **Description**: This field specifies the path to the directory where the generated favicon files should be placed.
 
 #### Usage of Favicons Generator
 
