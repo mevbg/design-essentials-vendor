@@ -80,7 +80,7 @@ export const colorHandler = async ({
               Object.entries(colorScheme).forEach(([scheme, tokens]) => {
                 output.push(
                   wrapper({
-                    name: `html.${scheme}`,
+                    name: scheme === designData.colorScheme.default ? ':root' : `html.${scheme}`,
                     code: definer({ tokens })
                   }) + '\n'
                 );
