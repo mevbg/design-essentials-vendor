@@ -45,6 +45,7 @@ export const colorHandler = async ({
         const parsers = {
           css: () => {
             // no method case
+            // (just a fallback case that is expected to never happen)
             if (!designData.colorScheme?.method) {
               output.push(
                 wrapper({
