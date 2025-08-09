@@ -38,7 +38,8 @@ export const colorHandler = async ({
       if (category !== CustomFormatterCategory.JS || type !== JsCustomFormatterType.VARIABLE) {
         const colorScheme = getColorScheme(
           tokens,
-          category === CustomFormatterCategory.JS ? 'pascal' : 'kebab'
+          category === CustomFormatterCategory.JS ? 'pascal' : 'kebab',
+          designData.colorScheme?.default
         );
 
         const parsers = {

@@ -28,12 +28,34 @@ const getColorSchemeTokens = (
 // Returns the color scheme tokens for a given syntax
 export const getColorScheme = (
   tokens: TransformedToken[],
-  syntax: Syntax
+  syntax: Syntax,
+  defaultScheme?: string
 ): Record<string, TransformedToken[]> => {
   const schemeTokens = tokens.filter(({ attributes }) => attributes?.type === 'scheme');
 
-  return {
+  // Create base color scheme object
+  const baseColorScheme = {
     light: getColorSchemeTokens(schemeTokens, 'light', syntax),
     dark: getColorSchemeTokens(schemeTokens, 'dark', syntax)
   };
+
+  // If default scheme is specified and it's different from 'light', reorder the keys
+  if (defaultScheme && defaultScheme !== 'light') {
+    const reorderedColorScheme: Record<string, TransformedToken[]> = {};
+
+    // Put the default scheme first
+    reorderedColorScheme[defaultScheme] =
+      baseColorScheme[defaultScheme as keyof typeof baseColorScheme];
+
+    // Add the remaining schemes
+    Object.keys(baseColorScheme).forEach((scheme) => {
+      if (scheme !== defaultScheme) {
+        reorderedColorScheme[scheme] = baseColorScheme[scheme as keyof typeof baseColorScheme];
+      }
+    });
+
+    return reorderedColorScheme;
+  }
+
+  return baseColorScheme;
 };
