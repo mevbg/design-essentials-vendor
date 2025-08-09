@@ -43,7 +43,7 @@ const DEFAULT_PREFIX: string = 'ds'; // "ds" stands for "Design System"
 
 const DEFAULT_COLOR_SCHEME_PARAMS: ColorSchemeParams = {
   default: ColorSchemeType.LIGHT,
-  method: ColorSchemeMethod.COMBINED
+  method: ColorSchemeMethod.CLASS
 };
 
 //

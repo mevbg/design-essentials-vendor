@@ -14,6 +14,6 @@ export const tokens: TokensGeneratorParams = {
   },
   colorScheme: {  
     default: ColorSchemeType.LIGHT,
-    method: ColorSchemeMethod.COMBINED
+    method: ColorSchemeMethod.CLASS
   }
 };
