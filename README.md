@@ -2,6 +2,9 @@
 
 > A simple vendor of design system essentials
 
+[![npm version][npm-version-src]][npm-version-href]
+[![License][license-src]][license-href]
+
 ## 🎯 Overview
 
 _[Mev](https://mev.bg)’s Design Essentials Vendor_ (**mDEV**) is a full-fledged factory for generating essential assets used to scaffold a robust Design System. Built on top of [Style Dictionary](https://styledictionary.com/) and [Favicons](https://www.npmjs.com/package/favicons), it delivers a strongly opinionated and production-ready foundation of assets, tokens and utilities — aligned with Mev’s principle for creating resilient and stable UIs.
@@ -2333,3 +2336,11 @@ favicons/
 
 This is a personal tool and no contributions are expected.
 At least for now. 😋
+
+
+<!-- Badges -->
+[npm-version-src]: https://img.shields.io/npm/v/%40mevbg%2Fdesign-essentials-vendor/latest.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-version-href]: https://npmjs.com/package/@mevbg/design-essentials-vendor
+
+[license-src]: https://img.shields.io/npm/l/%40mevbg%2Fdesign-essentials-vendor.svg?style=flat&colorA=020420&colorB=00DC82
+[license-href]: https://github.com/mevbg/design-essentials-vendor/blob/main/LICENSE
