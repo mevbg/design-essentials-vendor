@@ -4,6 +4,7 @@
 
 [![npm version][npm-version-src]][npm-version-href]
 [![License][license-src]][license-href]
+[![Style Dictionary][style-dictionary-src]][style-dictionary-href]
 
 ## 🎯 Overview
 
@@ -2344,3 +2345,6 @@ At least for now. 😋
 
 [license-src]: https://img.shields.io/npm/l/%40mevbg%2Fdesign-essentials-vendor.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://github.com/mevbg/design-essentials-vendor/blob/main/LICENSE
+
+[style-dictionary-src]: https://img.shields.io/badge/Style%20Dictionary-%5E5.0.1-3fc6c0?colorA=020420
+[style-dictionary-href]: https://styledictionary.com
