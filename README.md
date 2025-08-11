@@ -283,24 +283,24 @@ It is primarily utilized by the Viewport Scaler Generator and Tokens Generator, 
 #### Usage of Master Generator
 
 ```ts
-import { generateDesignEssentials } from ’@mevbg/design-essentials-vendor’;
+import { generateDesignEssentials } from '@mevbg/design-essentials-vendor';
 
 try {
   await generateDesignEssentials({
-    buildPath: ’./dist’,
-    prefix: ’mev’,
+    buildPath: './dist',
+    prefix: 'mev',
     baseFontSize: 16,
     generators: {
       favicons: {
-        id: ’https://mev.bg’,
-        sourcePath: ’assets/images/logo.svg’,
-        appName: ’Mev.bg’,
-        appShortName: ’Mev’,
-        appDescription: ’Personal webpage’,
-        version: ’1.0.0’
+        id: 'https://mev.bg',
+        sourcePath: 'assets/images/logo.svg',
+        appName: 'Mev.bg',
+        appShortName: 'Mev',
+        appDescription: 'Personal webpage',
+        version: '1.0.0'
       },
       fontFaces: {
-        sourcePath: ’assets/client/fonts’,
+        sourcePath: 'assets/client/fonts',
         fonts: {
           Helvetica: {
             Regular: 400,
@@ -309,35 +309,35 @@ try {
         }
       },
       icons: {
-        fontFamily: ’MevIcons’,
-        color: ’var(--mev-color-content-gray)’,
+        fontFamily: 'MevIcons',
+        color: 'var(--mev-color-content-gray)',
         list: {
-          main: ’E000’,
-          nav: ’E001’,
-          search: ’E002’,
-          profile: ’E003’
+          main: 'E000',
+          nav: 'E001',
+          search: 'E002',
+          profile: 'E003'
           // ...
         },
         viewportScaler: {},
         scrollbar: {},
         tokens: {
-          sourcePath: ’./design/tokens/**/index.js’,
-          platforms: [’css’, ’js’, ’scss’],
+          sourcePath: './design/tokens/**/index.js',
+          platforms: ['css', 'js', 'scss'],
           contentScaling: {
             minViewportW: 600,
             maxViewportW: 1200
           },
           colorScheme: {
-            default: ’light’,
-            method: ’combined’
+            default: 'light',
+            method: 'combined'
           }
         }
       }
     }
   });
-  console.info(’Design essentials generated successfully!’);
+  console.info('Design essentials generated successfully!');
 } catch (err) {
-  console.error(’Failed to generate design essentials:’, err.message);
+  console.error('Failed to generate design essentials:', err.message);
 }
 ```
 
@@ -1513,7 +1513,7 @@ This generator automatically scans font directories and generates comprehensive 
 - **Process**:
   1. Calls `getTypefaces(sourcePath)` to discover available fonts
   2. For each typeface, checks if there’s a predefined weight mapping in the `fonts` config
-  3. If no mapping exists and multiple weights are detected, skips the typeface (can't determine weights)
+  3. If no mapping exists and multiple weights are detected, skips the typeface (can’t determine weights)
   4. Sorts weights by their numeric values if mapping exists
   5. Filters files to ensure only `.woff2` files are processed
   6. Creates FontFace objects with:
@@ -1617,7 +1617,7 @@ This generator leverages the `favicons` npm package to create comprehensive favi
   2. Merges default parameters with provided parameters using spread operator
   3. Sets `manifestMaskable` to `sourcePath` if not provided (uses same image for maskable icons)
   4. Resolves the build path using `path.resolve()` for absolute path
-  5. Creates the output directory if it doesn't exist using `fs.mkdir()` with `recursive: true`
+  5. Creates the output directory if it doesn’t exist using `fs.mkdir()` with `recursive: true`
   6. Calls the `favicons()` function from the favicons package with `sourcePath` and `config`
   7. Uses `Promise.all()` to handle concurrent file writing operations:
      - **Image files**: Maps through `faviconsResult.images` array
